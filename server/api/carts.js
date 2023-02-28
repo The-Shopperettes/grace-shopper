@@ -2,6 +2,20 @@ const router = require('express').Router();
 const {Product, User, Cart, CartItem, Order} = require('../db').models;
 
 
+//auth middleware
+const requireToken = async (req, res, next) => {
+    try {
+        const token = req.headers.authorization;
+        if(!token) throw new Error('Not authorized');
+        const user = await User.findByToken(token);
+        if(!user) throw new Error('User not found');
+        req.user = user;
+        next();
+    } catch (err) {
+        next(err);
+    }
+  }
+
 //get the cart of a single user
 router.get('/:userId', async (req, res, next) => {
     try {
@@ -28,20 +42,21 @@ router.get('/:userId', async (req, res, next) => {
 })
 
 //update qty of item in user's cart
-router.put('/:itemId/qty', async (req, res, next) => {
+router.put('/item/:itemId', async (req, res, next) => {
     try {
         const { itemId: id } = req.params;
-        const {qty} = req.body;
-        
+        const update = {qty: Number(req.body.qty)}
+        if(isNaN(update.qty)) throw new Error('Qty must be a number');
+
         //to do: make sure it's the right user!
 
         //update the item
-        const item = await CartItem.update({qty}, {
+        await CartItem.update(update, {
             where: {id}
         })
 
         //send back the updated cart
-        res.send(await Cart.findByPk(item.cartId));
+        res.status(201).send();
 
     } catch (err) {
         next(err);
