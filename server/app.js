@@ -41,3 +41,19 @@ app.use((err, req, res, next) => {
   console.error(err.stack)
   res.status(err.status || 500).send(err.message || 'Internal server error.')
 })
+
+
+const requireToken = async (req, res, next) => {
+  try {
+      const token = req.headers.authorization;
+      if(!token) throw new Error('Not authorized');
+      const user = await User.findByToken(token);
+      if(!user) throw new Error('User not found');
+      req.user = user;
+      next();
+  } catch (err) {
+      next(err);
+  }
+}
+
+module.exports = requireToken;
