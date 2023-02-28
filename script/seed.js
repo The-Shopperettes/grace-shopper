@@ -23,8 +23,6 @@ async function seed() {
   // Creating products
   const products = await Product.bulkCreate(plantData);
 
-
-
   console.log(`seeded ${users.length} users and ${products.length} products`);
   console.log(`seeded successfully`);
   return {

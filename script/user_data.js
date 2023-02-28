@@ -18,7 +18,7 @@ function createUsers(n) {
         users.push(createSingleUser());
     }
 
-    return users;
+    return users.sort((a,b) => a.username.localeCompare(b.username));
 }
 
 module.exports = createUsers;
