@@ -1,6 +1,6 @@
 'use strict'
 
-const {db, models: {User, Product, Cart} } = require('../server/db');
+const {db, models: {User, Product, CartItem} } = require('../server/db');
 const plantData = require('./plants/data');
 const createUsers = require('./user_data');
 
@@ -11,17 +11,32 @@ const createUsers = require('./user_data');
 async function seed() {
   await db.sync({ force: true }) // clears db and matches models to tables
   console.log('db synced!');
+  const numUsers = 40;
 
-  // Create Users with empty carts
-  // should we do this in the model??
-  const userData = createUsers(40);
+  // Create Users with carts
+  const userData = createUsers(numUsers);
 
   const users = await Promise.all(userData.map(user => {
-    User.create(user);
+    return User.create(user);
   }))
 
   // Creating products
   const products = await Product.bulkCreate(plantData);
+
+  //add random products to user's carts
+  await Promise.all(users.map(async ({id}) => {
+    const productIds = Array(Math.floor(Math.random()*20)).fill(Math.floor(Math.random()*979)).map((num, i) => i + num);
+
+    await CartItem.bulkCreate(productIds.map((productId) => {
+      return {
+        productId,
+        cartId: id,
+        qty: (Math.floor(Math.random() * 10) + 1)
+      }
+    }));
+    
+  }))
+
 
   console.log(`seeded ${users.length} users and ${products.length} products`);
   console.log(`seeded successfully`);

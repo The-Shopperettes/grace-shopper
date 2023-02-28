@@ -20,6 +20,10 @@ const User = db.define('user', {
     validate: {
       isEmail: true
     }
+  },
+  isAdmin: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
 })
 
