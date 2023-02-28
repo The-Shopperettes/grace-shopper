@@ -1,5 +1,46 @@
 # FS-App-Template
 
+## Models schema
+
+Product:
+id (primary key)
+common_name (string)
+scientific_name (string)
+cycle (string)
+watering (string)
+sunlight (string)
+large_img (string)
+medium_img (string)
+small_img (string)
+thumbnail (string)
+qty (int)
+price (float)
+
+User:
+id (primary key)
+username (string)
+password (string)
+email (string)
+cartId
+
+Cart:
+id (primary key)
+userId
+
+-----------
+Associations
+
+Product.belongsToMany(Cart, {through: "Carts_Products"})
+Cart.belongsToMany(Product, {through: "Carts_Products"})
+
+User.hasOne(Cart)
+Cart.belongsTo(User)
+
+
+
+
+
+
 ## Setup
 
 To use this as boilerplate, you'll need to take the following steps:
