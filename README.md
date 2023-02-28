@@ -4,7 +4,7 @@
 
 Product:
 id (primary key)
-common_name (string)
+name (string)
 scientific_name (string)
 cycle (string)
 watering (string)
