@@ -10,21 +10,23 @@ const TOKEN = 'token';
   THUNKS
 */
 export const me = createAsyncThunk('auth/me', async () => {
-  const token = window.localStorage.getItem(TOKEN);
   try {
+    const token = window.localStorage.getItem(TOKEN);
+
     if (token) {
       const res = await axios.get('/auth/me', {
         headers: {
           authorization: token,
         },
       });
+
       return res.data;
     } else {
       return {};
     }
   } catch (err) {
     if (err.response.data) {
-      return thunkAPI.rejectWithValue(err.response.data);
+      //return thunkAPI.rejectWithValue(err.response.data);
     } else {
       return 'There was an issue with your request.';
     }
