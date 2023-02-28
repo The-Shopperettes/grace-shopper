@@ -8,6 +8,8 @@ import { authenticate } from '../../app/store';
   Props for Sign up: name="signup", displayName="Sign Up"
 **/
 
+// ------------- using for login ------------------- //
+
 const AuthForm = ({ name, displayName }) => {
   const { error } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
