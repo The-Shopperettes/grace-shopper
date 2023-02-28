@@ -42,7 +42,7 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).send(err.message || 'Internal server error.')
 })
 
-
+//auth middleware
 const requireToken = async (req, res, next) => {
   try {
       const token = req.headers.authorization;
