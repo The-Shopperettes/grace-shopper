@@ -2,6 +2,7 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt');
+const Cart = require('./Cart');
 
 const SALT_ROUNDS = 5;
 
@@ -13,6 +14,12 @@ const User = db.define('user', {
   },
   password: {
     type: Sequelize.STRING,
+  },
+  email: {
+    type: Sequelize.STRING,
+    validate: {
+      isEmail: true
+    }
   }
 })
 
@@ -68,6 +75,12 @@ const hashPassword = async(user) => {
   }
 }
 
+//automatically create an empty cart for the user
+const initCart = async({id}) => {
+  await Cart.create({userId: id});
+}
+
 User.beforeCreate(hashPassword)
+User.afterCreate(initCart)
 User.beforeUpdate(hashPassword)
 User.beforeBulkCreate(users => Promise.all(users.map(hashPassword)))

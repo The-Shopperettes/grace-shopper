@@ -1,5 +1,5 @@
 {
-  "name": "fs-app-template",
+  "name": "grace-shopper",
   "version": "2.0.0",
   "description": "Some boilerplate code to get you started - get shakin'!",
   "main": "index.js",
@@ -23,6 +23,8 @@
     "bcrypt": "^5.1.0",
     "compression": "^1.7.4",
     "express": "^4.18.2",
+    "faker": "^6.6.6",
+    "fs": "^0.0.1-security",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "pg": "^8.8.0",
@@ -33,6 +35,7 @@
     "@babel/preset-env": "^7.19.4",
     "@babel/preset-react": "^7.18.6",
     "@babel/register": "^7.18.9",
+    "@faker-js/faker": "^7.6.0",
     "@reduxjs/toolkit": "^1.8.6",
     "axios": "^1.1.3",
     "axios-mock-adapter": "^1.21.2",
