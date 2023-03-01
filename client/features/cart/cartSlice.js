@@ -11,7 +11,7 @@ export const fetchCart = createAsyncThunk("cart/items", async () => {
         authorization: token,
       }
     });
-    console.log(id, cartItems);
+
     return {cartId: id, cartItems, error: null};
   } catch (err) {
     console.error(err);

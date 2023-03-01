@@ -10,7 +10,7 @@ const Cart = () => {
     const {cartItems} = useSelector(selectCart);
 
     useEffect(() => {
-        dispatch(fetchCart(5));
+        dispatch(fetchCart());
     }, [dispatch])
 
     return (
@@ -39,6 +39,9 @@ const Cart = () => {
             <div className='ms-auto mt-3'>
                 <h3>Total: ${cartItems.reduce((sum, {qty, product: {price}}) => sum + price*qty, 0)}.00</h3>
             </div>
+            <Button variant="secondary" size="lg">
+                Check out
+            </Button>
             </Stack>
         
         </Stack> 
