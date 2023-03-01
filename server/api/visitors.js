@@ -8,9 +8,11 @@ router.get('/', async (req, res, next) => {
     try {
         const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
-        const visitor = await Visitor.findOrCreate({
+        let visitor = await Visitor.findOne({
             where: {token: ip}
-        })
+        });
+
+        if(!visitor) visitor = await Visitor.create({token: ip});
         
         //send the visitor back
         res.send(visitor);
