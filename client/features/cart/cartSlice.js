@@ -18,6 +18,25 @@ export const fetchCart = createAsyncThunk("cart/items", async () => {
   }
 });
 
+export const updateQty = createAsyncThunk("cart/updateItem", async ({itemId, qty, cartId}) => {
+  const token = window.localStorage.getItem(TOKEN);
+  try {
+    const { data: {id, cartItems} } = await axios.put(`/api/carts/item/${itemId}`, {
+      qty, cartId,
+      headers: {
+        authorization: token
+      }
+    });
+
+    console.log('cartItems', cartItems)
+
+    return {cartId: id, cartItems, error: null};
+
+  } catch (err) {
+    console.error(err);
+  }
+})
+
 export const cartSlice = createSlice({
   name: "cart",
   initialState: {
@@ -29,8 +48,8 @@ export const cartSlice = createSlice({
     builder.addCase(fetchCart.fulfilled, (state, action) => {
       return action.payload;
     });
-    builder.addCase(fetchCart.rejected, (state, action) => {
-      state.error = action.error;
+    builder.addCase(updateQty.fulfilled, (state, action) => {
+      return action.payload;
     });
   }
 });

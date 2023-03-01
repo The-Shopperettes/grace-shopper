@@ -9,6 +9,7 @@ const getToken = async (req, res, next) => {
         if(token) {
             const user = await User.findByToken(token);
             req.user = user;
+
         } else {
             const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
@@ -19,6 +20,7 @@ const getToken = async (req, res, next) => {
             if(!visitor) visitor = await Visitor.create({token: ip});
 
             req.visitor = visitor;
+
         }
 
         next();
@@ -44,7 +46,8 @@ router.get('/', getToken, async ({visitor, user}, res, next) => {
             include: {
                 model: CartItem,
                 include: [ Product ]
-            }
+            },
+            order: [[CartItem, 'id', 'DESC']]
         })
 
         res.send(cart);
@@ -54,11 +57,12 @@ router.get('/', getToken, async ({visitor, user}, res, next) => {
     }
 })
 
-//update qty of item in user's cart
+//update qty of item in user's cart, sends back new cart
 router.put('/item/:itemId', async (req, res, next) => {
     try {
         const { itemId: id } = req.params;
         const update = {qty: Number(req.body.qty)}
+
         if(isNaN(update.qty)) throw new Error('Qty must be a number');
 
         //to do: make sure it's the right user!
@@ -68,8 +72,17 @@ router.put('/item/:itemId', async (req, res, next) => {
             where: {id}
         })
 
+        const cart = await Cart.findOne({
+            where: {id: req.body.cartId},
+            include: {
+                model: CartItem,
+                include: [ Product ]
+            },
+            order: [[CartItem, 'id', 'DESC']]
+        })
+
         //send back the updated cart
-        res.status(201).send();
+        res.status(201).send(cart);
 
     } catch (err) {
         next(err);
