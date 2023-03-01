@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const TOKEN = 'token';
+
 export const fetchCart = createAsyncThunk("cart/items", async (userId, {rejectWithValue}) => {
   const token = window.localStorage.getItem(TOKEN);
   try {
@@ -10,13 +12,9 @@ export const fetchCart = createAsyncThunk("cart/items", async (userId, {rejectWi
       }
     });
 
-    return data;
+    return data.cartItems;
   } catch (err) {
-    if(err.response.data) {
-        return rejectWithValue(err.response.data);
-    } else {
-        return 'There was an issue with your request';
-    }
+    console.error(err);
   }
 });
 
