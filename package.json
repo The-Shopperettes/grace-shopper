@@ -26,6 +26,7 @@
     "express": "^4.18.2",
     "faker": "^6.6.6",
     "fs": "^0.0.1-security",
+    "ipware": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "pg": "^8.8.0",

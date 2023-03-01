@@ -25,7 +25,7 @@ async function seed() {
 
   //add random products to user's carts
   await Promise.all(users.map(async ({id}) => {
-    const productIds = Array(Math.floor(Math.random()*20)).fill(Math.floor(Math.random()*979)).map((num, i) => i + num);
+    const productIds = Array(Math.floor(Math.random()*20)).fill(Math.floor(Math.random()*978)).map((num, i) => i + num + 1);
 
     await CartItem.bulkCreate(productIds.map((productId) => {
       return {

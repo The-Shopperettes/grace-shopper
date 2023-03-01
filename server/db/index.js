@@ -6,6 +6,7 @@ const Cart = require('./models/Cart');
 const Product = require('./models/Product');
 const Order = require('./models/Order');
 const CartItem = require('./models/CartItem');
+const Visitor = require('./models/Visitor');
 
 //Associations
 
@@ -24,6 +25,9 @@ Cart.hasMany(CartItem);
 Product.hasMany(CartItem);
 CartItem.belongsTo(Product);
 
+Visitor.hasOne(Cart);
+Cart.belongsTo(Visitor);
+
 module.exports = {
   db,
   models: {
@@ -31,6 +35,7 @@ module.exports = {
     Cart,
     Product,
     Order,
-    CartItem
+    CartItem,
+    Visitor
   },
 }

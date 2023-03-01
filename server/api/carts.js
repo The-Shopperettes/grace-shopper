@@ -3,13 +3,15 @@ const {Product, User, Cart, CartItem, Order} = require('../db').models;
 
 
 //auth middleware
-const requireToken = async (req, res, next) => {
+const getToken = async (req, res, next) => {
     try {
         const token = req.headers.authorization;
-        if(!token) throw new Error('Not authorized');
-        const user = await User.findByToken(token);
-        if(!user) throw new Error('User not found');
-        req.user = user;
+        if(token) {
+            const user = await User.findByToken(token);
+            req.user = user;
+        }
+        //otherwise, get ip
+
         next();
     } catch (err) {
         next(err);
@@ -17,12 +19,14 @@ const requireToken = async (req, res, next) => {
   }
 
 //get the cart of a single user
-router.get('/:userId', async (req, res, next) => {
+router.get('/:userId', getToken, async (req, res, next) => {
     try {
         //get the users' cart, including the cart items and associated products
         const {userId} = req.params;
 
-        //to do: make sure it's the right user
+        //if it's the right user or an administrator, find and send back the cart
+        //if there's no user, find/create via IP address
+        //if it's a user, get it via the user token
 
         const cart = await Cart.findOne({
             where: {
