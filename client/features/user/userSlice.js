@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchUser = createAsyncThunk('user', async (id) => {
     try {
-    const {data} = await axios.get(`/api/${id}`)
+    const {data} = await axios.get(`/api/users/${id}`)
     } catch (error) {
         console.log(error)
     }
