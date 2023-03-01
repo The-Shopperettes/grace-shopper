@@ -5,7 +5,6 @@ import {
 } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Container, Card, Row, Col, Nav } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { fetchProductsAsync, selectProducts } from "./productsSlice";
 import PageControls from "./pageControls";
 
@@ -56,9 +55,6 @@ const AllProducts = () => {
   };
 
   // #endregion------------------------------------------
-
-  // // this will be passed to each product card
-  // const reload = () => dispatch(fetchProductsAsync({page, perPage}));
 
   // mapping to create products list. This is where the product cards are created
   const productList = products?.map((product) => {
