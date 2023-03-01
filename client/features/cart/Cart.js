@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCart, fetchCart } from './cartSlice';
 import { Card, Button, Container, Stack, Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 
 const Cart = () => {
@@ -15,23 +16,34 @@ const Cart = () => {
     return (
     <Container>
         { cartItems ?
-        <Stack> 
+        <Stack gap={3}> 
             {
                cartItems.map(({id, product, qty}) => {
                 return (
-                <Card>
+                <Card key={id} >
+                <Stack direction='horizontal'>
+                    <Card.Img src={product.thumbnail} style={{ height: '10rem', width: 'auto'}}></Card.Img>
                     <Card.Body>
-                        <Card.Img src={product.mediumImg}></Card.Img>
+                        
                         <Card.Title>{product.name}</Card.Title>
-                        <Card.Text>
-                        <p>Quantity: {qty}</p>
-                        <p>Price: ${product.price}.00</p>
-                        </Card.Text>
+                        <Card.Text>Quantity: {qty}</Card.Text>
+                        <Card.Text>Price: ${product.price * qty}.00</Card.Text>
+                        <Card.Text><Link to="">See details</Link></Card.Text>
                     </Card.Body>
+                </Stack>
                 </Card>)
             })
             }
-        </Stack> : null
+            <Stack direction="horizontal">
+            <div></div>
+            <div className='ms-auto mt-3'>
+                <h3>Total: ${cartItems.reduce((sum, {qty, product: {price}}) => sum + price*qty, 0)}.00</h3>
+            </div>
+            </Stack>
+        
+        </Stack> 
+        
+        : null
         }
     </Container>
     )
