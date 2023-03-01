@@ -90,3 +90,5 @@ const AllProducts = () => {
     </Container>
   );
 };
+
+export default AllProducts;
