@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../app/store';
 
 const Navbar = () => {
-  const isLoggedIn = useSelector((state) => !!state.auth.me.id);
+  const isLoggedIn = useSelector((state) => !!state.auth.me);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const logoutAndRedirectHome = () => {

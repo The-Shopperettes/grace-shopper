@@ -27,11 +27,14 @@
     "faker": "^6.6.6",
     "fs": "^0.0.1-security",
     "install": "^0.13.0",
+    "ipware": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "npm": "^9.5.1",
     "pg": "^8.8.0",
     "react-bootstrap": "^2.7.2",
+    "react-router": "^6.8.2",
+    "react-router-bootstrap": "^0.26.2",
     "sequelize": "^6.25.3"
   },
   "devDependencies": {
