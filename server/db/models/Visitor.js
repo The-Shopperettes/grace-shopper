@@ -14,9 +14,7 @@ const Visitor = db.define('visitor', {
 
 //automatically create an empty cart for the user
 const initCart = async({id}) => {
-    await Cart.create({
-        visitorId: id
-    });
+    await Cart.create({visitorId: id});
 }
 
 Visitor.afterCreate(initCart);

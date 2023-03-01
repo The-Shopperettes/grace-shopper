@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {Product, User, Cart, CartItem, Order} = require('../db').models;
+const {Product, User, Cart, CartItem, Order, Visitor} = require('../db').models;
 
 
 //auth middleware
@@ -9,8 +9,17 @@ const getToken = async (req, res, next) => {
         if(token) {
             const user = await User.findByToken(token);
             req.user = user;
+        } else {
+            const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+            let visitor = await Visitor.findOne({
+                where: {token: ip}
+            });
+
+            if(!visitor) visitor = await Visitor.create({token: ip});
+
+            req.visitor = visitor;
         }
-        //otherwise, get ip
 
         next();
     } catch (err) {
@@ -19,22 +28,22 @@ const getToken = async (req, res, next) => {
   }
 
 //get the cart of a single user
-router.get('/:userId', getToken, async (req, res, next) => {
+router.get('/', getToken, async ({visitor, user}, res, next) => {
     try {
-        //get the users' cart, including the cart items and associated products
-        const {userId} = req.params;
-
-        //if it's the right user or an administrator, find and send back the cart
-        //if there's no user, find/create via IP address
-        //if it's a user, get it via the user token
+    
+        let search = {};
+        //get the user or visitor's cart
+        if(user) {
+            search = {userId: user.id};
+        } else {
+            search = {visitorId: visitor.id}
+        }
 
         const cart = await Cart.findOne({
-            where: {
-                userId
-            },
+            where: search,
             include: {
                 model: CartItem,
-                include: Product
+                include: [ Product ]
             }
         })
 
