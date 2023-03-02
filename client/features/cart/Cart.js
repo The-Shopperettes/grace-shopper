@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectCart, fetchCart, updateQty, deleteItem } from './cartSlice';
+import { selectCart, fetchCart, updateQty, deleteItem, addToCart } from './cartSlice';
 import { Card, Button, Container, Stack, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -9,6 +9,8 @@ const Cart = () => {
     const dispatch = useDispatch();
     const {cartItems, cartId} = useSelector(selectCart);
     const [errorMessages, setErrorMessages] = useState({});
+
+    
 
 
     useEffect(() => {
@@ -35,12 +37,12 @@ const Cart = () => {
     }
 
     function handleCheckout() {
-        
+
     }
 
     return (
     <Container>
-        { cartItems ?
+        { cartItems && cartItems.length ?
         <Stack gap={3}> 
             {
                cartItems.map(({id, product, qty}) => {

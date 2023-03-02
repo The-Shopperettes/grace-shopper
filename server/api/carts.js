@@ -84,6 +84,38 @@ router.get('/', getToken, async ({visitor, user}, res, next) => {
     }
 })
 
+//add item to cart
+router.post('/item/add', getToken, async (req, res, next) => {
+    try {
+        //get the product id
+        const { productId, qty } = req.body;
+
+        //get the user's cart
+        const search = req.user ? {userId: req.user.id} : {visitorId: req.visitor.id};
+
+        const cart = await Cart.findOne({where: search, include: CartItem});
+
+        const item = cart.cartItems.find(({productId : id}) => id === Number(productId));
+
+        if(!item) {
+            await CartItem.create({
+                cartId: cart.id,
+                productId,
+                qty
+            })
+        } else {
+            await item.update({qty: (item.qty + qty)})
+        }
+
+        res.status(201).send();
+
+
+    } catch (err) {
+        next(err);
+    }
+})
+
+
 //update qty of item in user's cart, sends back new cart
 router.put('/item/:itemId', getToken, authenticateCartItem, async (req, res, next) => {
     try {
@@ -116,8 +148,6 @@ router.put('/order', getToken, async(req, res, next) => {
         })
 
         await order.addCartItems(cart.cartItems);
-
-        await cart.removeCartItems(cart.cartItems);
 
         await cart.destroy();
 
