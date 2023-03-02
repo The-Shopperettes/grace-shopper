@@ -24,8 +24,9 @@ const AppRoutes = () => {
     dispatch(me());
   }, []);
 
+  ////===== TOOK OUT '.id' AFTER USER ON LINE 29===///
   useEffect(() => {
-    if(user.id) {
+    if(user) {
       dispatch(fetchCart());
     }
   }, [user])
