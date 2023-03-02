@@ -19,7 +19,6 @@ export const me = createAsyncThunk('auth/me', async () => {
           authorization: token,
         },
       });
-
       return res.data;
     } else {
       return {};
