@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectCart, fetchCart, updateQty } from './cartSlice';
+import { selectCart, fetchCart, updateQty, deleteItem } from './cartSlice';
 import { Card, Button, Container, Stack, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
 const Cart = () => {
     const dispatch = useDispatch();
     const {cartItems, cartId} = useSelector(selectCart);
+    const [errorMessages, setErrorMessages] = useState({});
+
 
     useEffect(() => {
         dispatch(fetchCart());
@@ -16,11 +18,20 @@ const Cart = () => {
     function changeQty({target}, itemId, totalQty) {
         //check that the change is valid
         const qty = Number(target.value);
-        
-        if(qty <= 0 || qty > totalQty || isNaN(qty)) return; 
+
+        if(qty <= 0 || qty > totalQty || isNaN(qty)) {
+            const err = {};
+            err[itemId] = qty <= 0 ? 'Must enter a number greater than 0' : `Only ${totalQty} left in stock`;
+            setErrorMessages(err);
+            return;
+        } 
 
         //send request to backend to change quantity of that item
         dispatch(updateQty({qty, itemId, cartId}));
+    }
+
+    function handleRemove(itemId) {
+        dispatch(deleteItem(itemId));
     }
 
     return (
@@ -38,13 +49,15 @@ const Cart = () => {
                         <Form>
                             Quantity: 
                             <Form.Control 
-                            style={{width: '4rem'}} 
+                            style={{width: '6rem'}} 
                             type="number" 
                             value={qty}
-                            onChange={(e) => changeQty(e, id, product.qty)}
+                            onChange={(e) => {changeQty(e, id, product.qty)}}
                             ></Form.Control>
+                            <Form.Text>{errorMessages[id] ? errorMessages[id] : ""}</Form.Text>
                         </Form>
                         <Card.Text>Price: ${product.price}.00</Card.Text>
+                        <Button onClick={() => handleRemove(id)}>Remove item</Button>
                         <Card.Text><Link to="">See details</Link></Card.Text>
                     </Card.Body>
                 </Stack>

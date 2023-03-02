@@ -18,19 +18,30 @@ export const fetchCart = createAsyncThunk("cart/items", async () => {
   }
 });
 
-export const updateQty = createAsyncThunk("cart/updateItem", async ({itemId, qty, cartId}) => {
+export const updateQty = createAsyncThunk("cart/updateItem", async ({itemId, qty, cartId}, {dispatch}) => {
+  const token = window.localStorage.getItem(TOKEN);
+
+  try {
+
+    await axios.put(`/api/carts/item/${itemId}`, {qty, cartId}, {headers: {
+      authorization: token,
+    }});
+
+    dispatch(fetchCart());
+
+  } catch (err) {
+    console.error(err);
+  }
+})
+
+export const deleteItem = createAsyncThunk("cart/deleteItem", async(itemId, {dispatch}) => {
   const token = window.localStorage.getItem(TOKEN);
   try {
-    const { data: {id, cartItems} } = await axios.put(`/api/carts/item/${itemId}`, {
-      qty, cartId,
-      headers: {
-        authorization: token
-      }
-    });
+    await axios.delete(`/api/carts/item/${itemId}`, {headers: {
+      authorization: token,
+    }}, {itemId});
 
-    console.log('cartItems', cartItems)
-
-    return {cartId: id, cartItems, error: null};
+    dispatch(fetchCart());
 
   } catch (err) {
     console.error(err);
