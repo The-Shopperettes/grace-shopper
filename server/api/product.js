@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {Product, User, Cart} = require('../db');
+const {Product} = require('../db').models;
 
 // get all products
 router.get('/', async (req, res, next) => {
@@ -22,15 +22,6 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-// get single product
-router.get('/:productId', async (req, res, next) => {
-    try{
-        res.json(await Product.findByPk(req.params.productId));
-    } catch(err) {
-        next(err);
-    }
-})
-
 // get product count via Product.count
 router.get('/count', async (req, res, next) => {
     try{
@@ -39,5 +30,16 @@ router.get('/count', async (req, res, next) => {
         next(err);
     }
 })
+
+// get single product
+router.get('/:id', async (req, res, next) => {
+    try{
+        res.json(await Product.findByPk(req.params.id));
+    } catch(err) {
+        next(err);
+    }
+})
+
+
 
 module.exports = router;

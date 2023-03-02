@@ -25,11 +25,6 @@ export const me = createAsyncThunk('auth/me', async () => {
       return {};
     }
   } catch (err) {
-    if (err.response.data) {
-      //return thunkAPI.rejectWithValue(err.response.data);
-    } else {
-      return 'There was an issue with your request.';
-    }
   }
 });
 
