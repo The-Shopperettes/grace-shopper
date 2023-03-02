@@ -48,6 +48,11 @@ export const deleteItem = createAsyncThunk("cart/deleteItem", async(itemId, {dis
   }
 })
 
+export const order = createAsyncThunk("cart/order", async () => {
+  const token = window.localStorage.getItem(TOKEN);
+  
+})
+
 export const cartSlice = createSlice({
   name: "cart",
   initialState: {

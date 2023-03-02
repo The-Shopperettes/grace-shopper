@@ -104,6 +104,35 @@ router.put('/item/:itemId', getToken, authenticateCartItem, async (req, res, nex
     }
 })
 
+router.put('/order', getToken, async(req, res, next) => {
+    try {
+        //create order and assign cart items to that order, assign user to order
+        const order = await Order.create()
+
+        const cartId = req.user ? req.user.cartId : req.visitor.cartId;
+
+        const cart = await Cart.findByPk(cartId, {
+            include: CartItem
+        })
+
+        await order.addCartItems(cart.cartItems);
+
+        await cart.removeCartItems(cart.cartItems);
+
+        await cart.destroy();
+
+        const newCartData = req.user ? {userId: req.user.id} : {visitorId: req.visitor.id};
+
+        await Cart.create(newCartData);
+
+        res.status(204).send();
+
+
+    } catch (err) {
+        next(err);
+    }
+})
+
 router.delete(`/item/:itemId`, getToken, authenticateCartItem, async (req, res, next) => {
     try {  
         const { itemId } = req.params;

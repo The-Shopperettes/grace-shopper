@@ -34,6 +34,10 @@ const Cart = () => {
         dispatch(deleteItem(itemId));
     }
 
+    function handleCheckout() {
+        
+    }
+
     return (
     <Container>
         { cartItems ?
@@ -68,15 +72,16 @@ const Cart = () => {
             <div></div>
             <div className='ms-auto mt-3'>
                 <h3>Total: ${cartItems.reduce((sum, {qty, product: {price}}) => sum + (price*qty), 0)}.00</h3>
-            </div>
-            <Button variant="secondary" size="lg">
+                <Button variant="secondary" size="lg" onClick={handleCheckout}>
                 Check out
-            </Button>
+                </Button>
+            </div>
+            
             </Stack>
         
         </Stack> 
         
-        : null
+        : <p>Your cart is empty. <Link to="/products">Click here to browse our plants</Link></p>
         }
     </Container>
     )
