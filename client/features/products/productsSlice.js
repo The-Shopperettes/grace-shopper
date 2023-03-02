@@ -10,7 +10,7 @@ async({page, perPage}) => {
         const count = await axios.get('api/products/count')
         return {products: data, productCount: count.data};
     } catch(err) {
-        console.log(err);
+        console.error(err);
     }
 })
 

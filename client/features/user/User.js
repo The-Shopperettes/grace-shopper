@@ -17,6 +17,7 @@ useEffect(() => {
     dispatch(fetchUser(id))
 }, [dispatch, id]);
 
+// TO FIX: user.orders is never coming up false;
 return (
     <div>
         <header id='user-header'>
@@ -28,11 +29,12 @@ return (
         </header>
         <h4>Order History</h4>
         <ListGroup>
-            {user.orders.map((order) => {
-                return (
-                    <ListGroup.Item>Order #{order.id}</ListGroup.Item>
+            {user.orders 
+                ? user.orders.map((order) => {
+                    return (
+                        <ListGroup.Item>Order #{order.id}</ListGroup.Item>
                 )
-            })}
+            }) : 'No previous transactions'}
         </ListGroup>
     </div>
 )
