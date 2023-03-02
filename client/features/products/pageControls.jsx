@@ -1,6 +1,7 @@
 import React from "react";
 import { Pagination, Dropdown, Stack } from "react-bootstrap";
 
+// TODO: update to include 9 as a dropdown
 //a component allowing user to change pages and number of items to show on a page
 // used by AllProducts components
 const PageControls = (props) => {

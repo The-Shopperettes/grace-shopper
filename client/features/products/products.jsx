@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   useNavigate,
   useSearchParams,
+  Link
 } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Container, Card, Row, Col, Nav } from "react-bootstrap";
@@ -59,15 +60,15 @@ const AllProducts = () => {
   // mapping to create products list. This is where the product cards are created
   const productList = products?.map((product) => {
     return (
-      <Col>
+      <Col gap={3}>
         <Card key={product.id}>
           <Card.Title>{product.name}</Card.Title>
-          <Card.Img src={product.small_img} />
+          <Card.Img src={product.mediumImg} />
           <Card.Body>
-            <Card.Text>{product.price}</Card.Text>
+            <Card.Text>Price: ${product.price}</Card.Text>
           </Card.Body>
           <Nav.Item>
-            <Nav.Link href={`/product/${product.id}`}> See More </Nav.Link>
+            <Link to={`/products/${product.id}`}> See More </Link>
           </Nav.Item>
         </Card>
       </Col>
@@ -76,7 +77,7 @@ const AllProducts = () => {
 
   return (
     <Container>
-      <Row xs={1} md={3}>
+      <Row xs={1} md={3} gap={3}>
         {products && products.length ? productList : "No products here"}
       </Row>
       ;
