@@ -27,14 +27,33 @@ async function seed() {
   await Promise.all(users.map(async ({id}) => {
     const productIds = Array(Math.floor(Math.random()*20)).fill(Math.floor(Math.random()*978)).map((num, i) => i + num + 1);
 
-    await CartItem.bulkCreate(productIds.map((productId) => {
+    CartItem.bulkCreate(productIds.map((productId) => {
       return {
         productId,
         cartId: id,
         qty: (Math.floor(Math.random() * 10) + 1)
       }
     }));
-    
+  }));
+
+
+  await Promise.all(users.map(async ({id}) => {
+
+    const arr = Array(Math.ceil(Math.random()*30)).fill({userId: id});
+
+    const orders = await Order.bulkCreate(arr);
+
+    orders.forEach(({id}) => {
+      const productIds = Array(Math.floor(Math.random()*10)).fill(Math.floor(Math.random()*978)).map((num, i) => i + num + 1);
+
+      CartItem.bulkCreate(productIds.map((productId) => {
+        return {
+          productId,
+          orderId: id,
+          qty: (Math.floor(Math.random() * 10) + 1)
+        }
+      }));
+    })
   }))
 
 
