@@ -7,18 +7,27 @@ import Cart from '../features/cart/Cart';
 import AllProducts from '../features/products/products';
 import SingleProduct from '../features/products/singleProductComponent';
 import { me } from './store';
+import { fetchCart } from '../features/cart/cartSlice';
 
 /**
  * COMPONENT
  */
 
 const AppRoutes = () => {
-  const isLoggedIn = useSelector((state) => !!state.auth.me);
+  const isLoggedIn = useSelector((state) => !!(state.auth.me && state.auth.me.password));
+  const user = useSelector((state) => state.auth.me);
+ 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(me());
   }, []);
+
+  useEffect(() => {
+    if(user.id) {
+      dispatch(fetchCart());
+    }
+  }, [user])
 
   return (
     <div>

@@ -6,9 +6,11 @@ const {Product, User, Cart, CartItem, Order, Visitor} = require('../db').models;
 const getToken = async (req, res, next) => {
     try {
         const token = req.headers.authorization;
+
         if(token) {
             const user = await User.findByToken(token);
             req.user = user;
+
         } else {
             const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
@@ -19,9 +21,36 @@ const getToken = async (req, res, next) => {
             if(!visitor) visitor = await Visitor.create({token: ip});
 
             req.visitor = visitor;
+
         }
 
         next();
+    } catch (err) {
+        next(err);
+    }
+  }
+
+  //auth middleware
+  const authenticateCartItem = async (req, res, next) => {
+    try {
+        
+        //get the user/visitor, check that the cart item belongs to that userg, unless an admin
+        
+        if(!(req.user && req.user.isAdmin)) {
+            const {itemId} = req.params;
+
+            const cartItem = await CartItem.findByPk(itemId);
+
+            const search = req.user ? {userId: req.user.id} : {visitorId: req.visitor.id};
+
+            const cart = await Cart.findOne({
+                where: search
+            });
+
+            if(cartItem.cartId !== cart.id) throw new Error('Not authorized');
+        }
+        next();
+
     } catch (err) {
         next(err);
     }
@@ -44,7 +73,8 @@ router.get('/', getToken, async ({visitor, user}, res, next) => {
             include: {
                 model: CartItem,
                 include: [ Product ]
-            }
+            },
+            order: [[CartItem, 'id', 'DESC']]
         })
 
         res.send(cart);
@@ -54,22 +84,62 @@ router.get('/', getToken, async ({visitor, user}, res, next) => {
     }
 })
 
-//update qty of item in user's cart
-router.put('/item/:itemId', async (req, res, next) => {
+//update qty of item in user's cart, sends back new cart
+router.put('/item/:itemId', getToken, authenticateCartItem, async (req, res, next) => {
     try {
-        const { itemId: id } = req.params;
+        const { itemId } = req.params;
         const update = {qty: Number(req.body.qty)}
-        if(isNaN(update.qty)) throw new Error('Qty must be a number');
 
-        //to do: make sure it's the right user!
+        if(isNaN(update.qty)) throw new Error('Qty must be a number');
 
         //update the item
         await CartItem.update(update, {
-            where: {id}
+            where: {id: itemId}
         })
 
-        //send back the updated cart
         res.status(201).send();
+
+    } catch (err) {
+        next(err);
+    }
+})
+
+router.put('/order', getToken, async(req, res, next) => {
+    try {
+        //create order and assign cart items to that order, assign user to order
+        const order = await Order.create()
+
+        const cartId = req.user ? req.user.cartId : req.visitor.cartId;
+
+        const cart = await Cart.findByPk(cartId, {
+            include: CartItem
+        })
+
+        await order.addCartItems(cart.cartItems);
+
+        await cart.removeCartItems(cart.cartItems);
+
+        await cart.destroy();
+
+        const newCartData = req.user ? {userId: req.user.id} : {visitorId: req.visitor.id};
+
+        await Cart.create(newCartData);
+
+        res.status(204).send();
+
+
+    } catch (err) {
+        next(err);
+    }
+})
+
+router.delete(`/item/:itemId`, getToken, authenticateCartItem, async (req, res, next) => {
+    try {  
+        const { itemId } = req.params;
+
+        await CartItem.destroy({where: {id: itemId}});
+
+        res.status(204).send();
 
     } catch (err) {
         next(err);

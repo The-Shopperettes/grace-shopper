@@ -18,6 +18,41 @@ export const fetchCart = createAsyncThunk("cart/items", async () => {
   }
 });
 
+export const updateQty = createAsyncThunk("cart/updateItem", async ({itemId, qty, cartId}, {dispatch}) => {
+  const token = window.localStorage.getItem(TOKEN);
+
+  try {
+
+    await axios.put(`/api/carts/item/${itemId}`, {qty, cartId}, {headers: {
+      authorization: token,
+    }});
+
+    dispatch(fetchCart());
+
+  } catch (err) {
+    console.error(err);
+  }
+})
+
+export const deleteItem = createAsyncThunk("cart/deleteItem", async(itemId, {dispatch}) => {
+  const token = window.localStorage.getItem(TOKEN);
+  try {
+    await axios.delete(`/api/carts/item/${itemId}`, {headers: {
+      authorization: token,
+    }}, {itemId});
+
+    dispatch(fetchCart());
+
+  } catch (err) {
+    console.error(err);
+  }
+})
+
+export const order = createAsyncThunk("cart/order", async () => {
+  const token = window.localStorage.getItem(TOKEN);
+  
+})
+
 export const cartSlice = createSlice({
   name: "cart",
   initialState: {
@@ -29,8 +64,8 @@ export const cartSlice = createSlice({
     builder.addCase(fetchCart.fulfilled, (state, action) => {
       return action.payload;
     });
-    builder.addCase(fetchCart.rejected, (state, action) => {
-      state.error = action.error;
+    builder.addCase(updateQty.fulfilled, (state, action) => {
+      return action.payload;
     });
   }
 });

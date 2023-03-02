@@ -1,6 +1,6 @@
 'use strict'
 
-const {db, models: {User, Product, CartItem} } = require('../server/db');
+const {db, models: {User, Product, CartItem, Order} } = require('../server/db');
 const plantData = require('./plants/data');
 const createUsers = require('./user_data');
 
