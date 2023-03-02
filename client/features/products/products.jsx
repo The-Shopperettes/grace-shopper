@@ -60,8 +60,8 @@ const AllProducts = () => {
   // mapping to create products list. This is where the product cards are created
   const productList = products?.map((product) => {
     return (
-      <Col gap={3}>
-        <Card key={product.id}>
+      <Col gap={3} key={product.id}>
+        <Card>
           <Card.Title>{product.name}</Card.Title>
           <Card.Img src={product.mediumImg} />
           <Card.Body>

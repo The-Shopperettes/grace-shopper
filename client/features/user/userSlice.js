@@ -3,9 +3,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchUser = createAsyncThunk('user', async (id) => {
     try {
-    const {data} = await axios.get(`/api/users/${id}`)
+    const {data} = await axios.get(`/api/users/${id}`);
+    return data;
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 });
 
@@ -15,7 +16,7 @@ export const userSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(fetchUser.fulfilled, (state, action) => {
-            state = action.payload;
+            return action.payload;
         })
     }
 });
