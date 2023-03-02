@@ -10,9 +10,6 @@ const Cart = () => {
     const {cartItems, cartId} = useSelector(selectCart);
     const [errorMessages, setErrorMessages] = useState({});
 
-    
-
-
     useEffect(() => {
         dispatch(fetchCart());
     }, [dispatch])
@@ -44,6 +41,7 @@ const Cart = () => {
     <Container>
         { cartItems && cartItems.length ?
         <Stack gap={3}> 
+        <Button>Clear cart</Button>
             {
                cartItems.map(({id, product, qty}) => {
                 return (

@@ -3,7 +3,7 @@ import axios from "axios";
 
 const TOKEN = 'token';
 
-export const fetchCart = createAsyncThunk("cart/items", async () => {
+export const fetchCart = createAsyncThunk("cart/items", async (_, {dispatch}) => {
   const token = window.localStorage.getItem(TOKEN);
   try {
     const { data: {id, cartItems} } = await axios.get(`/api/carts`, {
@@ -11,6 +11,12 @@ export const fetchCart = createAsyncThunk("cart/items", async () => {
         authorization: token,
       }
     });
+
+    await Promise.all(cartItems.map(item => {
+      if(item.qty > item.product.qty) {
+
+      }
+    }))
 
     return {cartId: id, cartItems, error: null};
   } catch (err) {
