@@ -85,7 +85,7 @@ router.get('/', getToken, async ({visitor, user}, res, next) => {
 })
 
 //add item to cart
-router.post('/add', getToken, async (req, res, next) => {
+router.post('/item/add', getToken, async (req, res, next) => {
     try {
         //get the product id
         const { productId, qty } = req.body;
