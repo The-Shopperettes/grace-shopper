@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../app/store";
 import { Button, Badge } from "react-bootstrap";
+import { selectCart } from '../cart/cartSlice';
 
 const Navbar = () => {
   const isLoggedIn = useSelector((state) => !!state.auth.me);
@@ -10,8 +11,11 @@ const Navbar = () => {
   const navigate = useNavigate();
   const logoutAndRedirectHome = () => {
     dispatch(logout());
+    // Need to edit this navigation route so it shows login/signup options when it redirects to home page
     navigate("/products");
   };
+
+  const {cartItems} = useSelector(selectCart);
 
   return (
     <div>
@@ -26,7 +30,7 @@ const Navbar = () => {
             </button>
             <Link to="/cart">
               <Button variant="cart">
-                🛒<Badge bg="secondary">0</Badge>
+                🛒<Badge bg="secondary">{cartItems.length}</Badge>
                 <span className="visually-hidden">cart items</span>
               </Button>
             </Link>
@@ -39,7 +43,7 @@ const Navbar = () => {
             <Link to="/signup">Sign Up</Link>
             <Link to="/cart">
               <Button variant="cart">
-                🛒<Badge bg="secondary">0</Badge>
+                🛒<Badge bg="secondary">{cartItems.length}</Badge>
                 <span className="visually-hidden">cart items</span>
               </Button>
             </Link>
