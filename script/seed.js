@@ -10,7 +10,7 @@ const createUsers = require('./user_data');
  */
 async function seed() {
   await db.sync({ force: true }) // clears db and matches models to tables
-  console.log('db synced!');
+
   const numUsers = 40;
 
   // Create Users with carts
@@ -27,19 +27,34 @@ async function seed() {
   await Promise.all(users.map(async ({id}) => {
     const productIds = Array(Math.floor(Math.random()*20)).fill(Math.floor(Math.random()*978)).map((num, i) => i + num + 1);
 
-    await CartItem.bulkCreate(productIds.map((productId) => {
+    CartItem.bulkCreate(productIds.map((productId) => {
       return {
         productId,
         cartId: id,
         qty: (Math.floor(Math.random() * 10) + 1)
       }
     }));
-    
+  }));
+
+
+  await Promise.all(users.map(async ({id}) => {
+
+    const arr = Array(Math.ceil(Math.random()*30)).fill({userId: id});
+
+    const orders = await Order.bulkCreate(arr);
+
+    orders.forEach(({id}) => {
+      const productIds = Array(Math.floor(Math.random()*10)).fill(Math.floor(Math.random()*978)).map((num, i) => i + num + 1);
+
+      CartItem.bulkCreate(productIds.map((productId) => {
+        return {
+          productId,
+          orderId: id,
+          qty: (Math.floor(Math.random() * 10) + 1)
+        }
+      }));
+    })
   }))
-
-
-  console.log(`seeded ${users.length} users and ${products.length} products`);
-  console.log(`seeded successfully`);
   return {
     users,
     products
@@ -52,16 +67,16 @@ async function seed() {
  The `seed` function is concerned only with modifying the database.
 */
 async function runSeed() {
-  console.log('seeding...')
+  
   try {
     await seed()
   } catch (err) {
     console.error(err)
     process.exitCode = 1
   } finally {
-    console.log('closing db connection')
+  
     await db.close()
-    console.log('db connection closed')
+    
   }
 }
 

@@ -6,6 +6,7 @@ import Home from '../features/home/Home';
 import Cart from '../features/cart/Cart';
 import AllProducts from '../features/products/products';
 import SingleProduct from '../features/products/singleProductComponent';
+import User from '../features/user/User';
 import { me } from './store';
 import { fetchCart } from '../features/cart/cartSlice';
 
@@ -38,6 +39,7 @@ const AppRoutes = () => {
           <Route path="/cart" element={<Cart />}/>
           <Route path='/products' element = {<AllProducts />} />
           <Route path='/products/:id' element = {<SingleProduct />} />
+          <Route path='/users/:id' element = {<User/>}></Route>
         </Routes>
       ) : (
         <Routes>

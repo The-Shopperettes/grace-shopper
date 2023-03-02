@@ -8,7 +8,6 @@ async function pullPlantData() {
         const {data} = await axios.get(`https://perenual.com/api/species-list?page=${i}&key=sk-RhbN63fe2d6635f17135`);
 
         for(let plant of data.data) {
-            console.log("plant", plant)
             const qty = Math.floor(Math.random() * 200) + 50;
             const price = Math.floor(Math.random() * 69) + 1;
             const sunlight = plant.sunlight.join(", ") || "";
