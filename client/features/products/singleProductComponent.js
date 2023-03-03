@@ -56,7 +56,8 @@ const SingleProduct = () => {
           <br/>
           {/* NOTE: Currently each field in the form needs to have something in it for submit to work, though it can be the same value if no edit is needed.
           //Can change this later if needed */}
-          <p><b>Edit Product Details (must enter every field before submit):</b></p>
+          <p><b>Edit Product Details:</b></p>
+            <p><i>Note: Must enter a value in each field before submitting. Please add the current value for that product's detail if no change is needed.</i></p>
             <p>Quantity (in-stock): {qty}</p>
          <div>
           <div>{<EditProduct />}</div>
