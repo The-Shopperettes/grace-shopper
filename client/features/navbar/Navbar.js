@@ -39,8 +39,7 @@ const Navbar = () => {
           <div>
             {/* The navbar will show these links before you log in */}
             <Link to="/products">Home🌱</Link>
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Sign Up</Link>
+            <Link to="/login">Login/Sign Up</Link>
             <Link to="/cart">
               <Button variant="cart">
                 🛒<Badge bg="secondary">{cartItems.length}</Badge>

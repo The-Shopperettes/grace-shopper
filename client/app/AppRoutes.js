@@ -25,8 +25,9 @@ const AppRoutes = () => {
     dispatch(me());
   }, []);
 
+  ////===== TOOK OUT '.id' AFTER USER ON LINE 29===///
   useEffect(() => {
-    if(user.id) {
+    if(user) {
       dispatch(fetchCart());
     }
   }, [user])
@@ -39,6 +40,7 @@ const AppRoutes = () => {
           <Route path='/products' element = {<AllProducts />} />
           <Route path='/products/:id' element = {<SingleProduct />} />
           <Route path='/users/:id' element = {<User/>}></Route>
+
           <Route path='/checkout' element={<CheckoutPage />} />
         {!isLoggedIn ?
         <>
@@ -53,6 +55,7 @@ const AppRoutes = () => {
           </>
         : null}
         </Routes> 
+
     </div>
   );
 };
