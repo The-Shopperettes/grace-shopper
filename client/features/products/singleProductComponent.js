@@ -23,7 +23,7 @@ const SingleProduct = () => {
   }, [dispatch]);
 
   //This is not working, will need to edit later
-  const isAdmin = useSelector(selectUser);
+  // const isAdmin = useSelector(selectUser);
 
   //handleDelete function allows Delete button to remove a product
   //This will delete product and then navigate back to all products page
@@ -49,7 +49,7 @@ const SingleProduct = () => {
       <br/>
       {/* Admin-only functionality does not work, need to edit later */}
       <h5>Admin View</h5>
-      {isAdmin ? (
+      {/* {isAdmin ? ( */}
         <div>
           <Button onClick={handleDelete}>Delete Product</Button>
           <br/>
@@ -63,7 +63,7 @@ const SingleProduct = () => {
           <div>{<EditProduct />}</div>
         </div>
         </div>
-      ) : null}
+      {/* ) : null} */}
 
     </Card>
   );
