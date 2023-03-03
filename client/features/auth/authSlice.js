@@ -12,16 +12,7 @@ const TOKEN = "token";
 export const me = createAsyncThunk("auth/me", async () => {
   try {
     const token = window.localStorage.getItem(TOKEN);
-    console.log("token:", token);
-
-    // if (token = undefined) {
-    //   console.log('token undefined BUT THIS IS WORKING')
-    // }
     if (token) {
-
-      // const via = await axios.get("/visitors");
-      // console.log('vis,' via);
-      console.log('if');
       const res = await axios.get("/auth/me", {
         headers: {
           authorization: token,
@@ -30,7 +21,6 @@ export const me = createAsyncThunk("auth/me", async () => {
       return res.data;
     } else {
       const vis = await axios.get("/api/visitors");
-      console.log("vis", vis);
       return vis.data;
     }
   } catch (err) {}

@@ -26,29 +26,9 @@ router.post('/signup', async (req, res, next) => {
 });
 
 router.get('/me', async (req, res, next) => {
-  console.log('got to route');
   try {
     res.send(await User.findByToken(req.headers.authorization));
   } catch (ex) {
     next(ex);
   }
 });
-
-// router.get('/visitors', async (req, res, next) => {
-//   console.log(" at visitor");
-//   try {
-//       const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-
-//       let visitor = await Visitor.findOne({
-//           where: {token: ip}
-//       });
-
-//       if(!visitor) visitor = await Visitor.create({token: ip});
-      
-//       //send the visitor back
-//       res.send(visitor);
-
-//   } catch (err) {
-//       next(err);
-//   }
-// });

@@ -4,7 +4,6 @@ const {Product, User, Cart, CartItem, Order, Visitor} = require('../db').models;
 
 //auth middleware
 const getToken = async (req, res, next) => {
-    console.log(req.headers, 'req header');
     try {
         const token = req.headers.authorization;
 

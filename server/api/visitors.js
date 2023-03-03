@@ -3,7 +3,6 @@ const { models: { Visitor }} = require('../db');
 
 //gets or creates a visitor based on their IP address
 router.get('/', async (req, res, next) => {
-    console.log(" at visitor");
     try {
         const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
