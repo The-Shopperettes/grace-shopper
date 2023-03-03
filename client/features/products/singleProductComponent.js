@@ -39,6 +39,7 @@ const SingleProduct = () => {
       Navigate("/products");
     };
 
+  // TODO: Product Quantity: Need to include conditional for decrement, can't be lower than 0: qty>=0. Need to include conditional for increment, can't add more than than (qty - product in cart quantity)
   return (
     <Card id="singleProduct" key={id} style = {{width: '50rem'}}>
       <Card.Title>{name}</Card.Title>
