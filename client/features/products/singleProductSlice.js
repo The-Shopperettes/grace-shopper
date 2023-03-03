@@ -11,6 +11,18 @@ export const fetchSingleProduct = createAsyncThunk("singleProduct", async (id) =
       console.log(err);
     }
   });
+
+  export const deleteProduct = createAsyncThunk(
+    "products/deleteProduct",
+    async (id) => {
+      try {
+      const { data } = await axios.delete(
+        `/api/products/${id}`);
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  });
   
   const singleProductSlice = createSlice({
     name: "singleProduct",
@@ -19,6 +31,9 @@ export const fetchSingleProduct = createAsyncThunk("singleProduct", async (id) =
     extraReducers: (builder) => {
       builder.addCase(fetchSingleProduct.fulfilled, (state, action) => {
         return action.payload;
+      });
+      builder.addCase(deleteProduct.fulfilled, (state, action) => {
+        return {};
       });
     },
   });
