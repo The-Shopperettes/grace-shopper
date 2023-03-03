@@ -6,6 +6,7 @@ import Home from '../features/home/Home';
 import Cart from '../features/cart/Cart';
 import AllProducts from '../features/products/products';
 import SingleProduct from '../features/products/singleProductComponent';
+import CheckoutPage from '../features/order/CheckoutPage';
 import User from '../features/user/User';
 import { me } from './store';
 import { fetchCart } from '../features/cart/cartSlice';
@@ -33,22 +34,16 @@ const AppRoutes = () => {
 
   return (
     <div>
-      {/* {isLoggedIn ? ( */}
         <Routes>
           <Route path="/*" element={<AllProducts />} />
-          <Route path='/login' element={<AuthForm/>}/>
-          <Route to="/home" element={<AllProducts />} />
           <Route path="/cart" element={<Cart />}/>
           <Route path='/products' element = {<AllProducts />} />
           <Route path='/products/:id' element = {<SingleProduct />} />
           <Route path='/users/:id' element = {<User/>}></Route>
-        </Routes>
-      {/* ) : (
-        <Routes>
-          <Route
-            path="/*"
-            element={<AuthForm name="login" displayName="Login" />}
-          />
+
+          <Route path='/checkout' element={<CheckoutPage />} />
+        {!isLoggedIn ?
+        <>
           <Route
             path="/login"
             element={<AuthForm name="login" displayName="Login" />}
@@ -57,8 +52,10 @@ const AppRoutes = () => {
             path="/signup"
             element={<AuthForm name="signup" displayName="Sign Up" />}
           />
-        </Routes> */}
-      {/* )} */}
+          </>
+        : null}
+        </Routes> 
+
     </div>
   );
 };
