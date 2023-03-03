@@ -15,7 +15,7 @@ const SingleProduct = () => {
   const dispatch = useDispatch();
 
   const singleProduct = useSelector(selectSingleProduct);
-  const { name, cycle, watering, sunlight, smallImg, mediumImg, largeImg, qty, price } =
+  const { name, cycle, watering, sunlight, largeImg, qty, price } =
     singleProduct;
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const SingleProduct = () => {
     <Card id="singleProduct" key={id}>
       <Card.Title>{name}</Card.Title>
       {/* Note: Find out how to move image to the side in Bootstrap. Reference: https://mdbootstrap.com/docs/react/layout/flexbox/ */}
-      <Card.Img src={mediumImg} />
+      <Card.Img src={largeImg} />
       <Card.Text>Cycle: {cycle}</Card.Text>
       <Card.Text>Watering: {watering}</Card.Text>
       <Card.Text>Sun Needs: {sunlight}</Card.Text>
