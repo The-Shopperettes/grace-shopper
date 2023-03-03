@@ -90,6 +90,8 @@ router.post('/item/add', getToken, async (req, res, next) => {
         //get the product id
         const { productId, qty } = req.body;
 
+        console.log(productId)
+        console.log(qty)
         //get the user's cart
         const search = req.user ? {userId: req.user.id} : {visitorId: req.visitor.id};
 
