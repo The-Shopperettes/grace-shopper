@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {createAction, createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
+
 // TODO: fetch the count of the product too & add to slice
 
 export const fetchProductsAsync = createAsyncThunk('products/fetchAll',
