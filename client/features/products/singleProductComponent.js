@@ -5,9 +5,11 @@ import {
   selectSingleProduct,
   fetchSingleProduct,
   deleteProduct,
+  editProduct,
 } from "../products/singleProductSlice";
+import EditProduct from "./editSingleProduct";
 import { selectUser } from "../user/userSlice";
-import { Button, Card, Form } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 
 const SingleProduct = () => {
   const { id } = useParams();
@@ -53,39 +55,16 @@ const SingleProduct = () => {
           <Button onClick={handleDelete}>Delete Product</Button>
           <br/>
           <br/>
-          {/* Edit functionality still in progress */}
-          <p><b>Edit Product Details:</b></p>
-          <p>Quantity (in-stock): {qty}</p>
-            <Form>
-            <Form.Group controlId="editQty">
-                <Form.Label>Quantity (in-stock):</Form.Label>
-                <Form.Control type="qty" placeholder="Edit product quantity" />
-              </Form.Group>
-              <Form.Group className="editProduct" controlId="editName">
-                <Form.Label>Name:</Form.Label>
-                <Form.Control type="name" placeholder="Edit product name" />
-              </Form.Group>
-              <Form.Group controlId="editCycle">
-                <Form.Label>Cycle:</Form.Label>
-                <Form.Control type="cycle" placeholder="Edit cycle details" />
-              </Form.Group>
-              <br/>
-              <Form.Group controlId="editWatering">
-                <Form.Label>Watering:</Form.Label>
-                <Form.Control type="watering" placeholder="Edit watering details" />
-              </Form.Group>
-              <Form.Group controlId="editSunNeeds">
-                <Form.Label>Sun Needs:</Form.Label>
-                <Form.Control type="sunNeeds" placeholder="Edit sun needs details" />
-              </Form.Group>
-              <Form.Group controlId="editPrice">
-                <Form.Label>Price:</Form.Label>
-                <Form.Control type="price" placeholder="Edit product price" />
-              </Form.Group>
-              <Button variant="primary" type="submit">Submit Edits</Button>
-            </Form>
+          {/* NOTE: Currently each field in the form needs to have something in it for submit to work, though it can be the same value if no edit is needed.
+          //Can change this later if needed */}
+          <p><b>Edit Product Details (must enter every field before submit):</b></p>
+            <p>Quantity (in-stock): {qty}</p>
+         <div>
+          <div>{<EditProduct />}</div>
+        </div>
         </div>
       ) : null}
+
     </Card>
   );
 };
