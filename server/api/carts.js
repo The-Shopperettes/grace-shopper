@@ -68,7 +68,7 @@ router.get('/', getToken, async ({visitor, user}, res, next) => {
             search = {visitorId: visitor.id}
         }
 
-        const cart = await Cart.findOne({
+        let cart = await Cart.findOne({
             where: search,
             include: {
                 model: CartItem,
@@ -76,6 +76,28 @@ router.get('/', getToken, async ({visitor, user}, res, next) => {
             },
             order: [[CartItem, 'id', 'DESC']]
         })
+
+        let upToDate = true;
+
+        await Promise.all(cart.cartItems.map(item => {
+            if(item.qty > item.product.qty) {
+                item.update({qty: item.product.qty});
+                upToDate = false;
+            }
+        }))
+
+        //refetch if not up to date
+        if(!upToDate) {
+            cart = await Cart.findOne({
+                where: search,
+                include: {
+                    model: CartItem,
+                    include: [ Product ]
+                },
+                order: [[CartItem, 'id', 'DESC']]
+            })
+        }
+
 
         res.send(cart);
 

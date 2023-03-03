@@ -12,12 +12,6 @@ export const fetchCart = createAsyncThunk("cart/items", async (_, {dispatch}) =>
       }
     });
 
-    await Promise.all(cartItems.map(item => {
-      if(item.qty > item.product.qty) {
-
-      }
-    }))
-
     return {cartId: id, cartItems, error: null};
   } catch (err) {
     console.error(err);
@@ -70,7 +64,16 @@ export const addToCart = createAsyncThunk("cart/addItem", async({productId, qty}
 
 export const order = createAsyncThunk("cart/order", async () => {
   const token = window.localStorage.getItem(TOKEN);
-  
+  try {
+    await axios.post(`/api/carts/order`, {headers: {
+      authorization: token,
+    }});
+
+    dispatch(fetchCart());
+
+  } catch (err) {
+    console.error(err);
+  }
 })
 
 export const cartSlice = createSlice({
