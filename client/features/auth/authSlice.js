@@ -1,35 +1,43 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
 /*
   CONSTANT VARIABLES
 */
-const TOKEN = 'token';
+const TOKEN = "token";
 
 /*
   THUNKS
 */
-export const me = createAsyncThunk('auth/me', async () => {
+export const me = createAsyncThunk("auth/me", async () => {
   try {
     const token = window.localStorage.getItem(TOKEN);
-    console.log('token:')
+    console.log("token:", token);
+
+    // if (token = undefined) {
+    //   console.log('token undefined BUT THIS IS WORKING')
+    // }
     if (token) {
-      const res = await axios.get('/auth/me', {
+
+      // const via = await axios.get("/visitors");
+      // console.log('vis,' via);
+      console.log('if');
+      const res = await axios.get("/auth/me", {
         headers: {
           authorization: token,
         },
       });
       return res.data;
     } else {
-      const vis = await axios.get('/visitors');
+      const vis = await axios.get("/api/visitors");
+      console.log("vis", vis);
       return vis.data;
     }
-  } catch (err) {
-  }
+  } catch (err) {}
 });
 
 export const authenticate = createAsyncThunk(
-  'auth/authenticate',
+  "auth/authenticate",
   async ({ username, password, method }, thunkAPI) => {
     try {
       const res = await axios.post(`/auth/${method}`, { username, password });
@@ -39,7 +47,7 @@ export const authenticate = createAsyncThunk(
       if (err.response.data) {
         return thunkAPI.rejectWithValue(err.response.data);
       } else {
-        return 'There was an issue with your request.';
+        return "There was an issue with your request.";
       }
     }
   }
@@ -49,7 +57,7 @@ export const authenticate = createAsyncThunk(
   SLICE
 */
 export const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState: {
     me: {},
     error: null,
