@@ -40,6 +40,18 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 
-
+//delete single product
+router.delete('/:id', async (req, res, next) => {
+    try {
+      await Product.destroy({
+        where: {
+          id: req.params.id,
+        },
+      });
+      res.send();
+    } catch(err) {
+      next(err)
+    }
+  });
 
 module.exports = router;
