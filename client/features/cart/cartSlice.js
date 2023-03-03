@@ -3,7 +3,7 @@ import axios from "axios";
 
 const TOKEN = 'token';
 
-export const fetchCart = createAsyncThunk("cart/items", async () => {
+export const fetchCart = createAsyncThunk("cart/items", async (_, {dispatch}) => {
   const token = window.localStorage.getItem(TOKEN);
   try {
     const { data: {id, cartItems} } = await axios.get(`/api/carts`, {
@@ -64,7 +64,16 @@ export const addToCart = createAsyncThunk("cart/addItem", async({productId, qty}
 
 export const order = createAsyncThunk("cart/order", async () => {
   const token = window.localStorage.getItem(TOKEN);
-  
+  try {
+    await axios.post(`/api/carts/order`, {headers: {
+      authorization: token,
+    }});
+
+    dispatch(fetchCart());
+
+  } catch (err) {
+    console.error(err);
+  }
 })
 
 export const cartSlice = createSlice({
