@@ -44,7 +44,7 @@ const EditProduct = () => {
                 onChange={(event) => setQty(event.target.value) } />
               </Form.Group>
 
-              <Form.Group className="editProduct" controlId="editName">
+              <Form.Group controlId="editName">
                 <Form.Label>Name:</Form.Label>
                 <Form.Control 
                   type="name" 
