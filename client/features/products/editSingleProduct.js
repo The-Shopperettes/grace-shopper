@@ -8,7 +8,8 @@ const EditProduct = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
 
-  //editProduct function for edit product details form
+  //editProduct function for 'edit product' form
+  //Using state to update each field of the form
 
   const [name, setName] = useState("");
   const [cycle, setCycle] = useState("");
