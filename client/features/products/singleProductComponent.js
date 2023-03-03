@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectSingleProduct,
   fetchSingleProduct,
   deleteProduct,
-  editProduct,
 } from "../products/singleProductSlice";
 import EditProduct from "./editSingleProduct";
 import { selectUser } from "../user/userSlice";
@@ -23,11 +22,11 @@ const SingleProduct = () => {
     dispatch(fetchSingleProduct(id));
   }, [dispatch]);
 
-  //Have not confirmed functionality of this yet
+  //This is not working, will need to edit later
   const isAdmin = useSelector(selectUser);
 
-  //add handleDelete function for Delete button event listener
-  //will delete product and then navigate back to all products page
+  //handleDelete function allows Delete button to remove a product
+  //This will delete product and then navigate back to all products page
   const Navigate = useNavigate();
 
   const handleDelete = async () => {
@@ -48,7 +47,7 @@ const SingleProduct = () => {
       <br />
       <Card.Footer>Price: ${price}</Card.Footer>
       <br/>
-      {/* Have not confirmed functionality that only admins can view below info */}
+      {/* Admin-only functionality does not work, need to edit later */}
       <h5>Admin View</h5>
       {isAdmin ? (
         <div>
