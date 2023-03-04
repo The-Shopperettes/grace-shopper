@@ -19,7 +19,6 @@ const Navbar = () => {
 
   return (
     <div>
-      <h1>FS-App-Template</h1>
       <nav>
         {isLoggedIn ? (
           <div>
@@ -49,6 +48,7 @@ const Navbar = () => {
           </div>
         )}
       </nav>
+      <img src="logo.png"></img>
       <hr />
     </div>
   );
