@@ -6,7 +6,7 @@ import { Button, Badge } from "react-bootstrap";
 import { selectCart } from '../cart/cartSlice';
 
 const Navbar = () => {
-  const isLoggedIn = useSelector((state) => !!state.auth.me.username);
+  const isLoggedIn = useSelector((state) => !!state.auth.me);
   console.log(isLoggedIn);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,7 +19,8 @@ const Navbar = () => {
 
   return (
     <div>
-      <nav>
+      <nav id='navbar'>
+        <div id='navlinks'>
         {isLoggedIn ? (
           <div>
             {/* The navbar will show these links after you log in */}
@@ -47,9 +48,9 @@ const Navbar = () => {
             </Link>
           </div>
         )}
-      </nav>
+        </div>
       <img src="logo.png"></img>
-      <hr />
+      </nav>
     </div>
   );
 };
