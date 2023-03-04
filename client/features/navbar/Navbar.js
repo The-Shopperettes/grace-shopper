@@ -14,6 +14,7 @@ const Navbar = () => {
     // Need to edit this navigation route so it shows login/signup options when it redirects to home page
     navigate("/products");
   };
+  console.log(isLoggedIn);
 
   const {cartItems} = useSelector(selectCart);
 
