@@ -6,12 +6,11 @@ import { Button, Badge } from "react-bootstrap";
 import { selectCart } from '../cart/cartSlice';
 
 const Navbar = () => {
-  const isLoggedIn = useSelector((state) => !!state.auth.me);
+  const isLoggedIn = useSelector((state) => !!state.auth.me.username);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const logoutAndRedirectHome = () => {
     dispatch(logout());
-    // Need to edit this navigation route so it shows login/signup options when it redirects to home page
     navigate("/products");
   };
   console.log(isLoggedIn);
