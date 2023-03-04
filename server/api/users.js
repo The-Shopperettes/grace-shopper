@@ -2,9 +2,10 @@ const router = require("express").Router();
 const {
   models: { User, Order },
 } = require("../db");
+const { requireAdmin, getToken } = require('./middleware');
 module.exports = router;
 
-router.get("/", async (req, res, next) => {
+router.get("/", requireAdmin, async (req, res, next) => {
   try {
     const users = await User.findAll({
       // explicitly select only the id and username fields - even though
@@ -18,14 +19,15 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:id", async (req, res, next) => {
+//UPDATE FOR THAT USER ONLY
+router.get("/:id", getToken, async (req, res, next) => {
   try {
-    const user = await User.findOne({
-      where: { id: req.params.id },
-      // attributes: ["id", "username", "email", "isAdmin"],
-      include: Order,
-    });
-    res.json(user);
+    if(!req.user) throw new Error('Not authorized');
+
+    const orders = await req.user.getOrders();
+
+    res.json({user: req.user.dataValues, orders});
+
   } catch (err) {
     next(err);
   }

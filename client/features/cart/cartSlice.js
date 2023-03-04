@@ -51,8 +51,7 @@ export const deleteItem = createAsyncThunk("cart/deleteItem", async(itemId, {dis
 export const addToCart = createAsyncThunk("cart/addItem", async({productId, qty}, {dispatch}) => {
   const token = window.localStorage.getItem(TOKEN);
   try {
-    console.log(productId)
-    console.log(qty)
+
     await axios.post(`/api/carts/item/add`, {productId, qty}, {headers: {
       authorization: token,
     }});
@@ -64,10 +63,11 @@ export const addToCart = createAsyncThunk("cart/addItem", async({productId, qty}
   }
 })
 
-export const order = createAsyncThunk("cart/order", async () => {
+export const order = createAsyncThunk("cart/order", async (email, {dispatch}) => {
   const token = window.localStorage.getItem(TOKEN);
   try {
-    await axios.post(`/api/carts/order`, {headers: {
+    const body = email ? {email} : {email: null};
+    await axios.put(`/api/carts/order`, body, {headers: {
       authorization: token,
     }});
 

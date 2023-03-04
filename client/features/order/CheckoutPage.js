@@ -3,9 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   selectCart,
   fetchCart,
-  updateQty,
-  deleteItem,
-  addToCart,
+  order
 } from "../cart/cartSlice";
 import { Accordion, Form, Container, Row, Col, Button, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -15,10 +13,12 @@ const CheckoutPage = () => {
   const [loading, setLoading] = useState(false);
   const [guestEmail, setGuestEmail] = useState("");
   const [price, setPrice] = useState(null);
+  const [confirmed, setConfirmed] = useState(false);
+  const [orderError, setOrderError] = useState(null);
 
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.auth);
-  const {cartItems} = useSelector(selectCart);
+  const {cartItems, error} = useSelector(selectCart);
 
   useEffect(() => {
     dispatch(fetchCart());
@@ -35,13 +35,24 @@ const CheckoutPage = () => {
     }
   }, [cartItems])
 
+  useEffect(() => {
+    if(loading) {
+      if(cartItems.length === 0) {
+        setConfirmed(true);
+      } else {
+        setOrderError('There was an issue with your order. Please try again later.');
+      }
+    }
+  }, [loading]);
+
   function testEmail(email) {
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
   }
 
   function placeOrder() {
-
+    setLoading(true);
+    dispatch(order(testEmail(guestEmail) ? guestEmail : null))
   }
 
   //if there are no items in the cart, tell user to go to home
@@ -96,11 +107,13 @@ const CheckoutPage = () => {
               Payment info here
               <p></p>
               <Button onClick={() => setActive(1)}>Back</Button>{' '}
-              <Button onClick={placeOrder}>Place order</Button>
+              <Button onClick={placeOrder} disabled={loading}>Place order</Button>
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
+        {orderError && <p>{orderError}</p>}
         </Col>
+        
     <Col md={4}> 
     <Table bordered>
       <thead>
@@ -117,7 +130,7 @@ const CheckoutPage = () => {
                     {product.name} x {qty}
                 </td>
                 <td>
-                    ${product.price * qty}.00
+                    ${parseFloat(product.price * qty).toFixed(2)}.00
                 </td>
             </tr>)
         })
@@ -132,7 +145,7 @@ const CheckoutPage = () => {
         </tr>
         <tr>
           <th>Total</th>
-          <th>${price+5.99}</th>
+          <th>${parseFloat(price+5.99).toFixed(2)}</th>
         </tr>
       </tbody>
     </Table>

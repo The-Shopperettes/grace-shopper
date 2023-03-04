@@ -14,7 +14,8 @@ import { Button, Card, Form } from "react-bootstrap";
 const SingleProduct = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [qtyMessage, setQtyMessage] = useState(null);
 
   const singleProduct = useSelector(selectSingleProduct);
   const { name, cycle, watering, sunlight, mediumImg, qty, price } = singleProduct;
@@ -28,6 +29,7 @@ const SingleProduct = () => {
     const handleAddToCart = (event) => {
       event.preventDefault();
        dispatch(addToCart({productId: id, qty: quantity}));
+       setQuantity(1);
     };
     
     //handleDelete function allows Delete button to remove a product
@@ -39,27 +41,39 @@ const SingleProduct = () => {
       Navigate("/products");
     };
 
+    const handleQuantityChange = ({target: {value}}) => {
+      value = Number(value);
+      if(value < 1 || isNaN(value)) return;
+      //update to also check qty in cart
+      if(value > qty) {
+        setQtyMessage(`Only ${qty} in stock`);
+        return;
+      }
+      setQuantity(value);
+    }
+
   return (
     <Card id="singleProduct" key={id} style = {{width: '50rem'}}>
       <Card.Title>{name}</Card.Title>
       {/* Note: Find out how to move image to the side in Bootstrap. Reference: https://mdbootstrap.com/docs/react/layout/flexbox/ */}
       <Card.Img src={mediumImg} />
-      <Form>
+      {qty > 0 && <Form>
         <Form.Control 
         style={{width: '10rem'}}
         type='number'
         value={quantity}
-        onChange={(e) => {setQuantity(e.target.value)}}>
+        onChange={handleQuantityChange}>
           </Form.Control>
-        </Form>
+          {qtyMessage && <Form.Text>{qtyMessage}</Form.Text>}
+        </Form>}
       <Card.Text>Cycle: {cycle}</Card.Text>
       <Card.Text>Watering: {watering}</Card.Text>
       <Card.Text>Sun Needs: {sunlight}</Card.Text>
-      <Card.Text>{singleProduct.qty < 20 && <Card.Text>Low stock! Only ${qty} left!</Card.Text>}</Card.Text>
+      <Card.Text>{singleProduct.qty < 20 && <Card.Text>{qty <= 0 ? 'Sold out!' : `Low stock! Only ${qty} left!`}</Card.Text>}</Card.Text>
       <br />
-      <Button onClick={handleAddToCart} style={{width: '10rem'}}>Add to Cart</Button>
+      <Button onClick={handleAddToCart} style={{width: '10rem'}} disabled={qty <= 0}>Add to Cart</Button>
       <br />
-      <Card.Footer>Price: ${price}</Card.Footer>
+      <Card.Footer>Price: ${parseFloat(price).toFixed(2)}</Card.Footer>
       <br/>
       {/* Admin-only functionality does not work, need to edit later */}
       <h5>Admin View</h5>

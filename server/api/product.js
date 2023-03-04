@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const {Product} = require('../db').models;
+const { requireAdmin } = require('./middleware');
 
 // get all products
 router.get('/', async (req, res, next) => {
@@ -34,14 +35,14 @@ router.get('/count', async (req, res, next) => {
 // get single product
 router.get('/:id', async (req, res, next) => {
     try{
-        res.json(await Product.findByPk(req.params.id));
+        res.send(await Product.findByPk(req.params.id));
     } catch(err) {
         next(err);
     }
 })
 
 //delete single product
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', requireAdmin, async (req, res, next) => {
     try {
       await Product.destroy({
         where: {
@@ -55,8 +56,9 @@ router.delete('/:id', async (req, res, next) => {
   });
 
   //edit single product
-  router.put('/:id', async (req, res, next) => {
+  router.put('/:id', requireAdmin, async (req, res, next) => {
     try {
+      console.log(req.body);
       const editProduct = await Product.findByPk(req.params.id);
       res.send(await editProduct.update(
         { name: req.body.name,
