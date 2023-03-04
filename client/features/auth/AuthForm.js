@@ -23,7 +23,6 @@ const AuthForm = ({ name, displayName }) => {
     const username = evt.target.username.value;
     const password = evt.target.password.value;
     dispatch(authenticate({ username, password, method: formName }));
-    navigate("/products"); 
   };
 
   const handleNewUser = (evt) => {
