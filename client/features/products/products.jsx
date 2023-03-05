@@ -81,7 +81,6 @@ const AllProducts = () => {
       <Row xs={1} md={3} gap={3}>
         {products && products.length ? productList : "No products here"}
       </Row>
-      ;
       <PageControls
         handlePageChange={handlePageChange}
         page={page}

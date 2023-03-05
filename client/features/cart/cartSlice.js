@@ -75,6 +75,7 @@ export const order = createAsyncThunk("cart/order", async (email, {dispatch}) =>
 
   } catch (err) {
     console.error(err);
+    return err.message;
   }
 })
 
@@ -94,6 +95,9 @@ export const cartSlice = createSlice({
     });
     builder.addCase(addToCart.fulfilled, (state, action) => {
   });
+    builder.addCase(order.fulfilled, (state, action) => {
+      if(typeof action.payload === 'string') state.error = action.payload;
+    })
 }});
 
 export const selectCart = (state) => state.cart;

@@ -9,13 +9,15 @@ import {
 import {addToCart} from '../cart/cartSlice';
 import EditProduct from "./editSingleProduct";
 import { selectUser } from "../user/userSlice";
-import { Button, Card, Form } from "react-bootstrap";
+import { Button, Card, Form, Modal, Container } from "react-bootstrap";
 
 const SingleProduct = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+
   const [quantity, setQuantity] = useState(1);
   const [qtyMessage, setQtyMessage] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const singleProduct = useSelector(selectSingleProduct);
   const { name, cycle, watering, sunlight, mediumImg, qty, price } = singleProduct;
@@ -29,16 +31,16 @@ const SingleProduct = () => {
     const handleAddToCart = (event) => {
       event.preventDefault();
        dispatch(addToCart({productId: id, qty: quantity}));
-       setQuantity(1);
+       setShowModal(true);
     };
     
     //handleDelete function allows Delete button to remove a product
     //This will delete product and then navigate back to all products page
-    const Navigate = useNavigate();
+    const navigate = useNavigate();
 
     const handleDelete = async () => {
       await dispatch(deleteProduct(id));
-      Navigate("/products");
+      navigate("/products");
     };
 
     const handleQuantityChange = ({target: {value}}) => {
@@ -52,7 +54,34 @@ const SingleProduct = () => {
       setQuantity(value);
     }
 
+    const viewCart = () => {
+      navigate('/cart');
+    }
+
+    const closeModal = () => {
+      setShowModal(false);
+      setQuantity(1);
+    }
+
+    const ConfirmationModal = () => {
+      return (
+        <Modal show={showModal}>
+        <Modal.Header>
+          <Modal.Title>Added {quantity} {name} to cart</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Button onClick={viewCart}>View cart</Button>
+          <br></br>
+          <br></br>
+          <Button onClick={closeModal}>Continue shopping</Button>
+        </Modal.Body>
+      </Modal>
+      )
+    }
+
   return (
+    <Container>
+    <ConfirmationModal />
     <Card id="singleProduct" key={id} style = {{width: '50rem'}}>
       <Card.Title>{name}</Card.Title>
       {/* Note: Find out how to move image to the side in Bootstrap. Reference: https://mdbootstrap.com/docs/react/layout/flexbox/ */}
@@ -94,6 +123,7 @@ const SingleProduct = () => {
       {/* ) : null} */}
 
     </Card>
+    </Container>
   );
 };
 

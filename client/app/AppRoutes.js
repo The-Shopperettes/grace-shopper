@@ -10,6 +10,7 @@ import CheckoutPage from '../features/order/CheckoutPage';
 import User from '../features/user/User';
 import { me } from './store';
 import { fetchCart } from '../features/cart/cartSlice';
+import AllUsers from '../features/users/AllUsers';
 
 /**
  * COMPONENT
@@ -51,10 +52,19 @@ const AppRoutes = () => {
             element={<AuthForm name="signup" displayName="Sign Up" />}
           />
           </>
-        : <Route
+        : 
+        <>
+        <Route
             path="/user"
             element={<User />}
-          /> }
+          />
+          {user.isAdmin && 
+          <Route 
+            path="/allUsers"
+            element=<AllUsers />
+          />}
+          
+          </> }
         </Routes> 
 
     </div>
