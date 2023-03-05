@@ -6,7 +6,8 @@ import { Button, Badge } from "react-bootstrap";
 import { selectCart } from '../cart/cartSlice';
 
 const Navbar = () => {
-  const isLoggedIn = useSelector((state) => !!state.auth.me.password);
+  const user = useSelector(state => state.auth.me);
+  const isLoggedIn = !!user.password;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -29,6 +30,8 @@ const Navbar = () => {
               Logout
             </button>
             <Link to="/user">Account</Link>
+            {user.isAdmin && 
+            <Link to="/allUsers">Manage users</Link>}
           </>
 
         ) : (
@@ -42,7 +45,7 @@ const Navbar = () => {
                 🛒<Badge bg="secondary">{cartItems.length}</Badge>
                 <span className="visually-hidden">cart items</span>
               </Button>
-          </Link>
+        </Link>
       </nav>
       <hr />
     </div>
