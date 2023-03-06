@@ -14,7 +14,6 @@ const PaymentForm = () => {
   
   const [loading, setLoading] = useState("");
   const [message, setMessage] = useState(null);
-
   
 
   useEffect(() => {
@@ -63,8 +62,8 @@ const PaymentForm = () => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: "http://localhost:8080",
-      },
+        return_url: "http://localhost:8080/checkout"
+      }
     });
 
     if (error.type === "validation_error" || error.type === "card_error") {
@@ -77,15 +76,18 @@ const PaymentForm = () => {
   }
 
   const paymentElementOptions = {
-    layout: "tabs",
+    layout: {
+      type: 'accordion',
+      defaultCollapsed: false,
+      radios: true,
+      spacedAccordionItems: false
+    }
   };
 
   return (
 
           <Form>
-            <LinkAuthenticationElement
-              id="link-authentication-element"
-            />
+            
             <PaymentElement
               id="payment-element"
               options={paymentElementOptions}
