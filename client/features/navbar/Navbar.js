@@ -11,7 +11,6 @@ const Navbar = () => {
   const navigate = useNavigate();
   const logoutAndRedirectHome = () => {
     dispatch(logout());
-    // Need to edit this navigation route so it shows login/signup options when it redirects to home page
     navigate("/products");
   };
 
@@ -19,8 +18,8 @@ const Navbar = () => {
 
   return (
     <div>
-      <h1>FS-App-Template</h1>
-      <nav>
+      <nav id='navbar'>
+        <div id='navlinks'>
         {isLoggedIn ? (
           <div>
             {/* The navbar will show these links after you log in */}
@@ -48,8 +47,9 @@ const Navbar = () => {
             </Link>
           </div>
         )}
+        </div>
+      <img src="logo.png"></img>
       </nav>
-      <hr />
     </div>
   );
 };

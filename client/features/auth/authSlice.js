@@ -27,12 +27,7 @@ export const me = createAsyncThunk('auth/me', async (_, {getState}) => {
           },
         })
       }
-      
-
       return data;
-    } else {
-      const res = await axios.get('/api/visitors');
-      return res.data;
     }
   } catch (err) {
     console.error(err);
