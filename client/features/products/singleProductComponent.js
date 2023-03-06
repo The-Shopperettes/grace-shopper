@@ -14,6 +14,7 @@ import { Button, Card, Form, Modal, Container } from "react-bootstrap";
 const SingleProduct = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [quantity, setQuantity] = useState(0);
 
   const [quantity, setQuantity] = useState(1);
   const [qtyMessage, setQtyMessage] = useState(null);
@@ -42,6 +43,11 @@ const SingleProduct = () => {
       await dispatch(deleteProduct(id));
       navigate("/products");
     };
+    
+    //Define user variable to access isAdmin property so only admins can access certain information on the page
+    const user = useSelector((state) => {
+      return state.auth.me;
+    });
 
     const handleQuantityChange = ({target: {value}}) => {
       value = Number(value);
@@ -79,11 +85,11 @@ const SingleProduct = () => {
       )
     }
 
-
+  // TODO: Product Quantity: Need to include conditional for decrement, can't be lower than 0: qty>=0. Need to include conditional for increment, can't add more than than (qty - product in cart quantity)
   return (
     <Container>
     <ConfirmationModal />
-    <Card id="singleProduct" key={id} style = {{width: '50rem'}}>
+    <Card id="singleProduct" key={id} style = {{width: '50rem', backgroundColor: '#7BA842'}}>
       <Card.Title>{name}</Card.Title>
       {/* Note: Find out how to move image to the side in Bootstrap. Reference: https://mdbootstrap.com/docs/react/layout/flexbox/ */}
       <Card.Img src={mediumImg} />
@@ -103,17 +109,16 @@ const SingleProduct = () => {
       <br />
       <Button onClick={handleAddToCart} style={{width: '10rem'}} disabled={qty <= 0}>Add to Cart</Button>
       <br />
-      <Card.Footer>Price: ${parseFloat(price).toFixed(2)}</Card.Footer>
+      <Card.Footer style={{backgroundColor: 'white'}}>Price: ${parseFloat(price).toFixed(2)}</Card.Footer>
       <br/>
-      {/* Admin-only functionality does not work, need to edit later */}
-      <h5>Admin View</h5>
-      {/* {isAdmin ? ( */}
-        <div>
+      {(user.isAdmin) ? (
+        <div> 
+          <h5>Admin View</h5>
           <Button onClick={handleDelete}>Delete Product</Button>
           <br/>
           <br/>
           {/* NOTE: Currently each field in the form needs to have something in it for submit to work, though it can be the same value if no edit is needed.
-          //Can change this later if needed */}
+          */}
           <p><b>Edit Product Details:</b></p>
             <p><i>Note: Must enter a value in each field before submitting. Please add the current value for that product's detail if no change is needed.</i></p>
             <p>Quantity (in-stock): {qty}</p>
@@ -121,8 +126,7 @@ const SingleProduct = () => {
           <div>{<EditProduct />}</div>
         </div>
         </div>
-      {/* ) : null} */}
-
+      ) : null}
     </Card>
     </Container>
   );
