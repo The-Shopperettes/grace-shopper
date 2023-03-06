@@ -79,6 +79,7 @@ const SingleProduct = () => {
       )
     }
 
+
   return (
     <Container>
     <ConfirmationModal />

@@ -51,7 +51,6 @@ export const deleteItem = createAsyncThunk("cart/deleteItem", async(itemId, {dis
 export const addToCart = createAsyncThunk("cart/addItem", async({productId, qty}, {dispatch}) => {
   const token = window.localStorage.getItem(TOKEN);
   try {
-
     await axios.post(`/api/carts/item/add`, {productId, qty}, {headers: {
       authorization: token,
     }});
