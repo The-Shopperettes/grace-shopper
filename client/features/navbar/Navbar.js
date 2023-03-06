@@ -7,7 +7,6 @@ import { selectCart } from '../cart/cartSlice';
 
 const Navbar = () => {
   const isLoggedIn = useSelector((state) => !!state.auth.me);
-  console.log(isLoggedIn);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const logoutAndRedirectHome = () => {

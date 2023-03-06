@@ -19,7 +19,6 @@ const AuthForm = ({ name, displayName }) => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    console.log(evt);
     const formName = evt.target.name;
     const username = evt.target.username.value;
     const password = evt.target.password.value;
