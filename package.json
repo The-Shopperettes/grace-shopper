@@ -11,8 +11,8 @@
     "start:dev": "npm run build:dev & npm run start-server",
     "start:dev:logger": "LOGGING=true npm run start:dev",
     "start:dev:seed": "SEED=true npm run start:dev",
-    "start-server": "JWT=shh nodemon server -e html,js,scss --ignore public --ignore client",
-    "test": "NODE_ENV=test JWT=a_secret mocha \"./server/**/*.spec.js\" \"./client/**/*.spec.js\" --require @babel/register --require esm ",
+    "start-server": " nodemon server -e html,js,scss --ignore public --ignore client",
+    "test": "NODE_ENV=test \"./server/**/*.spec.js\" \"./client/**/*.spec.js\" --require @babel/register --require esm ",
     "test:dev": "npm run test -- --watch",
     "test:dev:models": "npm run test:dev -- --grep=model",
     "test:dev:routes": "npm run test:dev -- --grep=route"
@@ -23,6 +23,7 @@
     "bcrypt": "^5.1.0",
     "bootstrap": "^5.2.3",
     "compression": "^1.7.4",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "faker": "^6.6.6",
     "fs": "^0.0.1-security",
