@@ -73,7 +73,7 @@ const AuthForm = ({ name, displayName }) => {
       </div>
       <div id='signup-form'>
         <h6>New to Plant Shopper? Register below!</h6>
-        <form onSubmit={handleSubmit} name='signup'>
+        <form onSubmit={handleNewUser} name='signup'>
         <div>
             <label htmlFor="email">
               <small>Email</small>
