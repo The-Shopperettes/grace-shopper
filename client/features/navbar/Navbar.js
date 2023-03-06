@@ -7,7 +7,8 @@ import { selectCart } from '../cart/cartSlice';
 
 const Navbar = () => {
   const user = useSelector(state => state.auth.me);
-  const isLoggedIn = !!user.password;
+  const isLoggedIn = !!user;
+  //go back and add .password OR create other piece of state for loggedIn
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -20,10 +21,9 @@ const Navbar = () => {
 
   return (
     <div>
-      <h1>Wild Roots</h1>
       <nav id='navbar'>
-        <Link to="/products">Home🌱</Link>
         <div id='navlinks'>
+        <Link to="/products">Home🌱</Link>
         {isLoggedIn ? (
           <>
             <button type="button" onClick={logoutAndRedirectHome}>
@@ -46,7 +46,6 @@ const Navbar = () => {
                 <span className="visually-hidden">cart items</span>
               </Button>
             </Link>
-        )}
         </div>
       <img src="logo.png"></img>
       </nav>

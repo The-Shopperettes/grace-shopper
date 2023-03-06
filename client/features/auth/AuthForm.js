@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { authenticate } from "../../app/store";
+import { authenticateOld, authenticateNew } from "../../app/store";
 import { useNavigate } from "react-router";
 import {Form, Button} from 'react-bootstrap'
 
@@ -22,13 +22,16 @@ const AuthForm = ({ name, displayName }) => {
     const formName = evt.target.name;
     const username = evt.target.username.value;
     const password = evt.target.password.value;
-    dispatch(authenticate({ username, password, method: formName }));
+    dispatch(authenticateOld({ username, password, method: formName }));
   };
 
   const handleNewUser = (evt) => {
     evt.preventDefault();
     const formName = evt.target.name;
-
+    const username = evt.target.username.value;
+    const email = evt.target.email.value;
+    const password = evt.target.password.value;
+    dispatch(authenticateNew({email, username, password, method: formName}));
     // may need another authenticate function so that we can also pass the email??
 
     // need to call the auth/signup route

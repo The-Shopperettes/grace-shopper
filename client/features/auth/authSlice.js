@@ -36,8 +36,8 @@ export const me = createAsyncThunk('auth/me', async (_, {getState}) => {
   }
 });
 
-export const authenticate = createAsyncThunk(
-  "auth/authenticate",
+export const authenticateOld = createAsyncThunk(
+  "auth/authenticateOld",
   async ({ username, password, method }, thunkAPI) => {
     try {
 
@@ -53,6 +53,21 @@ export const authenticate = createAsyncThunk(
     }
   }
 );
+
+export const authenticateNew = createAsyncThunk("auth/authenticateNewUser", 
+async ({email, username, password, method}, thunkAPI) => {
+  try {
+    const res = await axios.post(`/auth/${method}`, { email, username, password });
+      window.localStorage.setItem(TOKEN, res.data.token);
+      thunkAPI.dispatch(me());
+  } catch (err) {
+    if (err.response.data) {
+      return thunkAPI.rejectWithValue(err.response.data);
+    } else {
+      return "There was an issue with your request.";
+    }
+  }
+})
 
 export const logout = createAsyncThunk(
   'auth/logout',
@@ -86,7 +101,10 @@ export const authSlice = createSlice({
     builder.addCase(me.rejected, (state, action) => {
       state.error = action.error;
     });
-    builder.addCase(authenticate.rejected, (state, action) => {
+    builder.addCase(authenticateOld.rejected, (state, action) => {
+      state.error = action.payload;
+    });
+    builder.addCase(authenticateNew.rejected, (state, action) => {
       state.error = action.payload;
     });
     builder.addCase(logout.fulfilled, (state, action) => {
