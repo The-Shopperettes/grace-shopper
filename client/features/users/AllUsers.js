@@ -36,7 +36,7 @@ const AllUsers = () => {
   useEffect(() => {
     if (!loading && page > usersCount / perPage) {
       const maxPage = Math.ceil(usersCount / perPage);
-      navigate(`/?page=${maxPage}&perPage=${perPage}`);
+      navigate(`/allUsers?page=${maxPage}&perPage=${perPage}`);
     }
   }, [users, usersCount]);
 
