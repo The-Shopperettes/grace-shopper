@@ -8,7 +8,7 @@ import {
 import axios from "axios";
 import { Container, Form, Spinner, Button } from "react-bootstrap";
 
-const PaymentForm = () => {
+const PaymentForm = ({placeOrder}) => {
   const stripe = useStripe();
   const elements = useElements();
   
@@ -59,14 +59,18 @@ const PaymentForm = () => {
 
     setLoading(true);
 
-    const { error } = await stripe.confirmPayment({
+    const {paymentIntent} = await stripe.confirmPayment({
       elements,
       confirmParams: {
         return_url: "http://localhost:8080/checkout"
-      }
+      },
+      redirect: 'if_required'
     });
+    const {status, error} = paymentIntent;
 
-    if (error.type === "validation_error" || error.type === "card_error") {
+    if(status === "succeeded") {
+      placeOrder();
+    } else if (error.type === "validation_error" || error.type === "card_error") {
       setMessage(error.message);
     } else {
       setMessage("An error occurred. Please try again.");

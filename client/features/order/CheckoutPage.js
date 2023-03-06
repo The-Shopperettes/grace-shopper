@@ -85,17 +85,10 @@ const CheckoutPage = () => {
     return re.test(email);
   }
 
-  function millToMin(ms) {
-    let minutes = Math.floor(ms/60000);
-    let seconds = ((ms%60000) / 1000).toFixed(0);
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-  }
-
   function placeOrder() {
     setLoading(true);
     dispatch(order(testEmail(guestEmail) ? guestEmail : null))
   }
-
 
   const Confirmation = () => (
     <Container>
@@ -160,7 +153,7 @@ const CheckoutPage = () => {
             <Accordion.Body>
             {clientSecret && stripePromise && 
               <Elements options={options} stripe={stripePromise}>
-                <PaymentForm />
+                <PaymentForm placeOrder={placeOrder}/>
               </Elements>}
               <Button onClick={() => setActive(1)}>Back</Button>{' '}
               <Button onClick={placeOrder} disabled={loading}>Place order</Button>
