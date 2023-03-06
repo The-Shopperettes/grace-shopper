@@ -17,7 +17,7 @@ User.hasMany(Order);
 Order.belongsTo(User);
 
 Order.hasMany(CartItem);
-CartItem.hasOne(Order);
+CartItem.belongsTo(Order);
 
 CartItem.belongsTo(Cart);
 Cart.hasMany(CartItem);

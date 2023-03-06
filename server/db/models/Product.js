@@ -44,7 +44,7 @@ const Product = db.define('product', {
         }
     },
     qty: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false,
         validate: {
             min: 0

@@ -1,35 +1,9 @@
 const router = require("express").Router();
 const { Product, User, Cart, CartItem, Order, Visitor } =
   require("../db").models;
+const { getToken } = require('./middleware'); 
 
-//auth middleware
-const getToken = async (req, res, next) => {
-  try {
-    const token = req.headers.authorization;
-
-    if (token) {
-      const user = await User.findByToken(token);
-      req.user = user;
-
-    } else {
-      const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
-
-      let visitor = await Visitor.findOne({
-        where: { token: ip },
-      });
-
-      if (!visitor) visitor = await Visitor.create({ token: ip });
-
-      req.visitor = visitor;
-    }
-
-    next();
-  } catch (err) {
-    next(err);
-  }
-};
-
-//auth middleware
+//auth middleware 
 const authenticateCartItem = async (req, res, next) => {
   try {
     //get the user/visitor, check that the cart item belongs to that userg, unless an admin
@@ -55,6 +29,7 @@ const authenticateCartItem = async (req, res, next) => {
   }
 };
 
+// /api/carts
 //get the cart of a single user
 router.get("/", getToken, async ({ visitor, user }, res, next) => {
   try {
@@ -104,6 +79,7 @@ router.get("/", getToken, async ({ visitor, user }, res, next) => {
   }
 });
 
+// /api/carts/item/add
 //add item to cart
 router.post("/item/add", getToken, async (req, res, next) => {
   try {
@@ -137,6 +113,8 @@ router.post("/item/add", getToken, async (req, res, next) => {
   }
 });
 
+// /api/carts/transfer
+// transfer cart items in a visitor cart to a user cart
 router.put("/transfer", getToken, async (req, res, next) => {
   try {
     //if there's no user, return an error
@@ -171,6 +149,7 @@ router.put("/transfer", getToken, async (req, res, next) => {
   }
 });
 
+// /api/carts/item/:itemId
 //update qty of item in user's cart, sends back new cart
 router.put(
   "/item/:itemId",
@@ -195,26 +174,35 @@ router.put(
   }
 );
 
+// /api/carts/order
+// orders the current items, creates order, resets user's cart, reduces qty of item
 router.put("/order", getToken, async (req, res, next) => {
   try {
+
+    const association = req.user ? {userId: req.user.id} : {visitorId: req.visitor.id};
     //create order and assign cart items to that order, assign user to order
-    const order = await Order.create();
+    const order = await Order.create({email: req.body.email, ...association});
 
-    const cartId = req.user ? req.user.cartId : req.visitor.cartId;
+    const idSearch = req.user ? {userId: req.user.id} : {visitorId: req.visitor.id};
 
-    const cart = await Cart.findByPk(cartId, {
-      include: CartItem,
+    const cart = await Cart.findOne({
+      where: idSearch,
+      include: {
+        model: CartItem,
+        include: Product
+      }
     });
 
+    //update quantity first, in order to catch any qty errors
+    await Promise.all(cart.cartItems.map(({qty, product}) => {
+      product.update({qty: product.qty - qty});
+    }))
+
+    //transfer cart items to order
     await order.addCartItems(cart.cartItems);
-
-    await cart.destroy();
-
-    const newCartData = req.user
-      ? { userId: req.user.id }
-      : { visitorId: req.visitor.id };
-
-    await Cart.create(newCartData);
+    
+    //reset the cart
+    await cart.removeCartItems(cart.cartItems);
 
     res.status(204).send();
   } catch (err) {
@@ -222,6 +210,8 @@ router.put("/order", getToken, async (req, res, next) => {
   }
 });
 
+// api/carts/item/:itemId
+//deletes an item from a cart
 router.delete(
   `/item/:itemId`,
   getToken,
