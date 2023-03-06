@@ -52,7 +52,7 @@ const Cart = () => {
                     <Card.Img src={product.thumbnail} style={{ height: '10rem', width: 'auto'}}></Card.Img>
                     <Card.Body>
                         <Card.Title>{product.name}</Card.Title>
-                        {product.qty <= 20 ?
+                        {product.qty <= 20 || qty >= product.qty - 10 ?
                         <Card.Text style={{color: "red"}}>Only {product.qty} left in stock. Order soon!</Card.Text>
                         : null}
                         <Form>

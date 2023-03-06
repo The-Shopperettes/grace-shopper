@@ -1,5 +1,6 @@
-body {
-  font-family: sans-serif;
+#app {
+  background-color: #9FC075;
+  font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 a {
@@ -19,3 +20,21 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+#navbar {
+  text-align: center;
+}
+
+#navlinks {
+  text-align: right;
+  text-decoration: none;
+}
+
+
+/*
+  STYLING PRIORITIES (TIME-DEPENDENT):
+  1. cards on all products
+  2. single card -> sizing, colors, text, etc
+  3. Navbar - links & logout button
+
+*/

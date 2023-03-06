@@ -10,6 +10,7 @@ import CheckoutPage from '../features/order/CheckoutPage';
 import User from '../features/user/User';
 import { me } from './store';
 import { fetchCart } from '../features/cart/cartSlice';
+import AllUsers from '../features/users/AllUsers';
 
 /**
  * COMPONENT
@@ -39,8 +40,6 @@ const AppRoutes = () => {
           <Route path="/cart" element={<Cart />}/>
           <Route path='/products' element = {<AllProducts />} />
           <Route path='/products/:id' element = {<SingleProduct />} />
-          <Route path='/users/:id' element = {<User/>}></Route>
-
           <Route path='/checkout' element={<CheckoutPage />} />
         {!isLoggedIn ?
         <>
@@ -53,7 +52,19 @@ const AppRoutes = () => {
             element={<AuthForm name="signup" displayName="Sign Up" />}
           />
           </>
-        : null}
+        : 
+        <>
+        <Route
+            path="/user"
+            element={<User />}
+          />
+          {user.isAdmin && 
+          <Route 
+            path="/allUsers"
+            element=<AllUsers />
+          />}
+          
+          </> }
         </Routes> 
 
     </div>

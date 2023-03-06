@@ -110,15 +110,15 @@ const wateringFilter = ((e) => {
   // mapping to create products list. This is where the product cards are created. If the product quantity is sold out, a "sold out" header will appear.
   const productList = lists?.map((list) => {
     return (
-      <Col gap={3} key={list.id}>
-        <Card>
+      <Col gap={3} key={product.id}>
+        <Card  style={{width: '22rem', margin: '1rem'}}>
           {list.qty ===0 && <Card.Header>SOLD OUT</Card.Header>}
-          <Card.Title>{list.name}</Card.Title>
-          <Card.Img src={list.mediumImg} />
+          <Card.Title as='h4' className='text-center'>{list.name}</Card.Title>
+          <Card.Img style={{padding: '.5rem'}} src={list.mediumImg} />
           <Card.Body>
-            <Card.Text>Price: ${list.price}</Card.Text>
+            <Card.Text as='h5' className='text-center'>Price: ${list.price}</Card.Text>
           </Card.Body>
-          <Nav.Item>
+          <Nav.Item className='text-center'>
             <Link to={`/products/${list.id}`}> See More </Link>
           </Nav.Item>
         </Card>
@@ -155,7 +155,6 @@ const wateringFilter = ((e) => {
       <Row xs={1} md={3} gap={3}>
         {lists && lists.length ? productList : "No products here"}
       </Row>
-      ;
       <PageControls
         handlePageChange={handlePageChange}
         page={page}

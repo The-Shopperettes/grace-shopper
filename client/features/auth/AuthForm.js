@@ -23,12 +23,17 @@ const AuthForm = ({ name, displayName }) => {
     const username = evt.target.username.value;
     const password = evt.target.password.value;
     dispatch(authenticate({ username, password, method: formName }));
-    navigate("/products"); 
   };
 
   const handleNewUser = (evt) => {
     evt.preventDefault();
+    const formName = evt.target.name;
+
+    // may need another authenticate function so that we can also pass the email??
+
+    // need to call the auth/signup route
     
+    //need to make error message if user already exists
   };
 
   return (
@@ -44,7 +49,7 @@ const AuthForm = ({ name, displayName }) => {
             <Form.Control type='password' placeholder='Password'/>
             <Button type='submit'>Login</Button>
         </Form> */}
-        <form onSubmit={handleSubmit} name={name}>
+        <form onSubmit={handleSubmit} name='login'>
           <div>
             <label htmlFor="username">
               <small>Username</small>
@@ -65,18 +70,30 @@ const AuthForm = ({ name, displayName }) => {
       </div>
       <div id='signup-form'>
         <h6>New to Plant Shopper? Register below!</h6>
-        <Form>
-          <Form.Group controlId='formSignup'>
-            <Form.Label>Email Address</Form.Label>
-            <Form.Control type='email' placeholder='Enter email'/>
-            <Form.Label>Username</Form.Label>
-            <Form.Control type='text' placeholder='Enter username'/>
-            <Form.Label>Password</Form.Label>
-            <Form.Control type='password' placeholder='Password'/>
-            <Button type='submit'>Sign Me Up!</Button>
-          </Form.Group>
-        </Form>
-
+        <form onSubmit={handleSubmit} name='signup'>
+        <div>
+            <label htmlFor="email">
+              <small>Email</small>
+            </label>
+            <input name="email" type="email" />
+          </div>
+          <div>
+            <label htmlFor="username">
+              <small>Username</small>
+            </label>
+            <input name="username" type="text" />
+          </div>
+          <div>
+            <label htmlFor="password">
+              <small>Password</small>
+            </label>
+            <input name="password" type="password" />
+          </div>
+          <div>
+            <button type="submit">Sign Me Up!</button>
+          </div>
+          {error && <div> {error} </div>}
+        </form>
       </div>
     </div>
   );

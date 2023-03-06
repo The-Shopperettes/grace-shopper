@@ -6,50 +6,50 @@ import { Button, Badge } from "react-bootstrap";
 import { selectCart } from '../cart/cartSlice';
 
 const Navbar = () => {
-  const isLoggedIn = useSelector((state) => !!state.auth.me);
+  const user = useSelector(state => state.auth.me);
+  const isLoggedIn = !!user.password;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const logoutAndRedirectHome = () => {
     dispatch(logout());
-    // Need to edit this navigation route so it shows login/signup options when it redirects to home page
-    navigate("/products");
+    navigate("/login");
   };
 
   const {cartItems} = useSelector(selectCart);
 
   return (
     <div>
-      <h1>FS-App-Template</h1>
-      <nav>
+      <h1>Wild Roots</h1>
+      <nav id='navbar'>
+        <Link to="/products">Home🌱</Link>
+        <div id='navlinks'>
         {isLoggedIn ? (
-          <div>
-            {/* The navbar will show these links after you log in */}
-            <Link to="/products">Home</Link>
+          <>
             <button type="button" onClick={logoutAndRedirectHome}>
               Logout
             </button>
-            <Link to="/cart">
-              <Button variant="cart">
-                🛒<Badge bg="secondary">{cartItems.length}</Badge>
-                <span className="visually-hidden">cart items</span>
-              </Button>
-            </Link>
-          </div>
+            <Link to="/user">Account</Link>
+            {user.isAdmin && 
+            <Link to="/allUsers">Manage users</Link>}
+          </>
+
         ) : (
-          <div>
-            {/* The navbar will show these links before you log in */}
-            <Link to="/products">Home🌱</Link>
-            <Link to="/login">Login/Sign Up</Link>
-            <Link to="/cart">
+          <>
+            <Link to="/login">Login</Link>
+            <Link to="/signup">Sign Up</Link>
+          </>
+        )}
+        <Link to="/cart">
               <Button variant="cart">
                 🛒<Badge bg="secondary">{cartItems.length}</Badge>
                 <span className="visually-hidden">cart items</span>
               </Button>
             </Link>
-          </div>
         )}
+        </div>
+      <img src="logo.png"></img>
       </nav>
-      <hr />
     </div>
   );
 };
