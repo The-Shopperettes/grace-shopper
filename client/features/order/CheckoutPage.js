@@ -7,7 +7,12 @@ import {
 } from "../cart/cartSlice";
 import { Accordion, Form, Container, Row, Col, Button, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import PaymentForm from "./PaymentForm";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
+
+const PUBLISHABLE_KEY = "pk_test_51MiLhrLln7p5YtECXlXKOV96PLFeJJODhaJDVS6BDy060PbpOXXz6NeFDUm1MyEl3XpnQQ4Ei0a0V8yPGSo9f6LO002aPDefM3";
 
 const CheckoutPage = () => {
   const [active, setActive] = useState(8);
@@ -16,32 +21,42 @@ const CheckoutPage = () => {
   const [price, setPrice] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
   const [orderError, setOrderError] = useState(null);
-  const [sessionTime, setSessionTime] = useState(300000);
-  let timer;
+
+
+  const [clientSecret, setClientSecret] = useState("");
+  const [stripePromise, setStripePromise] = useState(() => loadStripe(PUBLISHABLE_KEY))
+  
 
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.auth);
-  const {cartItems, error} = useSelector(selectCart);
-  const navigate = useNavigate();
-
-  function updateSessionTime () {
-    timer = !timer && setInterval(() => {
-      setSessionTime(sessionTime - 1000)
-    }, 1000);
-
-    if(sessionTime <= 0) navigate('/cart');
-  }
-
-  useEffect(() => {
-    updateSessionTime();
-
-    return () => clearInterval(timer);
-  })
+  const {cartItems} = useSelector(selectCart);
  
   useEffect(() => {
     dispatch(fetchCart());
     
   }, [dispatch]);
+
+  useEffect(() => {
+    if(!cartItems || !cartItems.length) return;
+    getSecret();
+  }, [cartItems]);
+
+  async function getSecret() {
+    try {
+      const { data } = await axios.post("/api/payments/create-payment-intent", {
+        cartItems,
+      });
+
+      setClientSecret(data.clientSecret);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  const appearance = {
+    theme: "stripe",
+  };
+  const options = { clientSecret, appearance };
 
   useEffect(() => {
     //if it's a user, start active at event key 1, else 0
@@ -70,17 +85,10 @@ const CheckoutPage = () => {
     return re.test(email);
   }
 
-  function millToMin(ms) {
-    let minutes = Math.floor(ms/60000);
-    let seconds = ((ms%60000) / 1000).toFixed(0);
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-  }
-
   function placeOrder() {
     setLoading(true);
     dispatch(order(testEmail(guestEmail) ? guestEmail : null))
   }
-
 
   const Confirmation = () => (
     <Container>
@@ -98,7 +106,6 @@ const CheckoutPage = () => {
     <>
     { confirmed ? <Confirmation /> : <>
       {cartItems && cartItems.length ? <Container>
-      {<p>{millToMin(sessionTime)} minutes remaining in session</p>}
         <Row>
         <Col md={6}>
         <Accordion activeKey={[active.toString()]}>
@@ -144,8 +151,10 @@ const CheckoutPage = () => {
           <Accordion.Item eventKey="2">
             <Accordion.Header>Payment information</Accordion.Header>
             <Accordion.Body>
-              Payment info here
-              <p></p>
+            {clientSecret && stripePromise && 
+              <Elements options={options} stripe={stripePromise}>
+                <PaymentForm placeOrder={placeOrder}/>
+              </Elements>}
               <Button onClick={() => setActive(1)}>Back</Button>{' '}
               <Button onClick={placeOrder} disabled={loading}>Place order</Button>
             </Accordion.Body>

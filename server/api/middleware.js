@@ -24,8 +24,9 @@ const requireAdmin = async(req, res, next) => {
 //auth middleware
 const getToken = async (req, res, next) => {
     try {
+      
       const token = req.headers.authorization;
-  
+
       if (token) {
         const user = await User.findByToken(token);
         req.user = user;

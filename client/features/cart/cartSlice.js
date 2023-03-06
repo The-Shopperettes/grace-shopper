@@ -78,6 +78,21 @@ export const order = createAsyncThunk("cart/order", async (email, {dispatch}) =>
   }
 })
 
+export const clearCart = createAsyncThunk("cart/clear", async(_, {dispatch}) => {
+  const token = window.localStorage.getItem(TOKEN);
+  try {
+    await axios.put(`/api/carts/clear`, {}, {
+      headers: {
+        authorization: token,
+      }
+    });
+
+    dispatch(fetchCart());
+  } catch (err) {
+    console.error(err);
+  }
+})
+
 export const cartSlice = createSlice({
   name: "cart",
   initialState: {

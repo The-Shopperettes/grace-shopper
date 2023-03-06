@@ -20,6 +20,8 @@
   "author": "Fullstack Academy of Code",
   "license": "MIT",
   "dependencies": {
+    "@stripe/react-stripe-js": "^1.16.5",
+    "@stripe/stripe-js": "^1.48.0",
     "bcrypt": "^5.1.0",
     "bootstrap": "^5.2.3",
     "compression": "^1.7.4",
@@ -36,7 +38,8 @@
     "react-bootstrap": "^2.7.2",
     "react-router": "^6.8.2",
     "react-router-bootstrap": "^0.26.2",
-    "sequelize": "^6.25.3"
+    "sequelize": "^6.25.3",
+    "stripe": "^11.13.0"
   },
   "devDependencies": {
     "@babel/core": "^7.19.6",
