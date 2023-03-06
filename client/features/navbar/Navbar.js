@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../auth/authSlice";
@@ -7,8 +7,7 @@ import { selectCart } from '../cart/cartSlice';
 
 const Navbar = () => {
   const user = useSelector(state => state.auth.me);
-  const isLoggedIn = !!user;
-  //go back and add .password OR create other piece of state for loggedIn
+  const isLoggedIn = !!user.password;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -36,8 +35,7 @@ const Navbar = () => {
 
         ) : (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Sign Up</Link>
+            <Link to="/login">Login/Sign Up</Link>
           </>
         )}
         <Link to="/cart">
