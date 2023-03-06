@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../auth/authSlice";
@@ -20,10 +20,9 @@ const Navbar = () => {
 
   return (
     <div>
-      <h1>Wild Roots</h1>
       <nav id='navbar'>
-        <Link to="/products">Home🌱</Link>
         <div id='navlinks'>
+        <Link to="/products">Home🌱</Link>
         {isLoggedIn ? (
           <>
             <button type="button" onClick={logoutAndRedirectHome}>
@@ -36,8 +35,7 @@ const Navbar = () => {
 
         ) : (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Sign Up</Link>
+            <Link to="/login">Login/Sign Up</Link>
           </>
         )}
         <Link to="/cart">
@@ -46,7 +44,6 @@ const Navbar = () => {
                 <span className="visually-hidden">cart items</span>
               </Button>
             </Link>
-        )}
         </div>
       <img src="logo.png"></img>
       </nav>

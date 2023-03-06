@@ -61,7 +61,7 @@ const AppRoutes = () => {
           {user.isAdmin && 
           <Route 
             path="/allUsers"
-            element=<AllUsers />
+            element={<AllUsers />}
           />}
           
           </> }
