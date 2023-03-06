@@ -13,7 +13,6 @@ const Navbar = () => {
 
   const logoutAndRedirectHome = () => {
     dispatch(logout());
-    // Need to edit this navigation route so it shows login/signup options when it redirects to home page
     navigate("/login");
   };
 
@@ -22,8 +21,9 @@ const Navbar = () => {
   return (
     <div>
       <h1>Wild Roots</h1>
-      <nav>
+      <nav id='navbar'>
         <Link to="/products">Home🌱</Link>
+        <div id='navlinks'>
         {isLoggedIn ? (
           <>
             <button type="button" onClick={logoutAndRedirectHome}>
@@ -45,9 +45,11 @@ const Navbar = () => {
                 🛒<Badge bg="secondary">{cartItems.length}</Badge>
                 <span className="visually-hidden">cart items</span>
               </Button>
-        </Link>
+            </Link>
+        )}
+        </div>
+      <img src="logo.png"></img>
       </nav>
-      <hr />
     </div>
   );
 };

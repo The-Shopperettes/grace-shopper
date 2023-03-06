@@ -61,14 +61,14 @@ const AllProducts = () => {
   const productList = products?.map((product) => {
     return (
       <Col gap={3} key={product.id}>
-        <Card>
+        <Card style={{width: '22rem', margin: '1rem'}}>
           {product.qty ===0 && <Card.Header>SOLD OUT</Card.Header>}
-          <Card.Title>{product.name}</Card.Title>
-          <Card.Img src={product.mediumImg} />
+          <Card.Title as='h4' className='text-center'>{product.name}</Card.Title>
+          <Card.Img style={{padding: '.5rem'}} src={product.mediumImg} />
           <Card.Body>
-            <Card.Text>Price: ${product.price}</Card.Text>
+            <Card.Text as='h5' className='text-center'>Price: ${product.price}</Card.Text>
           </Card.Body>
-          <Nav.Item>
+          <Nav.Item className='text-center'>
             <Link to={`/products/${product.id}`}> See More </Link>
           </Nav.Item>
         </Card>
