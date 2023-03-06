@@ -2,22 +2,26 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {};
+const TOKEN = 'token';
 
 export const fetchSingleProduct = createAsyncThunk("singleProduct", async (id) => {
     try {
       const { data } = await axios.get(`/api/products/${id}`);
       return data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   });
 
   export const deleteProduct = createAsyncThunk(
     "products/deleteProduct",
     async (id) => {
+      const token = window.localStorage.getItem(TOKEN);
       try {
       const { data } = await axios.delete(
-        `/api/products/${id}`);
+        `/api/products/${id}`, {headers: {
+          authorization: token,
+        }});
       return data;
     } catch (err) {
       console.log(err);
@@ -27,16 +31,19 @@ export const fetchSingleProduct = createAsyncThunk("singleProduct", async (id) =
   export const editProduct = createAsyncThunk(
     "products/editProduct",
     async ({ id, name, cycle, watering, sunlight, qty, price }) => {
+      const token = window.localStorage.getItem(TOKEN);
       try {
       const { data } = await axios.put(`/api/products/${id}`, {
-        id,
+        id: Number(id),
         name,
         cycle,
         watering,
         sunlight,
-        qty,
-        price,
-      });
+        qty: Number(qty),
+        price: Number(price),
+      }, {headers: {
+        authorization: token,
+      }});
       return data;
     } catch (err) {
       console.log(err);

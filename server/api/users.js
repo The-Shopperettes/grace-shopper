@@ -1,29 +1,68 @@
-const router = require('express').Router()
-const { models: { User }} = require('../db')
-module.exports = router
+const router = require("express").Router();
+const {
+  models: { User, Order, CartItem },
+} = require("../db");
+const { requireAdmin, getToken } = require('./middleware');
+module.exports = router;
 
-router.get('/', async (req, res, next) => {
+//admin only route to get all users, paginated
+router.get("/", requireAdmin, async (req, res, next) => {
   try {
+    // set page to the query, or default to 1
+    const page = req.query.page || 1;
+    // set the perPage limit to the query, or default to 15
+    const perPage = req.query.perPage || 20;
+
+    // calculate the offset
+    const offset = (page - 1) * perPage;
+
     const users = await User.findAll({
-      // explicitly select only the id and username fields - even though
-      // users' passwords are encrypted, it won't help if we just
-      // send everything to anyone who asks!
-      attributes: ['id', 'username']
-    })
-    res.json(users)
+      attributes: ["id", "username", "isAdmin", "email"],
+      offset,
+      limit: perPage,
+      include: Order,
+      order: ["id"]
+    });
+
+    res.json(users);
   } catch (err) {
-    next(err)
+    next(err);
   }
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get("/count", requireAdmin, async (req, res, next) => {
   try {
-    const user = await User.findByPk(req.params.id, {
-      attributes: ['id', 'username', 'email']
-    });
-    res.json(user);
+    res.json(await User.count());
   } catch (err) {
-    next(err)
+    next(err);
   }
 })
 
+router.get("/:id", getToken, async (req, res, next) => {
+  try {
+    if(!req.user) throw new Error('Not authorized');
+
+    const orders = await req.user.getOrders();
+
+    res.json({user: req.user.dataValues, orders});
+
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.delete("/:id", getToken, async(req, res, next) => {
+  try {
+    if(!req.user) throw new Error('Not authorized');
+
+    if(req.user.isAdmin) {
+      User.destroy({where: {id: req.params.id}});
+    } else {
+      req.user.destroy();
+    }
+
+    res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+})

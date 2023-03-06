@@ -57,17 +57,18 @@ const AllProducts = () => {
 
   // #endregion------------------------------------------
 
-  // mapping to create products list. This is where the product cards are created
+  // mapping to create products list. This is where the product cards are created. If the product quantity is sold out, a "sold out" header will appear.
   const productList = products?.map((product) => {
     return (
       <Col gap={3} key={product.id}>
-        <Card>
-          <Card.Title>{product.name}</Card.Title>
-          <Card.Img src={product.mediumImg} />
+        <Card style={{width: '22rem', margin: '1rem'}}>
+          {product.qty ===0 && <Card.Header>SOLD OUT</Card.Header>}
+          <Card.Title as='h4' className='text-center'>{product.name}</Card.Title>
+          <Card.Img style={{padding: '.5rem'}} src={product.mediumImg} />
           <Card.Body>
-            <Card.Text>Price: ${product.price}</Card.Text>
+            <Card.Text as='h5' className='text-center'>Price: ${product.price}</Card.Text>
           </Card.Body>
-          <Nav.Item>
+          <Nav.Item className='text-center'>
             <Link to={`/products/${product.id}`}> See More </Link>
           </Nav.Item>
         </Card>
@@ -80,7 +81,6 @@ const AllProducts = () => {
       <Row xs={1} md={3} gap={3}>
         {products && products.length ? productList : "No products here"}
       </Row>
-      ;
       <PageControls
         handlePageChange={handlePageChange}
         page={page}

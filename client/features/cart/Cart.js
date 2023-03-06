@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectCart, fetchCart, updateQty, deleteItem } from './cartSlice';
+import { selectCart, fetchCart, updateQty, deleteItem, addToCart } from './cartSlice';
 import { Card, Button, Container, Stack, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const Cart = () => {
@@ -10,6 +10,7 @@ const Cart = () => {
     const {cartItems, cartId} = useSelector(selectCart);
     const [errorMessages, setErrorMessages] = useState({});
 
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(fetchCart());
@@ -35,13 +36,14 @@ const Cart = () => {
     }
 
     function handleCheckout() {
-        
+        navigate('/checkout');
     }
 
     return (
     <Container>
-        { cartItems ?
+        { cartItems && cartItems.length ?
         <Stack gap={3}> 
+        <Button>Clear cart</Button>
             {
                cartItems.map(({id, product, qty}) => {
                 return (
@@ -50,6 +52,9 @@ const Cart = () => {
                     <Card.Img src={product.thumbnail} style={{ height: '10rem', width: 'auto'}}></Card.Img>
                     <Card.Body>
                         <Card.Title>{product.name}</Card.Title>
+                        {product.qty <= 20 || qty >= product.qty - 10 ?
+                        <Card.Text style={{color: "red"}}>Only {product.qty} left in stock. Order soon!</Card.Text>
+                        : null}
                         <Form>
                             Quantity: 
                             <Form.Control 
@@ -58,11 +63,15 @@ const Cart = () => {
                             value={qty}
                             onChange={(e) => {changeQty(e, id, product.qty)}}
                             ></Form.Control>
-                            <Form.Text>{errorMessages[id] ? errorMessages[id] : ""}</Form.Text>
+                            <Form.Text>
+                            {
+                            errorMessages[id] && product.qty > 20 ?
+                            errorMessages[id] : ""
+                            }</Form.Text>
                         </Form>
                         <Card.Text>Price: ${product.price}.00</Card.Text>
                         <Button onClick={() => handleRemove(id)}>Remove item</Button>
-                        <Card.Text><Link to="">See details</Link></Card.Text>
+                        <Card.Text><Link to={`/products/${product.id}`}>See details</Link></Card.Text>
                     </Card.Body>
                 </Stack>
                 </Card>)

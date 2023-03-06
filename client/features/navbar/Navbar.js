@@ -1,52 +1,52 @@
-import React from "react";
+import React, {useState} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { logout } from "../../app/store";
+import { logout } from "../auth/authSlice";
 import { Button, Badge } from "react-bootstrap";
+import { selectCart } from '../cart/cartSlice';
 
 const Navbar = () => {
-  const isLoggedIn = useSelector((state) => !!state.auth.me);
+  const user = useSelector(state => state.auth.me);
+  const isLoggedIn = !!user.password;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const logoutAndRedirectHome = () => {
     dispatch(logout());
-    navigate("/products");
+    navigate("/login");
   };
+
+  const {cartItems} = useSelector(selectCart);
 
   return (
     <div>
-      <h1>FS-App-Template</h1>
-      <nav>
+      <nav id='navbar'>
+        <div id='navlinks'>
+        <Link to="/products">Home🌱</Link>
         {isLoggedIn ? (
-          <div>
-            {/* The navbar will show these links after you log in */}
-            <Link to="/products">Home</Link>
+          <>
             <button type="button" onClick={logoutAndRedirectHome}>
               Logout
             </button>
-            <Link to="/cart">
-              <Button variant="cart">
-                🛒<Badge bg="secondary">0</Badge>
-                <span className="visually-hidden">cart items</span>
-              </Button>
-            </Link>
-          </div>
+            <Link to="/user">Account</Link>
+            {user.isAdmin && 
+            <Link to="/allUsers">Manage users</Link>}
+          </>
+
         ) : (
-          <div>
-            {/* The navbar will show these links before you log in */}
-            <Link to="/products">Home🌱</Link>
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Sign Up</Link>
-            <Link to="/cart">
+          <>
+            <Link to="/login">Login/Sign Up</Link>
+          </>
+        )}
+        <Link to="/cart">
               <Button variant="cart">
-                🛒<Badge bg="secondary">0</Badge>
+                🛒<Badge bg="secondary">{cartItems.length}</Badge>
                 <span className="visually-hidden">cart items</span>
               </Button>
             </Link>
-          </div>
-        )}
+        </div>
+      <img src="logo.png"></img>
       </nav>
-      <hr />
     </div>
   );
 };

@@ -6,8 +6,11 @@ import Home from '../features/home/Home';
 import Cart from '../features/cart/Cart';
 import AllProducts from '../features/products/products';
 import SingleProduct from '../features/products/singleProductComponent';
+import CheckoutPage from '../features/order/CheckoutPage';
+import User from '../features/user/User';
 import { me } from './store';
 import { fetchCart } from '../features/cart/cartSlice';
+import AllUsers from '../features/users/AllUsers';
 
 /**
  * COMPONENT
@@ -23,28 +26,23 @@ const AppRoutes = () => {
     dispatch(me());
   }, []);
 
+  ////===== TOOK OUT '.id' AFTER USER ON LINE 29===///
   useEffect(() => {
-    if(user.id) {
+    if(user) {
       dispatch(fetchCart());
     }
   }, [user])
 
   return (
     <div>
-      {isLoggedIn ? (
         <Routes>
-          <Route path="/*" element={<Home />} />
-          <Route to="/home" element={<Home />} />
+          <Route path="/*" element={<AllProducts />} />
           <Route path="/cart" element={<Cart />}/>
           <Route path='/products' element = {<AllProducts />} />
           <Route path='/products/:id' element = {<SingleProduct />} />
-        </Routes>
-      ) : (
-        <Routes>
-          <Route
-            path="/*"
-            element={<AuthForm name="login" displayName="Login" />}
-          />
+          <Route path='/checkout' element={<CheckoutPage />} />
+        {!isLoggedIn ?
+        <>
           <Route
             path="/login"
             element={<AuthForm name="login" displayName="Login" />}
@@ -53,8 +51,22 @@ const AppRoutes = () => {
             path="/signup"
             element={<AuthForm name="signup" displayName="Sign Up" />}
           />
-        </Routes>
-      )}
+          </>
+        : 
+        <>
+        <Route
+            path="/user"
+            element={<User />}
+          />
+          {user.isAdmin && 
+          <Route 
+            path="/allUsers"
+            element={<AllUsers />}
+          />}
+          
+          </> }
+        </Routes> 
+
     </div>
   );
 };

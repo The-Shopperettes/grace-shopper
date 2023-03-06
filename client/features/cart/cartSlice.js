@@ -3,7 +3,7 @@ import axios from "axios";
 
 const TOKEN = 'token';
 
-export const fetchCart = createAsyncThunk("cart/items", async () => {
+export const fetchCart = createAsyncThunk("cart/items", async (_, {dispatch}) => {
   const token = window.localStorage.getItem(TOKEN);
   try {
     const { data: {id, cartItems} } = await axios.get(`/api/carts`, {
@@ -48,9 +48,34 @@ export const deleteItem = createAsyncThunk("cart/deleteItem", async(itemId, {dis
   }
 })
 
-export const order = createAsyncThunk("cart/order", async () => {
+export const addToCart = createAsyncThunk("cart/addItem", async({productId, qty}, {dispatch}) => {
   const token = window.localStorage.getItem(TOKEN);
-  
+  try {
+    await axios.post(`/api/carts/item/add`, {productId, qty}, {headers: {
+      authorization: token,
+    }});
+
+    dispatch(fetchCart());
+
+  } catch (err) {
+    console.error(err);
+  }
+})
+
+export const order = createAsyncThunk("cart/order", async (email, {dispatch}) => {
+  const token = window.localStorage.getItem(TOKEN);
+  try {
+    const body = email ? {email} : {email: null};
+    await axios.put(`/api/carts/order`, body, {headers: {
+      authorization: token,
+    }});
+
+    dispatch(fetchCart());
+
+  } catch (err) {
+    console.error(err);
+    return err.message;
+  }
 })
 
 export const cartSlice = createSlice({
@@ -67,8 +92,12 @@ export const cartSlice = createSlice({
     builder.addCase(updateQty.fulfilled, (state, action) => {
       return action.payload;
     });
-  }
-});
+    builder.addCase(addToCart.fulfilled, (state, action) => {
+  });
+    builder.addCase(order.fulfilled, (state, action) => {
+      if(typeof action.payload === 'string') state.error = action.payload;
+    })
+}});
 
 export const selectCart = (state) => state.cart;
 

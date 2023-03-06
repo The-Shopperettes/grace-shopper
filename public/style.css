@@ -1,5 +1,10 @@
-body {
-  font-family: sans-serif;
+main {
+  background-color: #9FC075;
+}
+
+#app {
+  background-color: #9FC075;
+  font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 a {
@@ -19,3 +24,44 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+#navbar {
+  text-align: center;
+}
+
+#navlinks {
+  text-align: right;
+  text-decoration: none;
+}
+
+#user-profile {
+  width: 80vw;
+  margin: auto 10vw;
+  background-color: #C1C0C0;
+  align-items: center;
+}  
+
+#user-img {
+  height: 35vh;
+}
+
+#user-header {
+  display: flex;
+  align-items: center;
+  margin: 15v;
+  padding: 15px;
+}
+
+#orders-list {
+  margin: auto 15vh;
+  padding: 10vh;
+}
+
+
+/*
+  STYLING PRIORITIES (TIME-DEPENDENT):
+  1. cards on all products
+  2. single card -> sizing, colors, text, etc
+  3. Navbar - links & logout button
+
+*/
