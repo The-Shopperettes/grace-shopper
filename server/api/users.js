@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const {
-  models: { User, Order, CartItem },
+  models: { User, Order, CartItem, Product },
 } = require("../db");
 const { requireAdmin, getToken } = require('./middleware');
 module.exports = router;
@@ -42,7 +42,10 @@ router.get("/:id", getToken, async (req, res, next) => {
   try {
     if(!req.user) throw new Error('Not authorized');
 
-    const orders = await req.user.getOrders();
+    const orders = await req.user.getOrders({include: {
+      model: CartItem,
+      include: Product
+    }});
 
     res.json({user: req.user.dataValues, orders});
 
