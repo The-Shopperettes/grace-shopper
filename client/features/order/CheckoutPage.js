@@ -8,6 +8,10 @@ import {
 import { Accordion, Form, Container, Row, Col, Button, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import PaymentForm from "./PaymentForm";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
 
 const CheckoutPage = () => {
   const [active, setActive] = useState(8);
@@ -18,6 +22,13 @@ const CheckoutPage = () => {
   const [orderError, setOrderError] = useState(null);
   const [sessionTime, setSessionTime] = useState(300000);
   let timer;
+
+  const stripePromise = loadStripe("pk_test_51MiLhrLln7p5YtECXlXKOV96PLFeJJODhaJDVS6BDy060PbpOXXz6NeFDUm1MyEl3XpnQQ4Ei0a0V8yPGSo9f6LO002aPDefM3");
+  const appearance = {
+    theme: "stripe",
+  };
+  const options = { clientSecret, appearance };
+  const [clientSecret, setClientSecret] = useState("");
 
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.auth);
@@ -42,6 +53,22 @@ const CheckoutPage = () => {
     dispatch(fetchCart());
     
   }, [dispatch]);
+
+  useEffect(() => {
+    getSecret();
+  }, []);
+
+  async function getSecret() {
+    try {
+      const { data } = await axios.post("/api/payments/create-payment-intent", {
+        cartItems,
+      });
+
+      setClientSecret(data);
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   useEffect(() => {
     //if it's a user, start active at event key 1, else 0
@@ -144,8 +171,9 @@ const CheckoutPage = () => {
           <Accordion.Item eventKey="2">
             <Accordion.Header>Payment information</Accordion.Header>
             <Accordion.Body>
-              Payment info here
-              <p></p>
+            <Elements options={options} stripe={stripePromise}>
+              <PaymentForm />
+            </Elements>
               <Button onClick={() => setActive(1)}>Back</Button>{' '}
               <Button onClick={placeOrder} disabled={loading}>Place order</Button>
             </Accordion.Body>

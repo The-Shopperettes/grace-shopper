@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectCart, fetchCart, updateQty, deleteItem, addToCart } from './cartSlice';
+import { selectCart, fetchCart, updateQty, deleteItem, clearCart } from './cartSlice';
 import { Card, Button, Container, Stack, Form } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -39,11 +39,15 @@ const Cart = () => {
         navigate('/checkout');
     }
 
+    function handleClear() {
+        dispatch(clearCart());
+    }
+
     return (
     <Container>
         { cartItems && cartItems.length ?
         <Stack gap={3}> 
-        <Button>Clear cart</Button>
+        <Button onClick={handleClear}>Clear cart</Button>
             {
                cartItems.map(({id, product, qty}) => {
                 return (

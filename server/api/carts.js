@@ -149,6 +149,26 @@ router.put("/transfer", getToken, async (req, res, next) => {
   }
 });
 
+// /api/carts/clear
+// clear a given user's cart
+router.put("/clear", getToken, async (req, res, next) => {
+  try{
+    const owner = req.user || req.visitor;
+
+    const cart = await owner.getCart({
+      include: CartItem
+    });
+
+    await Promise.all(cart.cartItems.map(item => {
+      item.destroy();
+    }))
+
+    res.send();
+  } catch (err) {
+    next(err);
+  }
+})
+
 // /api/carts/item/:itemId
 //update qty of item in user's cart, sends back new cart
 router.put(
