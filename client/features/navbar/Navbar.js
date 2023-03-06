@@ -46,7 +46,6 @@ const Navbar = () => {
                 <span className="visually-hidden">cart items</span>
               </Button>
             </Link>
-        )}
         </div>
       <img src="logo.png"></img>
       </nav>
