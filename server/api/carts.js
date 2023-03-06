@@ -3,7 +3,7 @@ const { Product, User, Cart, CartItem, Order, Visitor } =
   require("../db").models;
 const { getToken } = require('./middleware'); 
 
-//auth middleware
+//auth middleware 
 const authenticateCartItem = async (req, res, next) => {
   try {
     //get the user/visitor, check that the cart item belongs to that userg, unless an admin
@@ -29,6 +29,7 @@ const authenticateCartItem = async (req, res, next) => {
   }
 };
 
+// /api/carts
 //get the cart of a single user
 router.get("/", getToken, async ({ visitor, user }, res, next) => {
   try {
@@ -78,6 +79,7 @@ router.get("/", getToken, async ({ visitor, user }, res, next) => {
   }
 });
 
+// /api/carts/item/add
 //add item to cart
 router.post("/item/add", getToken, async (req, res, next) => {
   try {
@@ -111,6 +113,8 @@ router.post("/item/add", getToken, async (req, res, next) => {
   }
 });
 
+// /api/carts/transfer
+// transfer cart items in a visitor cart to a user cart
 router.put("/transfer", getToken, async (req, res, next) => {
   try {
     //if there's no user, return an error
@@ -145,6 +149,7 @@ router.put("/transfer", getToken, async (req, res, next) => {
   }
 });
 
+// /api/carts/item/:itemId
 //update qty of item in user's cart, sends back new cart
 router.put(
   "/item/:itemId",
@@ -169,6 +174,8 @@ router.put(
   }
 );
 
+// /api/carts/order
+// orders the current items, creates order, resets user's cart, reduces qty of item
 router.put("/order", getToken, async (req, res, next) => {
   try {
 
@@ -203,6 +210,8 @@ router.put("/order", getToken, async (req, res, next) => {
   }
 });
 
+// api/carts/item/:itemId
+//deletes an item from a cart
 router.delete(
   `/item/:itemId`,
   getToken,
