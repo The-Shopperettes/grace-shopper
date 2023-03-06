@@ -14,7 +14,6 @@ import { Button, Card, Form, Modal, Container } from "react-bootstrap";
 const SingleProduct = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const [quantity, setQuantity] = useState(0);
 
   const [quantity, setQuantity] = useState(1);
   const [qtyMessage, setQtyMessage] = useState(null);
