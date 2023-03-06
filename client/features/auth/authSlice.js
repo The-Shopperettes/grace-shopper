@@ -41,11 +41,10 @@ export const me = createAsyncThunk('auth/me', async (_, {getState}) => {
 
 });
 
-export const authenticateOld = createAsyncThunk(
-  "auth/authenticateOld",
+export const authenticateLogin = createAsyncThunk(
+  "auth/authenticateLogin",
   async ({ username, password, method }, thunkAPI) => {
     try {
-
       const res = await axios.post(`/auth/${method}`, { username, password });
       window.localStorage.setItem(TOKEN, res.data.token);
       thunkAPI.dispatch(me());
@@ -59,7 +58,7 @@ export const authenticateOld = createAsyncThunk(
   }
 );
 
-export const authenticateNew = createAsyncThunk("auth/authenticateNewUser", 
+export const authenticateSignUp = createAsyncThunk("auth/authenticateSignUp", 
 async ({email, username, password, method}, thunkAPI) => {
   try {
     const res = await axios.post(`/auth/${method}`, { email, username, password });
@@ -106,10 +105,10 @@ export const authSlice = createSlice({
     builder.addCase(me.rejected, (state, action) => {
       state.error = action.error;
     });
-    builder.addCase(authenticateOld.rejected, (state, action) => {
+    builder.addCase(authenticateLogin.rejected, (state, action) => {
       state.error = action.payload;
     });
-    builder.addCase(authenticateNew.rejected, (state, action) => {
+    builder.addCase(authenticateSignUp.rejected, (state, action) => {
       state.error = action.payload;
     });
     builder.addCase(logout.fulfilled, (state, action) => {
