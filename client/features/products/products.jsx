@@ -5,7 +5,7 @@ import {
   Link
 } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Container, Card, Row, Col, Nav } from "react-bootstrap";
+import { Container, Card, Row, Col, Nav, DropdownButton, Dropdown } from "react-bootstrap";
 import { fetchProductsAsync, selectProducts } from "./productsSlice";
 import PageControls from "./pageControls";
 
@@ -13,6 +13,7 @@ const AllProducts = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [lists, setList] = useState([]);
 
   // fetch products and number of products (for pagination)
   const { products, productCount } = useSelector(selectProducts);
@@ -57,19 +58,38 @@ const AllProducts = () => {
 
   // #endregion------------------------------------------
 
+// #region FILTER & SORT----------------------------------
+// sets the local products state to the original fetchProductsAsync thunk (all products)
+useEffect(() => {
+  setList(products);
+}, [products]);
+
+// sorts products by their price
+const sortProducts = ((e) => {
+  const productSpread = [...products];
+  if (e.target.value === '0 to hero'){
+    setList(productSpread.sort((a,b) => a.price - b.price));
+  } else if (e.target.value === 'hero to 0'){
+    setList(productSpread.sort((a,b) => b.price - a.price));
+  }
+});
+
+// #endregion------------------------------------------
+
+
   // mapping to create products list. This is where the product cards are created. If the product quantity is sold out, a "sold out" header will appear.
-  const productList = products?.map((product) => {
+  const productList = lists?.map((list) => {
     return (
-      <Col gap={3} key={product.id}>
+      <Col gap={3} key={list.id}>
         <Card>
-          {product.qty ===0 && <Card.Header>SOLD OUT</Card.Header>}
-          <Card.Title>{product.name}</Card.Title>
-          <Card.Img src={product.mediumImg} />
+          {list.qty ===0 && <Card.Header>SOLD OUT</Card.Header>}
+          <Card.Title>{list.name}</Card.Title>
+          <Card.Img src={list.mediumImg} />
           <Card.Body>
-            <Card.Text>Price: ${product.price}</Card.Text>
+            <Card.Text>Price: ${list.price}</Card.Text>
           </Card.Body>
           <Nav.Item>
-            <Link to={`/products/${product.id}`}> See More </Link>
+            <Link to={`/products/${list.id}`}> See More </Link>
           </Nav.Item>
         </Card>
       </Col>
@@ -78,8 +98,16 @@ const AllProducts = () => {
 
   return (
     <Container>
+      <DropdownButton 
+    title='Sort' 
+    align='end' 
+    menuVariant="dark"
+    >
+      <Dropdown.Item as='button' value='0 to hero' onClick={sortProducts}>Low to High</Dropdown.Item>
+      <Dropdown.Item as='button' value='hero to 0' onClick={sortProducts}>High to Low</Dropdown.Item>
+    </DropdownButton>
       <Row xs={1} md={3} gap={3}>
-        {products && products.length ? productList : "No products here"}
+        {lists && lists.length ? productList : "No products here"}
       </Row>
       ;
       <PageControls
@@ -90,7 +118,6 @@ const AllProducts = () => {
         handlePerPageChange={handlePerPageChange}
       />
     </Container>
-  );
-};
+)};
 
 export default AllProducts;
