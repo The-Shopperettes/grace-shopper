@@ -65,6 +65,7 @@ useEffect(() => {
 }, [products]);
 
 // sorts products by their price
+// ! PageControls is causing function to only apply to products on current page, need this to happen to ALL products.
 const sortProducts = ((e) => {
   const productSpread = [...products];
   if (e.target.value === '0 to hero'){
@@ -73,6 +74,35 @@ const sortProducts = ((e) => {
     setList(productSpread.sort((a,b) => b.price - a.price));
   }
 });
+
+// filter products by cycle
+// TODO: need to include condition to reset aka all
+// ! PageControls is causing function to only apply to products on current page, need this to happen to ALL products.
+const cycleFilter = ((e) => {
+  const productSpread = [...products];
+  if (e.target.value === 'Biennial'){
+    setList(productSpread.filter((p) => p.cycle.toLowerCase() === 'biennial'));
+  } else if (e.target.value === 'Perennial'){
+    setList(productSpread.filter((p) => p.cycle.toLowerCase() === 'perennial'));
+  }  else if (e.target.value === 'Annual'){
+    setList(productSpread.filter((p) => p.cycle.toLowerCase() === 'annual'));
+  }
+})
+
+// filter products by watering needs
+// TODO: need to include condition to reset aka all
+// ! PageControls is causing function to only apply to products on current page, need this to happen to ALL products.
+const wateringFilter = ((e) => {
+  const productSpread = [...products];
+  if (e.target.value === 'Average'){
+    setList(productSpread.filter((p) => p.watering.toLowerCase() === 'average'));
+  } else if (e.target.value === 'Minimum'){
+    setList(productSpread.filter((p) => p.watering.toLowerCase() === 'minimum'));
+  }  else if (e.target.value === 'Frequent'){
+    setList(productSpread.filter((p) => p.watering.toLowerCase() === 'frequent'));
+  }
+})
+
 
 // #endregion------------------------------------------
 
@@ -98,6 +128,22 @@ const sortProducts = ((e) => {
 
   return (
     <Container>
+      <DropdownButton 
+    title='Cycle' 
+    menuVariant="dark"
+    >
+      <Dropdown.Item as='button' value='Biennial' onClick={cycleFilter}>Biennial</Dropdown.Item>
+      <Dropdown.Item as='button' value='Perennial' onClick={cycleFilter}>Perennial</Dropdown.Item>
+      <Dropdown.Item as='button' value='Annual' onClick={cycleFilter}>Annual</Dropdown.Item>
+    </DropdownButton>
+    <DropdownButton 
+    title='Watering' 
+    menuVariant="dark"
+    >
+      <Dropdown.Item as='button' value='Average' onClick={wateringFilter}>Average</Dropdown.Item>
+      <Dropdown.Item as='button' value='Minimum' onClick={wateringFilter}>Minimum</Dropdown.Item>
+      <Dropdown.Item as='button' value='Frequent' onClick={wateringFilter}>Frequent</Dropdown.Item>
+    </DropdownButton>
       <DropdownButton 
     title='Sort' 
     align='end' 
