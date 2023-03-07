@@ -58,14 +58,9 @@ router.delete('/:id', requireAdmin, async (req, res, next) => {
   //edit single product
   router.put('/:id', requireAdmin, async (req, res, next) => {
     try {
-      const editProduct = await Product.findByPk(req.params.id);
-      res.send(await editProduct.update(
-        { name: req.body.name,
-          cycle: req.body.cycle,
-          watering: req.body.watering,
-          sunlight: req.body.sunlight,
-          qty: req.body.qty,
-          price: req.body.price }));
+      await Product.update( req.body, {where: {id: req.params.id}});
+
+      res.send(await Product.findByPk(req.params.id));
     } catch (error) {
       next(error);
     }

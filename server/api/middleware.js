@@ -39,7 +39,7 @@ const getToken = async (req, res, next) => {
         });
   
         if (!visitor) visitor = await Visitor.create({ token: ip });
-  
+
         req.visitor = visitor;
       }
   

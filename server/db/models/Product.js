@@ -25,6 +25,7 @@ const Product = db.define('product', {
     largeImg: {
         type: Sequelize.STRING,
         allowNull: false,
+        defaultValue: "https://perenual.com/storage/species_image/5221_miscanthus_sinensis_zebrinus/regular/48630834416_72d316a966_b.jpg",
         validate: {
             isUrl: true
         }
@@ -32,6 +33,7 @@ const Product = db.define('product', {
     mediumImg: {
         type: Sequelize.STRING,
         allowNull: false,
+        defaultValue: "https://perenual.com/storage/species_image/5221_miscanthus_sinensis_zebrinus/medium/48630834416_72d316a966_b.jpg",
         validate: {
             isUrl: true
         }
@@ -39,6 +41,7 @@ const Product = db.define('product', {
     thumbnail: {
         type: Sequelize.STRING,
         allowNull: false,
+        defaultValue: "https://perenual.com/storage/species_image/5221_miscanthus_sinensis_zebrinus/thumbnail/48630834416_72d316a966_b.jpg",
         validate: {
             isUrl: true
         }
