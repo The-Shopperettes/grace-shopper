@@ -53,6 +53,11 @@ const Cart = () => {
         setShowModal(false);
       };
 
+    const linkStyle = {
+        margin: "15px",
+        color: "#2e2823"
+    }
+
     const ConfirmationModal = () => {
         return (
           <Modal show={showModal}>
@@ -74,15 +79,18 @@ const Cart = () => {
         <ConfirmationModal />
         { cartItems && cartItems.length ?
         <Stack gap={3}> 
-        <Button onClick={seeModal}>Clear cart</Button>
+        <Button variant="dark" style={{width: "20vw", margin: 'auto 27vw'}} onClick={seeModal}>Clear cart</Button>
             {
                cartItems.map(({id, product, qty}) => {
                 return (
-                <Card key={id} >
+                <Card key={id} id='cart-card'>
                 <Stack direction='horizontal'>
-                    <Card.Img src={product.thumbnail} style={{ height: '10rem', width: 'auto'}}></Card.Img>
+                    <Card.Header style={{textAlign: 'center'}}>
+                        <Card.Img src={product.thumbnail} style={{ height: '10rem', width: 'auto', padding: '15px'}}></Card.Img>
+                        <Card.Text><Link to={`/products/${product.id}`} style={linkStyle}>See details</Link></Card.Text>
+                    </Card.Header>
                     <Card.Body>
-                        <Card.Title>{product.name}</Card.Title>
+                        <Card.Title style={{fontWeight: 'bold'}}>{product.name}</Card.Title>
                         {product.qty <= 20 || qty >= product.qty - 10 ?
                         <Card.Text style={{color: "red"}}>Only {product.qty} left in stock. Order soon!</Card.Text>
                         : null}
@@ -101,8 +109,7 @@ const Cart = () => {
                             }</Form.Text>
                         </Form>
                         <Card.Text>Price: ${product.price}.00</Card.Text>
-                        <Button onClick={() => handleRemove(id)}>Remove item</Button>
-                        <Card.Text><Link to={`/products/${product.id}`}>See details</Link></Card.Text>
+                        <Button variant="secondary" onClick={() => handleRemove(id)}>Remove item</Button>
                     </Card.Body>
                 </Stack>
                 </Card>)
@@ -112,7 +119,7 @@ const Cart = () => {
             <div></div>
             <div className='ms-auto mt-3'>
                 <h3>Total: ${cartItems.reduce((sum, {qty, product: {price}}) => sum + (price*qty), 0)}.00</h3>
-                <Button variant="secondary" size="lg" onClick={handleCheckout}>
+                <Button variant="success" size="lg" onClick={handleCheckout}>
                 Check out
                 </Button>
             </div>

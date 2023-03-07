@@ -1,5 +1,6 @@
 main {
   background-color: #9FC075;
+  height: 100vh;
 }
 
 #app {
@@ -25,8 +26,18 @@ form div {
   display: inline-block;
 }
 
+button {
+  border-radius: 12px;
+  border: 1px solid black;
+  opacity: 0.8;
+}
+
 #navbar {
   text-align: center;
+}
+
+#logo {
+  height: 25vh;
 }
 
 #navlinks {
@@ -36,7 +47,7 @@ form div {
 
 #user-profile {
   width: 80vw;
-  margin: auto 10vw;
+  margin: 10px 10vw;
   background-color: #C1C0C0;
   align-items: center;
 }  
@@ -53,15 +64,118 @@ form div {
 }
 
 #orders-list {
-  margin: auto 15vh;
+  margin: 5vh 15vh;
   padding: 10vh;
+  background-color: rgb(226, 231, 229);
 }
+
+#all-products-container {
+  background-color: #C1C0C0;
+}
+
+.hstack {
+  padding: 15px;
+}
+
+#cart-card {
+  background-color: rgb(226, 231, 229);
+}
+
+#plant-card {
+  background-color: rgb(226, 231, 229);
+  padding: 15px;
+}
+
+#login-or-signup {
+  background-color: #C1C0C0;
+  padding: 40px;
+  width: 60vw;
+  /* height: 60vh; */
+  margin: auto 20%;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+ 
+.foot {
+  background-color: #9FC075;
+  height: 20vh;
+}
+
+#welcome {
+  font-size: 3em;
+  margin: auto 10px;
+}
+
+#wel-subtitle {
+  margin: auto 12px 30px 12px;
+}
+
+#login-form {
+margin: 5px auto 20px auto;  
+}
+
+#login-flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+#login-header {
+  font-size: 18px;
+  margin: auto 12px;
+} 
+
+#signup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#signup-flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.signup-div {
+  margin: 3px;
+}
+
+#singleProduct {
+  width: 70vw;
+  margin: 5vh 13vw;
+  background-color: #C1C0C0
+}
+
+.single-stack {
+  margin: 20px;
+}
+
+.single-container {
+  width: 60vw;
+  margin: 20vw;
+  padding: 40px
+}
+
+.single-admin-view {
+  background-color: gray;
+  margin-left: 25px;
+  padding: 40px
+}
+
+#admin-title {
+  padding: 8px;
+  font-weight: bold;
+}
+
+
+
+
+
+
 
 
 /*
   STYLING PRIORITIES (TIME-DEPENDENT):
-  1. cards on all products
   2. single card -> sizing, colors, text, etc
-  3. Navbar - links & logout button
-
 */
