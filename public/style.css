@@ -77,6 +77,10 @@ button {
   padding: 15px;
 }
 
+#cart-card {
+  background-color: rgb(226, 231, 229);
+}
+
 #plant-card {
   background-color: rgb(226, 231, 229);
   padding: 15px;
@@ -137,6 +141,32 @@ margin: 5px auto 20px auto;
   margin: 3px;
 }
 
+#singleProduct {
+  width: 70vw;
+  margin: 5vh 13vw;
+  background-color: #C1C0C0
+}
+
+.single-stack {
+  margin: 20px;
+}
+
+.single-container {
+  width: 60vw;
+  margin: 20vw;
+  padding: 40px
+}
+
+.single-admin-view {
+  background-color: gray;
+  margin-left: 25px;
+  padding: 40px
+}
+
+#admin-title {
+  padding: 8px;
+  font-weight: bold;
+}
 
 
 
@@ -150,8 +180,5 @@ margin: 5px auto 20px auto;
 
 /*
   STYLING PRIORITIES (TIME-DEPENDENT):
-  1. cards on all products
   2. single card -> sizing, colors, text, etc
-  3. Navbar - links & logout button
-
 */
