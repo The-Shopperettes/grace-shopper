@@ -39,7 +39,7 @@ const getToken = async (req, res, next) => {
         });
   
         if (!visitor) visitor = await Visitor.create({ token: ip });
-  
+
         req.visitor = visitor;
       }
   
@@ -53,3 +53,7 @@ module.exports = {
     requireAdmin,
     getToken
 }
+
+"71.46.90.22, 172.70.126.85, 10.207.95.208, 10.207.197.77"
+"71.46.90.22, 172.70.127.125, 10.207.95.239, 10.207.197.77"
+"71.46.90.22, 172.70.126.137, 10.207.95.239, 10.207.197.77"

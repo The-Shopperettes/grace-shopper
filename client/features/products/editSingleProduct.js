@@ -4,62 +4,80 @@ import { useDispatch } from "react-redux";
 import { editProduct } from "./singleProductSlice";
 import { Button, Form } from "react-bootstrap";
 
-const EditProduct = () => {
-  const { id } = useParams();
+const EditProduct = ({product}) => {
   const dispatch = useDispatch();
 
   //editProduct function for 'edit product' form
   //Using state to update each field of the form
 
-  const [name, setName] = useState("");
-  const [cycle, setCycle] = useState("");
-  const [watering, setWatering] = useState("");
-  const [sunlight, setSunlight] = useState("");
-  const [qty, setQty] = useState("");
-  const [price, setPrice] = useState("");
+  const [name, setName] = useState(product.name);
+  const [cycle, setCycle] = useState(product.cycle);
+  const [watering, setWatering] = useState(product.watering);
+  const [sunlight, setSunlight] = useState(product.sunlight);
+  const [qty, setQty] = useState(product.qty);
+  const [price, setPrice] = useState(product.price);
+  const [scientificName, setScientificName] = useState(product.scientificName);
 
   const handleSubmit = async (event) => {
+    if(!validateAll()) return;
     event.preventDefault();
-    await dispatch(editProduct({ id, name, cycle, watering, sunlight, qty, price }));
-    setName("");
-    setCycle("");
-    setWatering("");
-    setSunlight("");
-    setQty("");
-    setPrice("");
+    await dispatch(editProduct({ id: product.id, name, cycle, watering, sunlight, qty, price, scientificName }));
   };
 
+  const validateQty = () => {
+    return !isNaN(qty) && qty > 0;
+  }
+
+  const validateName = () => name.length > 0; 
+
+  const validateCycle = () => cycle.length > 0;
+
+  const validateWatering = () => watering.length > 0;
+
+  const validateSunlight = () => sunlight.length > 0;
+
+  const validateScientificName = () => scientificName.length > 0;
+
+  const validatePrice = () => !isNaN(price) && price > 0;
+
+  const validateAll = () => {
+    return validateQty() && validateName() && validateCycle() && validateWatering() && validateSunlight() && validatePrice();
+  }
+
   return (
-    //NOTE: Currently each field in the form needs to have something in it for submit to work, though it can be the same value if no edit is needed
-    //Can change this later if needed
     <div>
-        <Form id="editProductForm" onSubmit={handleSubmit}>
+        {product && product.name && <Form id="editProductForm" onSubmit={handleSubmit}>
 
             <Form.Group controlId="editQty">
                 <Form.Label>Quantity (in-stock):</Form.Label>
                 <Form.Control 
-                type="qty" 
+                type="number" 
                 placeholder="Edit product quantity" 
                 value={qty}
-                onChange={(event) => setQty(event.target.value) } />
+                name="qty"
+                onChange={({target}) => setQty(Number(target.value))} />
+                <Form.Text>{!validateQty() && "Please enter a number greater than 0"}</Form.Text>
               </Form.Group>
-
               <Form.Group controlId="editName">
                 <Form.Label>Name:</Form.Label>
                 <Form.Control 
-                  type="name" 
+                  type="text" 
                   placeholder="Edit product name"
+                  name="name"
                   value={name}
-                  onChange={(event) => setName(event.target.value) }/>
+                  onChange={({target}) => setName(target.value)}/>
+                  <Form.Text>{!validateName() && "Please enter a value"}</Form.Text>
               </Form.Group>
 
               <Form.Group controlId="editCycle">
                 <Form.Label>Cycle:</Form.Label>
                 <Form.Control 
-                  type="cycle"
+                  type="text" 
                   placeholder="Edit cycle details"
                   value={cycle}
-                  onChange={(event) => setCycle(event.target.value) }/>
+                  name="cycle"
+                  onChange={({target}) => setCycle(target.value)}/>
+                  <Form.Text>{!validateCycle() && "Please enter a value"}</Form.Text>
               </Form.Group>
 
               <br/>
@@ -67,32 +85,46 @@ const EditProduct = () => {
               <Form.Group controlId="editWatering">
                 <Form.Label>Watering:</Form.Label>
                 <Form.Control 
-                type="watering" 
+                type="text"  
                 placeholder="Edit watering details"
                 value={watering}
-                onChange={(event) => setWatering(event.target.value) }/>
+                name="watering"
+                onChange={({target}) => setWatering(target.value)}/>
+                <Form.Text>{!validateWatering() && "Please enter a value"}</Form.Text>
               </Form.Group>
 
               <Form.Group controlId="editSunNeeds">
                 <Form.Label>Sun Needs:</Form.Label>
                 <Form.Control 
-                type="sunNeeds" 
-                placeholder="Edit sun needs details"
+                type="text"  
+                name="sunlight"
                 value={sunlight}
-                onChange={(event) => setSunlight(event.target.value) }/>
+                onChange={({target}) => setSunlight(target.value)}/>
+                <Form.Text>{!validateSunlight() && "Please enter a value"}</Form.Text>
               </Form.Group>
 
               <Form.Group controlId="editPrice">
                 <Form.Label>Price:</Form.Label>
                 <Form.Control 
-                  type="price" 
-                  placeholder="Edit price (without $)"
+                  type="number" 
+                  name="price"
                   value={price} 
-                  onChange={(event) => setPrice(event.target.value) }/>
+                  onChange={({target}) => setPrice(Number(target.value))}/>
+                  <Form.Text>{!validatePrice() && "Please enter a number greater than 0"}</Form.Text>
               </Form.Group>
 
-              <Button variant="primary" type="submit">Submit Edits</Button>
-            </Form>
+              <Form.Group controlId="editScientificName">
+                <Form.Label>Scientific Name:</Form.Label>
+                <Form.Control 
+                  type="text" 
+                  name="scientificName"
+                  value={scientificName} 
+                  onChange={({target}) => setScientificName(target.value)}/>
+                  <Form.Text>{!validateScientificName() && "Please enter a value"}</Form.Text>
+              </Form.Group>
+
+              <Button variant="primary" type="submit" disabled={!validateAll()}>Submit Edits</Button>
+            </Form>}
     </div>
   );
 };

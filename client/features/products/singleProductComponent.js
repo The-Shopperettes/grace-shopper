@@ -88,7 +88,7 @@ const SingleProduct = () => {
   return (
     <Container>
     <ConfirmationModal />
-    <Card id="singleProduct" key={id} style = {{width: '50rem', backgroundColor: '#7BA842'}}>
+    {singleProduct && singleProduct.id && <Card id="singleProduct" key={id} style = {{width: '50rem', backgroundColor: '#7BA842'}}>
       <Card.Title>{name}</Card.Title>
       {/* Note: Find out how to move image to the side in Bootstrap. Reference: https://mdbootstrap.com/docs/react/layout/flexbox/ */}
       <Card.Img src={mediumImg} />
@@ -110,23 +110,16 @@ const SingleProduct = () => {
       <br />
       <Card.Footer style={{backgroundColor: 'white'}}>Price: ${parseFloat(price).toFixed(2)}</Card.Footer>
       <br/>
-      {(user.isAdmin) ? (
+      {user && user.isAdmin && (
         <div> 
           <h5>Admin View</h5>
           <Button onClick={handleDelete}>Delete Product</Button>
           <br/>
           <br/>
-          {/* NOTE: Currently each field in the form needs to have something in it for submit to work, though it can be the same value if no edit is needed.
-          */}
-          <p><b>Edit Product Details:</b></p>
-            <p><i>Note: Must enter a value in each field before submitting. Please add the current value for that product's detail if no change is needed.</i></p>
-            <p>Quantity (in-stock): {qty}</p>
-         <div>
-          <div>{<EditProduct />}</div>
+         <EditProduct product={singleProduct} />
         </div>
-        </div>
-      ) : null}
-    </Card>
+      )}
+    </Card>}
     </Container>
   );
 };
