@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCart, fetchCart, updateQty, deleteItem, clearCart } from './cartSlice';
-import { Card, Button, Container, Stack, Form } from 'react-bootstrap';
+import { Card, Button, Container, Stack, Form, Modal } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 
 
@@ -9,6 +9,7 @@ const Cart = () => {
     const dispatch = useDispatch();
     const {cartItems, cartId} = useSelector(selectCart);
     const [errorMessages, setErrorMessages] = useState({});
+    const [showModal, setShowModal] = useState(false);
 
     const navigate = useNavigate();
 
@@ -41,13 +42,39 @@ const Cart = () => {
 
     function handleClear() {
         dispatch(clearCart());
+        setShowModal(false);
     }
+
+    const seeModal = () => {
+        setShowModal(true);
+      };
+
+    const closeModal = () => {
+        setShowModal(false);
+      };
+
+    const ConfirmationModal = () => {
+        return (
+          <Modal show={showModal}>
+          <Modal.Header>
+            <Modal.Title>Are you sure you want to clear your cart?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Button onClick={handleClear}>Clear cart</Button>
+            <br></br>
+            <br></br>
+            <Button onClick={closeModal}>Don't clear cart</Button>
+          </Modal.Body>
+        </Modal>
+        )
+      };
 
     return (
     <Container>
+        <ConfirmationModal />
         { cartItems && cartItems.length ?
         <Stack gap={3}> 
-        <Button onClick={handleClear}>Clear cart</Button>
+        <Button onClick={seeModal}>Clear cart</Button>
             {
                cartItems.map(({id, product, qty}) => {
                 return (
