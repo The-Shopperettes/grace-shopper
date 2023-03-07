@@ -73,8 +73,13 @@ button {
   background-color: #C1C0C0;
 }
 
+.hstack {
+  padding: 15px;
+}
+
 #plant-card {
   background-color: rgb(226, 231, 229);
+  padding: 15px;
 }
 
 #login-or-signup {
