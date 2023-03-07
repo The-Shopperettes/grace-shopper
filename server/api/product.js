@@ -1,10 +1,13 @@
 const router = require('express').Router();
 const {Product} = require('../db').models;
+const { Sequelize } = require('sequelize');
 const { requireAdmin } = require('./middleware');
 
 // get all products
 router.get('/', async (req, res, next) => {
     try{
+        const {cycleFilter, waterFilter, sort, search} = req.query;
+
         // set page to the query, or default to 1
         const page = req.query.page || 1;
         // set the perPage limit to the query, or default to 9
@@ -13,10 +16,27 @@ router.get('/', async (req, res, next) => {
         // calculate the offset
         const offset = (page - 1) * perPage;
 
+        // filter all Products by any search queries utilized
+        let where = {};
+        if(cycleFilter){
+            where.cycle = cycleFilter;
+        }
+        if(waterFilter){
+            where.watering = waterFilter;
+        }
+        if(search) {
+            where.name = {[Op.iLike]:`%${search}%`};
+        }
+
+        // if no sort parameter passed, default sort descending
+        let pageSort = sort || 'DESC';
+
         // get all the products
         res.json(await Product.findAll({
             offset,
             limit: perPage,
+            where,
+            order: [['price', pageSort]],
         }));
     } catch (err) {
         next(err);
@@ -26,7 +46,19 @@ router.get('/', async (req, res, next) => {
 // get product count via Product.count
 router.get('/count', async (req, res, next) => {
     try{
-        res.json(await Product.count());
+        const {cycleFilter, waterFilter, sort, search} = req.query;
+        let where = {};
+        if(cycleFilter){
+            where.cycle = cycleFilter;
+        }
+        if(waterFilter){
+            where.watering = waterFilter;
+        }
+        if(search) {
+            where.name = {[Op.iLike]:`%${search}%`};
+        }
+
+        res.json(await Product.count({where}));
     } catch (err) {
         next(err);
     }

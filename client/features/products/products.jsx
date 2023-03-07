@@ -5,7 +5,7 @@ import {
   Link
 } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Container, Card, Row, Col, Nav, DropdownButton, Dropdown } from "react-bootstrap";
+import { Container, Card, Row, Col, Nav, DropdownButton, Dropdown, Form, Button } from "react-bootstrap";
 import { fetchProductsAsync, selectProducts } from "./productsSlice";
 import PageControls from "./pageControls";
 
@@ -13,7 +13,7 @@ const AllProducts = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [lists, setList] = useState([]);
+  const [search, setSearch] = useState('');
 
   // fetch products and number of products (for pagination)
   const { products, productCount } = useSelector(selectProducts);
@@ -60,66 +60,60 @@ const AllProducts = () => {
 
 // #region FILTER & SORT----------------------------------
 // sets the local products state to the original fetchProductsAsync thunk (all products)
-useEffect(() => {
-  setList(products);
-}, [products]);
+// useEffect(() => {
+//   setList(products);
+// }, [products]);
+
+// searches products based on search bar input
+const handleSearch = ((e) => {
+  dispatch(fetchProductsAsync({page, perPage, search: search}));
+})
 
 // sorts products by their price
 // ! PageControls is causing function to only apply to products on current page, need this to happen to ALL products.
 const sortProducts = ((e) => {
-  const productSpread = [...products];
-  if (e.target.value === '0 to hero'){
-    setList(productSpread.sort((a,b) => a.price - b.price));
-  } else if (e.target.value === 'hero to 0'){
-    setList(productSpread.sort((a,b) => b.price - a.price));
-  }
+  dispatch(fetchProductsAsync({page, perPage, sort: e.target.value }));
 });
 
 // filter products by cycle
-// TODO: need to include condition to reset aka all
 // ! PageControls is causing function to only apply to products on current page, need this to happen to ALL products.
 const cycleFilter = ((e) => {
-  const productSpread = [...products];
-  if (e.target.value === 'Biennial'){
-    setList(productSpread.filter((p) => p.cycle.toLowerCase() === 'biennial'));
-  } else if (e.target.value === 'Perennial'){
-    setList(productSpread.filter((p) => p.cycle.toLowerCase() === 'perennial'));
-  }  else if (e.target.value === 'Annual'){
-    setList(productSpread.filter((p) => p.cycle.toLowerCase() === 'annual'));
+  if (e.target.value === 'All'){
+    dispatch(fetchProductsAsync({page, perPage}));
+  } else {
+    dispatch(fetchProductsAsync({page, perPage, cycleFilter: e.target.value}));
   }
 })
 
 // filter products by watering needs
-// TODO: need to include condition to reset aka all
 // ! PageControls is causing function to only apply to products on current page, need this to happen to ALL products.
 const wateringFilter = ((e) => {
-  const productSpread = [...products];
-  if (e.target.value === 'Average'){
-    setList(productSpread.filter((p) => p.watering.toLowerCase() === 'average'));
-  } else if (e.target.value === 'Minimum'){
-    setList(productSpread.filter((p) => p.watering.toLowerCase() === 'minimum'));
-  }  else if (e.target.value === 'Frequent'){
-    setList(productSpread.filter((p) => p.watering.toLowerCase() === 'frequent'));
+  if (e.target.value === 'All'){
+    dispatch(fetchProductsAsync({page, perPage}));
+  } else {
+    dispatch(fetchProductsAsync({page, perPage, waterFilter: e.target.value}));
   }
 })
+
+
 
 
 // #endregion------------------------------------------
 
 
   // mapping to create products list. This is where the product cards are created. If the product quantity is sold out, a "sold out" header will appear.
-  const productList = lists?.map((list) => {
+  const productList = products?.map((product) => {
     return (
       <Col gap={3} key={product.id}>
         <Card  style={{width: '22rem', margin: '1rem'}}>
-          {list.qty ===0 && <Card.Header>SOLD OUT</Card.Header>}
-          <Card.Title as='h4' className='text-center'>{list.name}</Card.Title>
-          <Card.Img style={{padding: '.5rem'}} src={list.mediumImg} />
+          {product.qty ===0 && <Card.Header>SOLD OUT</Card.Header>}
+          <Card.Title as='h4' className='text-center'>{product.name}</Card.Title>
+          <Card.Img style={{padding: '.5rem'}} src={product.mediumImg} />
           <Card.Body>
-            <Card.Text as='h5' className='text-center'>Price: ${list.price}</Card.Text>
+            <Card.Text as='h5' className='text-center'>Price: ${product.price}</Card.Text>
           </Card.Body>
           <Nav.Item className='text-center'>
-            <Link to={`/products/${list.id}`}> See More </Link>
+            <Link to={`/products/${product.id}`}> See More </Link>
           </Nav.Item>
         </Card>
       </Col>
@@ -128,10 +122,22 @@ const wateringFilter = ((e) => {
 
   return (
     <Container>
+      <div className='d-flex justify-content-between'>
+        <Form>
+          <Form.Control
+          type='search'
+          placeholder='search'
+          onChange = { (e) => setSearch(e.target.value)}
+          >
+            </Form.Control>
+          <Button variant='outline-success' onClick={handleSearch}>Search</Button>
+        </Form>
+        <span className = 'd-flex justify-content-start'>
       <DropdownButton 
     title='Cycle' 
     menuVariant="dark"
     >
+      <Dropdown.Item as='button' value='All' onClick={cycleFilter}>All</Dropdown.Item>
       <Dropdown.Item as='button' value='Biennial' onClick={cycleFilter}>Biennial</Dropdown.Item>
       <Dropdown.Item as='button' value='Perennial' onClick={cycleFilter}>Perennial</Dropdown.Item>
       <Dropdown.Item as='button' value='Annual' onClick={cycleFilter}>Annual</Dropdown.Item>
@@ -140,20 +146,22 @@ const wateringFilter = ((e) => {
     title='Watering' 
     menuVariant="dark"
     >
+      <Dropdown.Item as='button' value='All' onClick={wateringFilter}>All</Dropdown.Item>
       <Dropdown.Item as='button' value='Average' onClick={wateringFilter}>Average</Dropdown.Item>
       <Dropdown.Item as='button' value='Minimum' onClick={wateringFilter}>Minimum</Dropdown.Item>
       <Dropdown.Item as='button' value='Frequent' onClick={wateringFilter}>Frequent</Dropdown.Item>
     </DropdownButton>
+    </span>
       <DropdownButton 
-    title='Sort' 
-    align='end' 
+    title='Sort by price' 
     menuVariant="dark"
     >
-      <Dropdown.Item as='button' value='0 to hero' onClick={sortProducts}>Low to High</Dropdown.Item>
-      <Dropdown.Item as='button' value='hero to 0' onClick={sortProducts}>High to Low</Dropdown.Item>
+      <Dropdown.Item as='button' value='ASC' onClick={sortProducts}>Low to High</Dropdown.Item>
+      <Dropdown.Item as='button' value='DESC' onClick={sortProducts}>High to Low</Dropdown.Item>
     </DropdownButton>
+    </div>
       <Row xs={1} md={3} gap={3}>
-        {lists && lists.length ? productList : "No products here"}
+        {products && products.length ? productList : "No products here"}
       </Row>
       <PageControls
         handlePageChange={handlePageChange}
