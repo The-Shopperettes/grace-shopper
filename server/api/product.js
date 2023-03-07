@@ -13,6 +13,7 @@ router.get('/', async (req, res, next) => {
         // calculate the offset
         const offset = (page - 1) * perPage;
 
+
         // get all the products
         res.json(await Product.findAll({
             offset,

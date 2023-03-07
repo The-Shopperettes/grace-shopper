@@ -68,7 +68,7 @@ const PaymentForm = ({placeOrder}) => {
     });
     const {status, error} = paymentIntent;
 
-    if(status === "succeeded") {
+    if(status && status === "succeeded") {
       placeOrder();
     } else if (error.type === "validation_error" || error.type === "card_error") {
       setMessage(error.message);

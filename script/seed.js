@@ -55,6 +55,9 @@ async function seed() {
       }));
     })
   }))
+
+  
+
   return {
     users,
     products
