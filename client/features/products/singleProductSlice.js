@@ -30,18 +30,11 @@ export const fetchSingleProduct = createAsyncThunk("singleProduct", async (id) =
 
   export const editProduct = createAsyncThunk(
     "products/editProduct",
-    async ({ id, name, cycle, watering, sunlight, qty, price }) => {
+    async (update) => {
+      const {id, ...body} = update; 
       const token = window.localStorage.getItem(TOKEN);
       try {
-      const { data } = await axios.put(`/api/products/${id}`, {
-        id: Number(id),
-        name,
-        cycle,
-        watering,
-        sunlight,
-        qty: Number(qty),
-        price: Number(price),
-      }, {headers: {
+      const { data } = await axios.put(`/api/products/${id}`, body, {headers: {
         authorization: token,
       }});
       return data;
