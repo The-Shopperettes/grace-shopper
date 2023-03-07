@@ -13,47 +13,71 @@ const AllProducts = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
+    // get the searchQuery
+    const [searchParams] = useSearchParams();
+    let params = Object.fromEntries([...searchParams]);
+    let {page, perPage} = Object.fromEntries([...searchParams]);
+
+  const [search, setSearch] = useState(params.search || '');
+  const [cycle, setCycle] = useState(params.cycle || '');
+  const [watering, setWatering] = useState(params.watering || ''); 
+  const [sort, setSort] = useState(params.sort || 'DESC')
 
   // fetch products and number of products (for pagination)
   const { products, productCount } = useSelector(selectProducts);
 
   // #region PAGINATION & SEARCH----------------------------------
-  // get the searchQuery
-  const [searchParams] = useSearchParams();
-  let { page, perPage } = Object.fromEntries([...searchParams]);
+
 
   // change page, perPage from strings to numbers
   page = Number(page);
   perPage = Number(perPage);
+
+  const runQuery = () => {
+    let query = '';
+    if (cycle) {
+      query += `&cycleFilter=${cycle}`;
+    }
+    if (watering) {
+      query += `&waterFilter=${watering}`;
+    }
+    if (sort) {
+      query += `&sort=${sort}`;
+    }
+    if (search) {
+      query += `&search=${search}`;
+    }
+    return query;
+  }
+     
 
   // set page defaults if no valid values given (9 cards/page & page 1)
   if (!perPage || isNaN(perPage) || (perPage > 100) | (perPage < 9))
     perPage = 9;
   if (!page || isNaN(page)) page = 1;
 
-  // once dispatch is created OR the page, perPage changes, fetch the products using the search query
+  // once dispatch is created OR the page, perPage changes, fetch the products
   useEffect(() => {
-    dispatch(fetchProductsAsync({ page, perPage }));
+    dispatch(fetchProductsAsync({ page, perPage, query:runQuery() }));
     setLoading(false);
-  }, [dispatch, page, perPage]);
+  }, [dispatch, page,  perPage]);
 
   // when products/productCount changes, make sure the current page is valid
   useEffect(() => {
     if (!loading && page > productCount / perPage) {
       const maxPage = Math.ceil(productCount / perPage);
-      navigate(`/products?page=${maxPage}&perPage=${perPage}`);
+      navigate(`/products?page=${maxPage}&perPage=${perPage}${runQuery()}`);
     }
   }, [products, productCount]);
 
   // changes page
   const handlePageChange = (newPage) => {
-    navigate(`/products?page=${newPage}&perPage=${perPage}`);
+    navigate(`/products?page=${newPage}&perPage=${perPage}${runQuery()}`);
   };
 
   // change page and perPage
   const handlePerPageChange = (newPage, newPerPage) => {
-    navigate(`/products?${newPage}&perPage=${newPerPage}`);
+    navigate(`/products?${newPage}&perPage=${newPerPage}${runQuery()}`);
   };
 
   // #endregion------------------------------------------
@@ -66,22 +90,37 @@ const AllProducts = () => {
 
 // searches products based on search bar input
 const handleSearch = ((e) => {
-  dispatch(fetchProductsAsync({page, perPage, search: search}));
+ 
+  e.preventDefault();
+  setSearch(e.target.value)
+  console.log(runQuery())
+  navigate(`/products?${page}&perPage=${perPage}${runQuery()}`);
+  // dispatch(fetchProductsAsync({page, perPage, query: runQuery()}));
 })
 
 // sorts products by their price
 // ! PageControls is causing function to only apply to products on current page, need this to happen to ALL products.
 const sortProducts = ((e) => {
-  dispatch(fetchProductsAsync({page, perPage, sort: e.target.value }));
+
+  setSort(e.target.value)
+  console.log(runQuery())
+  navigate(`/products?${page}&perPage=${perPage}${runQuery()}`);
+  // dispatch(fetchProductsAsync({page, perPage, query: runQuery() }));
 });
 
 // filter products by cycle
 // ! PageControls is causing function to only apply to products on current page, need this to happen to ALL products.
 const cycleFilter = ((e) => {
+  
   if (e.target.value === 'All'){
-    dispatch(fetchProductsAsync({page, perPage}));
+    setCycle('');
+    navigate(`/products?${page}&perPage=${perPage}${runQuery()}`);
+    // dispatch(fetchProductsAsync({page, perPage, query:runQuery()}));
   } else {
-    dispatch(fetchProductsAsync({page, perPage, cycleFilter: e.target.value}));
+    setCycle(e.target.value)
+    console.log(runQuery())
+    navigate(`/products?${page}&perPage=${perPage}${runQuery()}`);
+    // dispatch(fetchProductsAsync({page, perPage, query: runQuery()}));
   }
 })
 
@@ -89,9 +128,15 @@ const cycleFilter = ((e) => {
 // ! PageControls is causing function to only apply to products on current page, need this to happen to ALL products.
 const wateringFilter = ((e) => {
   if (e.target.value === 'All'){
-    dispatch(fetchProductsAsync({page, perPage}));
+    setWatering('');
+    navigate(`/products?${page}&perPage=${perPage}${runQuery()}`);
+    // dispatch(fetchProductsAsync({page, perPage, query: runQuery()}));
   } else {
-    dispatch(fetchProductsAsync({page, perPage, waterFilter: e.target.value}));
+    setWatering(e.target.value)
+    console.log(runQuery())
+
+    navigate(`/products?${page}&perPage=${perPage}${runQuery()}`);
+    // dispatch(fetchProductsAsync({page, perPage, query: runQuery()}));
   }
 })
 
@@ -130,7 +175,7 @@ const wateringFilter = ((e) => {
           onChange = { (e) => setSearch(e.target.value)}
           >
             </Form.Control>
-          <Button variant='outline-success' onClick={handleSearch}>Search</Button>
+          <Button type='submit' variant='outline-success' onClick={handleSearch}>Search</Button>
         </Form>
         <span className = 'd-flex justify-content-start'>
       <DropdownButton 

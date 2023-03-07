@@ -5,26 +5,13 @@ import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchProductsAsync = createAsyncThunk(
   "products/fetchAll",
-  async ( { page, perPage, cycleFilter, waterFilter, sort, search } ) => {
+  async ( { page, perPage, query } ) => {
     try {
-      let query = "";
-      if (cycleFilter) {
-        query += `&cycleFilter=${cycleFilter}`;
-      }
-      if (waterFilter) {
-        query += `&waterFilter=${waterFilter}`;
-      }
-      if (sort) {
-        query += `&sort=${sort}`;
-      }
-      if (search) {
-        query += `&search=${search}`;
-      }
-      const { data } = await axios.get(
+      const { data  } = await axios.get(
         `/api/products?page=${page}&perPage=${perPage}${query}`
       );
-      const count = await axios.get("api/products/count");
-      return { products: data, productCount: count.data };
+    //   const count = await axios.get("api/products/count");
+      return data;
     } catch (err) {
       console.error(err);
     }
