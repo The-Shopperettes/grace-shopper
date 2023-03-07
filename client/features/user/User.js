@@ -1,8 +1,9 @@
 import React, {useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {ListGroup} from 'react-bootstrap';
+import {Accordion} from 'react-bootstrap';
 import { fetchUser } from './userSlice';
+import Orders from './Orders';
 
 
 const User = () => {
@@ -26,16 +27,12 @@ return (
                 <h5>{user.email}</h5>
             </div>
         </header>
-        <ListGroup id='orders-list'>
         <h4>Order History</h4>
+        
             {orders && orders.length 
-                ? orders.map((order) => {
-                    return (
-                        <ListGroup.Item style={{width: '40vw', backgroundColor: "#dddcdc"}}>Order #{order.id}</ListGroup.Item>
-                )
-            }) : 'No previous transactions'}
-        </ListGroup>
+                ? <Orders orders={orders} /> : 'No previous transactions'}
     </div> : "User not found"}
+    <br></br>
     </div>
 )
 };
