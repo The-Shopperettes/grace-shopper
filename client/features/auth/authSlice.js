@@ -49,11 +49,7 @@ export const authenticateLogin = createAsyncThunk(
       window.localStorage.setItem(TOKEN, res.data.token);
       thunkAPI.dispatch(me());
     } catch (err) {
-      if (err.response.data) {
-        return thunkAPI.rejectWithValue(err.response.data);
-      } else {
-        return "There was an issue with your request.";
-      }
+      console.error(err);
     }
   }
 );
@@ -65,11 +61,7 @@ async ({email, username, password, method}, thunkAPI) => {
       window.localStorage.setItem(TOKEN, res.data.token);
       thunkAPI.dispatch(me());
   } catch (err) {
-    if (err.response.data) {
-      return thunkAPI.rejectWithValue(err.response.data);
-    } else {
-      return "There was an issue with your request.";
-    }
+    console.error(err);
   }
 })
 

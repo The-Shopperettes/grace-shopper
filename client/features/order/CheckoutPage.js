@@ -189,11 +189,11 @@ const CheckoutPage = () => {
         </tr>
         <tr>
           <th>Shipping</th>
-          <th>${5.99}</th>
+          <th>${6}</th>
         </tr>
         <tr>
           <th>Total</th>
-          <th>${parseFloat(price+5.99).toFixed(2)}</th>
+          <th>${parseFloat(price+6).toFixed(2)}</th>
         </tr>
       </tbody>
     </Table>
