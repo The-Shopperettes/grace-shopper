@@ -16,26 +16,32 @@ const Navbar = () => {
     navigate("/login");
   };
 
+  const linkStyle = {
+    margin: "8px",
+    textDecoration: "none", 
+    color: "#2e2823"
+  }
+
   const {cartItems} = useSelector(selectCart);
 
   return (
     <div>
       <nav id='navbar'>
         <div id='navlinks'>
-        <Link to="/products">Home🌱</Link>
+        <Link to="/products" style={linkStyle}>Home🌱</Link>
         {isLoggedIn ? (
           <>
+            <Link to="/user" style={linkStyle}>Account</Link>
+            {user.isAdmin && 
+            <Link to="/allUsers" style={linkStyle}>Manage users</Link>}
             <button type="button" onClick={logoutAndRedirectHome}>
               Logout
             </button>
-            <Link to="/user">Account</Link>
-            {user.isAdmin && 
-            <Link to="/allUsers">Manage users</Link>}
           </>
 
         ) : (
           <>
-            <Link to="/login">Login/Sign Up</Link>
+            <Link to="/login" style={linkStyle}>Login/Sign Up</Link>
           </>
         )}
         <Link to="/cart">

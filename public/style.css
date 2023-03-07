@@ -47,7 +47,7 @@ button {
 
 #user-profile {
   width: 80vw;
-  margin: auto 10vw;
+  margin: 10px 10vw;
   background-color: #C1C0C0;
   align-items: center;
 }  
@@ -64,8 +64,9 @@ button {
 }
 
 #orders-list {
-  margin: auto 15vh;
+  margin: 5vh 15vh;
   padding: 10vh;
+  background-color: rgb(226, 231, 229);
 }
 
 #all-products-container {
@@ -73,7 +74,7 @@ button {
 }
 
 #plant-card {
-  background-color: rgb(205, 207, 206);
+  background-color: rgb(226, 231, 229);
 }
 
 #login-or-signup {
