@@ -45,7 +45,7 @@ const Navbar = () => {
               </Button>
             </Link>
         </div>
-      <img src="logo.png"></img>
+      <img id='logo' src="logo.png"></img>
       </nav>
     </div>
   );

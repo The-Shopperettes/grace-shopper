@@ -1,5 +1,6 @@
 main {
   background-color: #9FC075;
+  height: 100vh;
 }
 
 #app {
@@ -25,8 +26,18 @@ form div {
   display: inline-block;
 }
 
+button {
+  border-radius: 12px;
+  border: 1px solid black;
+  opacity: 0.8;
+}
+
 #navbar {
   text-align: center;
+}
+
+#logo {
+  height: 25vh;
 }
 
 #navlinks {
@@ -62,8 +73,74 @@ form div {
 }
 
 #plant-card {
-  background-color: #898787;
+  background-color: rgb(205, 207, 206);
 }
+
+#login-or-signup {
+  background-color: #C1C0C0;
+  padding: 40px;
+  width: 60vw;
+  /* height: 60vh; */
+  margin: auto 20%;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+ 
+#login-foot {
+  background-color: #9FC075;
+  height: 20vh;
+}
+
+#welcome {
+  font-size: 3em;
+  margin: auto 10px;
+}
+
+#wel-subtitle {
+  margin: auto 12px 30px 12px;
+}
+
+#login-form {
+margin: 5px auto 20px auto;  
+}
+
+#login-flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+#login-header {
+  font-size: 18px;
+  margin: auto 12px;
+} 
+
+#signup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#signup-flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.signup-div {
+  margin: 3px;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 /*
   STYLING PRIORITIES (TIME-DEPENDENT):
