@@ -30,55 +30,50 @@ const AuthForm = ({ name, displayName }) => {
 
   return (
     <div>
-        <div id="login-or-signup">
-          <h2 id='welcome'>Welcome</h2>
-          <h3 id='wel-subtitle'>We're glad you're here.</h3>
-          <div id="login-form">
-            <h6 id='login-header'>Login</h6>
-            <form id='login-flex' onSubmit={handleSubmit} name="login">
-              <div>
-                <label htmlFor="username">
-                </label>
-                <input name="username" type="text" placeholder="Username" />
-              </div>
-              <div>
-                <label htmlFor="password">
-                </label>
-                <input name="password" type="password" placeholder="Password"/>
-              </div>
-              <div>
-                <button type="submit">Login</button>
-              </div>
-              {error && <div> {error} </div>}
-            </form>
-          </div>
-          <div id="signup-form">
-            <h6>New to Plant Shopper? Register below!</h6>
-            <form id='signup-flex' onSubmit={handleNewUser} name="signup">
-              <div className='signup-div'>
-                <label htmlFor="email">
-                </label>
-                <input name="email" type="email" placeholder="Email" />
-              </div>
-              <div className='signup-div'>
-                <label htmlFor="username">
-                </label>
-                <input name="username" type="text" placeholder="Username" />
-              </div>
-              <div className='signup-div'>
-                <label htmlFor="password">
-                </label>
-                <input name="password" type="password" placeholder="Password" />
-              </div>
-              <div className='signup-div'>
-                <button type="submit">Sign Me Up!</button>
-              </div>
-              {error && <div> {error} </div>}
-            </form>
-          </div>
+      <div id="login-or-signup">
+        <h2 id="welcome">Welcome</h2>
+        <h3 id="wel-subtitle">We're glad you're here.</h3>
+        <div id="login-form">
+          <h6 id="login-header">Login</h6>
+          <form id="login-flex" onSubmit={handleSubmit} name="login">
+            <div>
+              <label htmlFor="username"></label>
+              <input name="username" type="text" placeholder="Username" />
+            </div>
+            <div>
+              <label htmlFor="password"></label>
+              <input name="password" type="password" placeholder="Password" />
+            </div>
+            <div>
+              <button type="submit">Login</button>
+            </div>
+            {error && <div> {error} </div>}
+          </form>
         </div>
+        <div id="signup-form">
+          <h6>New to Plant Shopper? Register below!</h6>
+          <form id="signup-flex" onSubmit={handleNewUser} name="signup">
+            <div className="signup-div">
+              <label htmlFor="email"></label>
+              <input name="email" type="email" placeholder="Email" />
+            </div>
+            <div className="signup-div">
+              <label htmlFor="username"></label>
+              <input name="username" type="text" placeholder="Username" />
+            </div>
+            <div className="signup-div">
+              <label htmlFor="password"></label>
+              <input name="password" type="password" placeholder="Password" />
+            </div>
+            <div className="signup-div">
+              <button type="submit">Sign Me Up!</button>
+            </div>
+            {error && <div> {error} </div>}
+          </form>
+        </div>
+      </div>
       <div>
-        <footer id="login-foot" />
+        <footer className="foot" />
       </div>
     </div>
   );

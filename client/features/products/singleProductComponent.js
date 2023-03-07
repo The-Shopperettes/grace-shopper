@@ -88,69 +88,78 @@ const SingleProduct = () => {
 
   // TODO: Product Quantity: Need to include conditional for decrement, can't be lower than 0: qty>=0. Need to include conditional for increment, can't add more than than (qty - product in cart quantity)
   return (
-    <Container id='single-container'>
-      <ConfirmationModal />
-      {singleProduct && singleProduct.id && (
-        <Card
-          id="singleProduct"
-          key={id}>
-          <Stack direction="horizontal">
-            <div className='single-stack'>
-              <Card.Title style={{fontWeight: 'bold', margin: "20px auto"}}>{name}</Card.Title>
-              {qty > 0 && (
-                <Form>
-                  <Form.Control
-                    style={{ width: "10rem" }}
-                    type="number"
-                    value={quantity}
-                    onChange={handleQuantityChange}
-                  ></Form.Control>
-                  {qtyMessage && <Form.Text>{qtyMessage}</Form.Text>}
-                </Form>
+    <div>
+      <Container id="single-container">
+        <ConfirmationModal />
+        {singleProduct && singleProduct.id && (
+          <Card id="singleProduct" key={id}>
+            <Stack direction="horizontal">
+              <div className="single-stack">
+                <Card.Title style={{ fontWeight: "bold", margin: "20px auto" }}>
+                  {name}
+                </Card.Title>
+                {qty > 0 && (
+                  <Form>
+                    <Form.Control
+                      style={{ width: "10rem" }}
+                      type="number"
+                      value={quantity}
+                      onChange={handleQuantityChange}
+                    ></Form.Control>
+                    {qtyMessage && <Form.Text>{qtyMessage}</Form.Text>}
+                  </Form>
+                )}
+                <Card.Text>Cycle: {cycle}</Card.Text>
+                <Card.Text>Watering: {watering}</Card.Text>
+                <Card.Text>Sun Needs: {sunlight}</Card.Text>
+              </div>
+              <div className="single-stack">
+                <Card.Img src={mediumImg} style={{ width: "30vw" }} />
+              </div>
+            </Stack>
+            <Card.Text>
+              {singleProduct.qty < 20 && (
+                <Card.Text>
+                  {qty <= 0 ? "Sold out!" : `Low stock! Only ${qty} left!`}
+                </Card.Text>
               )}
-              <Card.Text>Cycle: {cycle}</Card.Text>
-              <Card.Text>Watering: {watering}</Card.Text>
-              <Card.Text>Sun Needs: {sunlight}</Card.Text>
-            </div>
-            <div className='single-stack'>
-              <Card.Img src={mediumImg} style={{width: '30vw'}} />
-            </div>
-          </Stack>
-          <Card.Text>
-            {singleProduct.qty < 20 && (
-              <Card.Text>
-                {qty <= 0 ? "Sold out!" : `Low stock! Only ${qty} left!`}
-              </Card.Text>
-            )}
-          </Card.Text>
-          <br />
-          <Card.Title style = {{margin: '25px'}}>Price: ${parseFloat(price).toFixed(2)}</Card.Title>
-          <br />
-          <Button
-            variant="secondary"
-            onClick={handleAddToCart}
-            style={{ width: "10rem" , margin: '20px'}}
-            disabled={qty <= 0}
-          >
-            Add to Cart
-          </Button>
-          <br />
-          {/* <Card.Footer>
+            </Card.Text>
+            <br />
+            <Card.Title style={{ margin: "25px" }}>
+              Price: ${parseFloat(price).toFixed(2)}
+            </Card.Title>
+            <br />
+            <Button
+              variant="secondary"
+              onClick={handleAddToCart}
+              style={{ width: "10rem", margin: "20px" }}
+              disabled={qty <= 0}
+            >
+              Add to Cart
+            </Button>
+            <br />
+            {/* <Card.Footer>
             Price: ${parseFloat(price).toFixed(2)}
           </Card.Footer> */}
-          <br />
-          {user && user.isAdmin && (
-            <div id='single-admin-view'>
-              <h5 id='admin-title'>Admin View</h5>
-              <Button style={{margin: '20px'}} onClick={handleDelete}>Delete Product</Button>
-              <br />
-              <br />
-              <EditProduct product={singleProduct} />
-            </div>
-          )}
-        </Card>
-      )}
-    </Container>
+            <br />
+            {user && user.isAdmin && (
+              <div id="single-admin-view">
+                <h5 id="admin-title">Admin View</h5>
+                <Button style={{ margin: "20px" }} onClick={handleDelete}>
+                  Delete Product
+                </Button>
+                <br />
+                <br />
+                <EditProduct product={singleProduct} />
+              </div>
+            )}
+          </Card>
+        )}
+      </Container>
+      <div>
+        <footer className="foot" />
+      </div>
+    </div>
   );
 };
 

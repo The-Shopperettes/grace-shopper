@@ -97,7 +97,7 @@ button {
   align-content: center;
 }
  
-#login-foot {
+.foot {
   background-color: #9FC075;
   height: 20vh;
 }
@@ -167,9 +167,6 @@ margin: 5px auto 20px auto;
   padding: 8px;
   font-weight: bold;
 }
-
-
-
 
 
 
