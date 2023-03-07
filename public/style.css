@@ -57,6 +57,13 @@ form div {
   padding: 10vh;
 }
 
+#all-products-container {
+  background-color: #C1C0C0;
+}
+
+#plant-card {
+  background-color: #898787;
+}
 
 /*
   STYLING PRIORITIES (TIME-DEPENDENT):

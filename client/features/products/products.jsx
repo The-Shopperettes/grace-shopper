@@ -5,7 +5,7 @@ import {
   Link
 } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Container, Card, Row, Col, Nav } from "react-bootstrap";
+import { Container, Card, Row, Col, Nav, Button } from "react-bootstrap";
 import { fetchProductsAsync, selectProducts } from "./productsSlice";
 import PageControls from "./pageControls";
 
@@ -61,7 +61,7 @@ const AllProducts = () => {
   const productList = products?.map((product) => {
     return (
       <Col gap={3} key={product.id}>
-        <Card style={{width: '22rem', margin: '1rem'}}>
+        <Card id='plant-card' style={{width: '22vw', margin: '1.5vw', padding: '5px'}}>
           {product.qty ===0 && <Card.Header>SOLD OUT</Card.Header>}
           <Card.Title as='h4' className='text-center'>{product.name}</Card.Title>
           <Card.Img style={{padding: '.5rem'}} src={product.mediumImg} />
@@ -69,7 +69,7 @@ const AllProducts = () => {
             <Card.Text as='h5' className='text-center'>Price: ${product.price}</Card.Text>
           </Card.Body>
           <Nav.Item className='text-center'>
-            <Link to={`/products/${product.id}`}> See More </Link>
+            <Link to={`/products/${product.id}`}><Button variant="outline-dark"> See More </Button></Link>
           </Nav.Item>
         </Card>
       </Col>
@@ -77,7 +77,7 @@ const AllProducts = () => {
   });
 
   return (
-    <Container>
+    <Container id='all-products-container'>
       <Row xs={1} md={3} gap={3}>
         {products && products.length ? productList : "No products here"}
       </Row>
