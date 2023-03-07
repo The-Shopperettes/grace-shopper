@@ -10,6 +10,7 @@ const calculatePrice = (cartItems) => {
 
 router.post('/create-payment-intent', async (req, res, next) => {
     try {
+      
         const {cartItems} = req.body;
 
         const paymentIntent = await stripe.paymentIntents.create({

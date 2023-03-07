@@ -44,7 +44,7 @@ const CheckoutPage = () => {
   async function getSecret() {
     try {
       const { data } = await axios.post("/api/payments/create-payment-intent", {
-        cartItems,
+        cartItems
       });
 
       setClientSecret(data.clientSecret);
@@ -156,7 +156,6 @@ const CheckoutPage = () => {
                 <PaymentForm placeOrder={placeOrder}/>
               </Elements>}
               <Button onClick={() => setActive(1)}>Back</Button>{' '}
-              <Button onClick={placeOrder} disabled={loading}>Place order</Button>
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
