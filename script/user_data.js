@@ -15,12 +15,12 @@ function createSingleUser(isAdmin) {
 
 //creates n users, including n/10 admins
 function createUsers(n) {
-    const users = [];
+    let users = [];
     for(let i = 0; i < n; i++) {
         users.push(createSingleUser(i % 10 === 0 ? true : false));
     }
 
-    users.push[
+    users = users.concat([
         {
             username: 'leah',
             password: 'leah_pass',
@@ -42,10 +42,10 @@ function createUsers(n) {
         {
             username: 'monique',
             password: 'monique_pass',
-            email: 'leah@shop.com',
+            email: 'monique@shop.com',
             isAdmin: true
         }
-    ]
+    ])
 
     return users.sort((a,b) => a.username.localeCompare(b.username));
 }
