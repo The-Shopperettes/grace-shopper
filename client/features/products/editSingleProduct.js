@@ -34,14 +34,12 @@ const EditProduct = ({product}) => {
 
   const validateWatering = () => watering.length > 0;
 
-  const validateSunlight = () => sunlight.length > 0;
-
   const validateScientificName = () => scientificName.length > 0;
 
   const validatePrice = () => !isNaN(price) && price > 0;
 
   const validateAll = () => {
-    return validateQty() && validateName() && validateCycle() && validateWatering() && validateSunlight() && validatePrice();
+    return validateQty() && validateName() && validateCycle() && validateWatering() && validatePrice();
   }
 
   return (
@@ -100,7 +98,6 @@ const EditProduct = ({product}) => {
                 name="sunlight"
                 value={sunlight}
                 onChange={({target}) => setSunlight(target.value)}/>
-                <Form.Text>{!validateSunlight() && "Please enter a value"}</Form.Text>
               </Form.Group>
 
               <Form.Group controlId="editPrice">
