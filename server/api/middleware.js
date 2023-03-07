@@ -32,7 +32,7 @@ const getToken = async (req, res, next) => {
         req.user = user;
   
       } else {
-        const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+        const ip = req.headers["x-forwarded-for"].split(',')[0];
   
         let visitor = await Visitor.findOne({
           where: { token: ip },
