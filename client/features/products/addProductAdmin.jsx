@@ -18,6 +18,7 @@ const AddProduct = () => {
 
   //Create function to dispatch addProduct thunk when the addProduct form is submitted
   const handleSubmit = async (event) => {
+    const token = window.localStorage.getItem('token');
     if (!validateAll()) return;
     event.preventDefault();
     try {
@@ -30,6 +31,10 @@ const AddProduct = () => {
         qty: Number(qty),
         price: Number(price),
         scientificName,
+      }, {
+        headers: {
+          authorization: token
+        }
       });
 
       if(data.id) navigate(`/products/${data.id}`);
