@@ -13,7 +13,7 @@ router.post('/create-payment-intent', async (req, res, next) => {
       
         const {cartItems} = req.body;
 
-        if(calculatePrice(cartItems) < 0.5) throw new Error('Invalid cart. Price:'+calculatePrice(cartItems));
+        if(calculatePrice(cartItems) < 50) throw new Error('Invalid cart. Price:'+calculatePrice(cartItems));
 
         const paymentIntent = await stripe.paymentIntents.create({
             amount: calculatePrice(cartItems),

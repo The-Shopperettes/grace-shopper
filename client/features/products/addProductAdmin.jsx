@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addProduct } from "./productsSlice";
 import { Button, Form } from "react-bootstrap";
+import { useNavigate } from "react-router";
+import axios from "axios";
 
 const AddProduct = () => {
   //Use state on all variables required to create a new product
@@ -12,25 +12,32 @@ const AddProduct = () => {
   const [qty, setQty] = useState("");
   const [price, setPrice] = useState("");
   const [scientificName, setScientificName] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  //Call useDispatch to use it to dispatch our thunk
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   //Create function to dispatch addProduct thunk when the addProduct form is submitted
   const handleSubmit = async (event) => {
     if (!validateAll()) return;
     event.preventDefault();
-    await dispatch(
-      addProduct({
+    try {
+      setLoading(true);
+      const { data } = await axios.post('/api/products', {
         name,
         cycle,
         watering,
         sunlight,
-        qty,
-        price,
+        qty: Number(qty),
+        price: Number(price),
         scientificName,
-      })
-    );
+      });
+
+      if(data.id) navigate(`/products/${data.id}`);
+      setLoading(false);
+
+    } catch(err) {
+      console.error(err);
+    }
   };
 
   const validateQty = () => {
@@ -150,8 +157,8 @@ const AddProduct = () => {
           </Form.Text>
         </Form.Group>
 
-        <Button variant="primary" type="submit" disabled={!validateAll()}>
-          Add Product
+        <Button variant="primary" type="submit" disabled={!validateAll() || loading}>
+          {!loading ? "Add Product" : "Loading..."}
         </Button>
       </Form>
     </div>

@@ -107,13 +107,8 @@ const AllProducts = () => {
             <h5>
               <b>Admin View</b>
             </h5>
-            {/* NOTE: Currently each field in the form needs to have something in it for submit to work, though it can be the same value if no edit is needed.
-             */}
             <p>
               <b>Add Product:</b>
-            </p>
-            <p>
-              <i>Note: Must enter a value in each field before submitting.</i>
             </p>
             <div>
               <div>{<AddProduct />}</div>
@@ -121,6 +116,8 @@ const AllProducts = () => {
           </div>
         )}
       </div>
+      <br></br>
+      <br></br>
     </Container>
   );
 };
