@@ -4,7 +4,7 @@ const { models: { Visitor }} = require('../db');
 //gets or creates a visitor based on their IP address
 router.get('/', async (req, res, next) => {
     try {
-        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        const ip = req.headers['x-forwarded-for'].split(',')[0];
 
         let visitor = await Visitor.findOne({
             where: {token: ip}
