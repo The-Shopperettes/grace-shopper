@@ -43,7 +43,6 @@ router.get('/:id', async (req, res, next) => {
 })
 
 //add a product
-//ADD AUTH!!!!! to frontend, too!
 router.post('/', requireAdmin, async (req, res, next) => {
   try {
     res.send(await Product.create(req.body));
