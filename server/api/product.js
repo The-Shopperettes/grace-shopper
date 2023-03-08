@@ -42,6 +42,22 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 
+//add a product
+router.post('/', async (req, res, next) => {
+  try {
+    res.send(await Product.create (
+     { name: req.body.name,
+       cycle: req.body.cycle,
+       watering: req.body.watering,
+       sunlight: req.body.sunlight,
+       qty: req.body.qty,
+       price: req.body.price,
+       scientificName: req.body.scientificName }));
+  } catch (error) {
+    next(error);
+  }
+});
+
 //delete single product
 router.delete('/:id', requireAdmin, async (req, res, next) => {
     try {
