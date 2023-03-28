@@ -1,85 +1,24 @@
-# FS-App-Template
+# Wild Roots
+Wild Roots is an ecommerce plant site that was developed for the Grace Shopper Senior Phase project in the Grace Hopper Program at Fullstack Academy.
 
-## Models schema
+https://wild-roots.onrender.com/ 
 
-Product:
-id (primary key)
-name (string)
-scientific_name (string)
-cycle (string)
-watering (string)
-sunlight (string)
-large_img (string)
-medium_img (string)
-small_img (string)
-thumbnail (string)
-qty (int)
-price (float)
+## Overview
+Wild Roots was designed to offer customers an easy-to-use site to browse a vast collection of plants from the comfort of their home. Customers are able to shop as a guest or as a logged in user. Similar to other ecommerce sites, users have the ability to add various items and quantities of items to their cart, as well as adjust or remove items once they are on the cart page. Furthermore, users can complete their order by checkout out via Stripe.
 
-User:
-id (primary key)
-username (string)
-password (string)
-email (string)
-cartId
+Wild Roots also offers select capabilities for users with administrative permissions. These administrators also have the ability to add, edit, and delete products and manage users of the site. 
 
-Cart:
-id (primary key)
-userId
+Wild Roots maintains security for each user. Access to an individual user's cart and profile can only be obtained by accessing the specific user's token, therefore verifying that it is truly them. Furthermore, extra requirements must be met in order for administrative capabilities to be rendered onto the page. 
 
------------
-Associations
+## Technology Stack
+Node.js, JavaScript, React, React Bootstrap, CSS3, HTML5, Redux, Sequelize, Express, Stripe, Webpack
 
-Product.belongsToMany(Cart, {through: "Carts_Products"})
-Cart.belongsToMany(Product, {through: "Carts_Products"})
+## Development Challenges
+While developing Wild Roots, problems that arose included ensuring that each route was secure, managing merge conflicts between various branches, and implementing Stripe in the web application. 
 
-User.hasOne(Cart)
-Cart.belongsTo(User)
+## Developers
+Judy Kuo, https://www.linkedin.com/in/judylkuo/ 
+Leah Treidler, https://www.linkedin.com/in/ltreidler/ 
+Carla Herrera, https://www.linkedin.com/in/carla-g-herrera/ 
+Monique Hayes, https://www.linkedin.com/in/monique-hayes/ 
 
-
-
-
-
-
-## Setup
-
-To use this as boilerplate, you'll need to take the following steps:
-
-- Don't fork or clone this repo! Instead, create a new, empty
-  directory on your machine and `git init` (or create an empty repo on
-  Github and clone it to your local machine)
-
-- Now you will have to add the fs-app-template as a remote and merge it into your own repository.
-
-```
-git remote add boilermaker git@github.com:FullstackAcademy/fs-app-template-v2.git
-git fetch boilermaker
-git merge boilermaker/main
-git branch -m master main
-```
-
-## Customize
-
-Now that you've got the code, follow these steps to get acclimated:
-
-- Update project name and description in `package.json`
-- `npm install`
-- Create two postgres databases (`MY_APP_NAME` should match the `name`
-  parameter in `package.json`):
-- These commands will create both your **development** and **test** databases
-
-```
-createdb <YOUR APP NAME HERE FROM package.json>
-createdb <YOUR APP NAME HERE FROM package.json>-test
-```
-
-- By default, running `npm test` will use your test database, while
-  regular development uses development database
-
-## Start
-
-Sync and seed your database by running `npm run seed`. Running `npm run start:dev` will make great things happen!
-
-- start:dev will both start your server and build your client side files using webpack
-- start:dev:logger is the same as start:dev, but you will see your SQL queries (can be helpful for debugging)
-- start:dev:seed will start your server and also seed your database (this is useful when you are making schema changes and you don't want to run your seed script separately)
