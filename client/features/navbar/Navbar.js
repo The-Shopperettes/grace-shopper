@@ -24,6 +24,14 @@ const Navbar = () => {
 
   const {cartItems} = useSelector(selectCart);
 
+  const cartProductCount = (cartItems) => {
+    let count=0;
+    for (const cartItem of cartItems){
+      count += cartItem.qty;
+    }
+    return count;
+  }
+
   return (
     <div>
       <nav id='navbar'>
@@ -46,7 +54,7 @@ const Navbar = () => {
         )}
         <Link to="/cart">
               <Button variant="cart">
-                🛒<Badge bg="secondary">{cartItems.length}</Badge>
+                🛒<Badge bg="secondary">{cartProductCount(cartItems)}</Badge>
                 <span className="visually-hidden">cart items</span>
               </Button>
             </Link>

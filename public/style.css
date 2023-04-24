@@ -157,15 +157,17 @@ margin: 5px auto 20px auto;
   padding: 40px
 }
 
-.single-admin-view {
-  background-color: gray;
-  margin-left: 25px;
+#single-admin-view {
+  background-color:  #7BA842;
+  border: 1.5px solid black;
+  margin: 25px;
   padding: 40px
 }
 
 #admin-title {
   padding: 8px;
   font-weight: bold;
+  text-decoration: underline;
 }
 
 
