@@ -1,11 +1,11 @@
 main {
-  background-color: #9FC075;
+  background-color: #9fc075;
   height: 100vh;
 }
 
 #app {
-  background-color: #9FC075;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  background-color: #9fc075;
+  font-family: Georgia, "Times New Roman", Times, serif;
 }
 
 a {
@@ -48,9 +48,9 @@ button {
 #user-profile {
   width: 80vw;
   margin: 10px 10vw;
-  background-color: #C1C0C0;
+  background-color: #c1c0c0;
   align-items: center;
-}  
+}
 
 #user-img {
   height: 35vh;
@@ -70,7 +70,7 @@ button {
 }
 
 #all-products-container {
-  background-color: #C1C0C0;
+  background-color: #c1c0c0;
 }
 
 .hstack {
@@ -87,7 +87,7 @@ button {
 }
 
 #login-or-signup {
-  background-color: #C1C0C0;
+  background-color: #c1c0c0;
   padding: 40px;
   width: 60vw;
   /* height: 60vh; */
@@ -96,9 +96,9 @@ button {
   flex-direction: column;
   align-content: center;
 }
- 
+
 .foot {
-  background-color: #9FC075;
+  background-color: #9fc075;
   height: 20vh;
 }
 
@@ -112,7 +112,7 @@ button {
 }
 
 #login-form {
-margin: 5px auto 20px auto;  
+  margin: 5px auto 20px auto;
 }
 
 #login-flex {
@@ -124,7 +124,7 @@ margin: 5px auto 20px auto;
 #login-header {
   font-size: 18px;
   margin: auto 12px;
-} 
+}
 
 #signup-form {
   display: flex;
@@ -144,7 +144,7 @@ margin: 5px auto 20px auto;
 #singleProduct {
   width: 70vw;
   margin: 5vh 13vw;
-  background-color: #C1C0C0
+  background-color: #c1c0c0;
 }
 
 .single-stack {
@@ -154,14 +154,14 @@ margin: 5px auto 20px auto;
 .single-container {
   width: 60vw;
   margin: 20vw;
-  padding: 40px
+  padding: 40px;
 }
 
 #single-admin-view {
-  background-color:  #7BA842;
+  background-color: #7ba842;
   border: 1.5px solid black;
   margin: 25px;
-  padding: 40px
+  padding: 40px;
 }
 
 #admin-title {
@@ -170,12 +170,19 @@ margin: 5px auto 20px auto;
   text-decoration: underline;
 }
 
+.searchOption {
+  margin: 0 16px 0 16px;
+  width: 100%;
+  background: white;
+  border: 0;
+  opacity: 100%;
+  text-align: left;
+  padding: 6px 12px;
+}
 
-
-
-
-
-
+#search {
+  border-radius: 0%;
+}
 
 /*
   STYLING PRIORITIES (TIME-DEPENDENT):

@@ -1,49 +1,107 @@
-const router = require('express').Router();
-const {Product} = require('../db').models;
-const { requireAdmin } = require('./middleware');
+const router = require("express").Router();
+const { Product } = require("../db").models;
+const { requireAdmin } = require("./middleware");
+const { Sequelize, Op } = require("sequelize");
 
 // get all products
-router.get('/', async (req, res, next) => {
-    try{
-        // set page to the query, or default to 1
-        const page = req.query.page || 1;
-        // set the perPage limit to the query, or default to 9
-        const perPage = req.query.perPage || 9;
+router.put("/", async (req, res, next) => {
+  try {
+    
+    // set page to the query, or default to 1
+    const page = req.query.page || 1;
+    // set the perPage limit to the query, or default to 9
+    const perPage = req.query.perPage || 9;
 
-        // calculate the offset
-        const offset = (page - 1) * perPage;
+    const search = req.query.search || "";
 
+    // calculate the offset
+    const offset = (page - 1) * perPage;
 
-        // get all the products
-        res.json(await Product.findAll({
-            offset,
-            limit: perPage,
-        }));
-    } catch (err) {
-        next(err);
+    const { count, rows } = await Product.findAndCountAll({
+      where: {
+        name: {
+          [Op.iLike]: `${search}%`,
+        },
+      },
+      offset,
+      limit: perPage,
+    });
+
+    async function getFilter(type) {
+      const options = await Product.findAll({
+        attributes: [
+          [type, "value"],
+          [
+            Sequelize.fn(
+              "COUNT",
+              Sequelize.fn("DISTINCT", Sequelize.col("id"))
+            ),
+            "count",
+          ],
+        ],
+
+        where: {
+          name: {
+            [Op.iLike]: `${search}%`,
+          },
+        },
+
+        group: [type],
+      });
+      return { type, options };
     }
+
+    const [cycle, sunlight, watering] = await Promise.all(
+      ["cycle", "sunlight", "watering"].map(getFilter)
+    );
+
+    res.json({ products: rows, count, cycle, sunlight, watering });
+  } catch (err) {
+    next(err);
+  }
 });
 
-// get product count via Product.count
-router.get('/count', async (req, res, next) => {
-    try{
-        res.json(await Product.count());
-    } catch (err) {
-        next(err);
-    }
-})
+// get array of up to 5 products based on string
+router.get("/autocomplete", async (req, res, next) => {
+  try {
+    const { search } = req.query;
+    if (!search) res.json([]);
+
+    let products = await Product.findAll({
+      attributes: ["name"],
+      where: {
+        name: {
+          [Op.iLike]: `${search}%`,
+        },
+      },
+      limit: 5,
+    });
+
+    res.json(products.map(({ name }) => name));
+  } catch (err) {
+    next(err);
+  }
+});
+
+//get the options for filters: cycle, watering, sunlight
+router.get("/filters", async (req, res, next) => {
+  try {
+  } catch (err) {
+    next(err);
+  }
+});
 
 // get single product
-router.get('/:id', async (req, res, next) => {
-    try{
-        res.send(await Product.findByPk(req.params.id));
-    } catch(err) {
-        next(err);
-    }
-})
+router.get("/:id", async (req, res, next) => {
+  try {
+    res.send(await Product.findByPk(req.params.id));
+  } catch (err) {
+    next(err);
+  }
+});
 
 //add a product
-router.post('/', requireAdmin, async (req, res, next) => {
+router.post("/", requireAdmin, async (req, res, next) => {
   try {
     res.send(await Product.create(req.body));
   } catch (error) {
@@ -52,28 +110,28 @@ router.post('/', requireAdmin, async (req, res, next) => {
 });
 
 //delete single product
-router.delete('/:id', requireAdmin, async (req, res, next) => {
-    try {
-      await Product.destroy({
-        where: {
-          id: req.params.id,
-        },
-      });
-      res.send();
-    } catch(err) {
-      next(err)
-    }
-  });
+router.delete("/:id", requireAdmin, async (req, res, next) => {
+  try {
+    await Product.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.send();
+  } catch (err) {
+    next(err);
+  }
+});
 
-  //edit single product
-  router.put('/:id', requireAdmin, async (req, res, next) => {
-    try {
-      await Product.update( req.body, {where: {id: req.params.id}});
+//edit single product
+router.put("/:id", requireAdmin, async (req, res, next) => {
+  try {
+    await Product.update(req.body, { where: { id: req.params.id } });
 
-      res.send(await Product.findByPk(req.params.id));
-    } catch (error) {
-      next(error);
-    }
-  });
+    res.send(await Product.findByPk(req.params.id));
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
