@@ -1,11 +1,13 @@
 main {
-  background-color: #9fc075;
+  background-image: #9fc075;
   height: 100vh;
+  background-attachment: fixed;
 }
 
 #app {
-  background-color: #9fc075;
   font-family: Georgia, "Times New Roman", Times, serif;
+  min-height: 100vh;
+  background-attachment: fixed;
 }
 
 a {
@@ -34,6 +36,9 @@ button {
 
 #navbar {
   text-align: center;
+  padding: 1rem;
+  background: #9fc075;
+  margin: 0 0 1rem 0;
 }
 
 #logo {
@@ -70,7 +75,15 @@ button {
 }
 
 #all-products-container {
-  background-color: #c1c0c0;
+  margin: 0;
+  max-width: 95%;
+}
+
+#routes {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-content: flex-start;
 }
 
 .hstack {
@@ -113,8 +126,9 @@ button {
 #sort-by {
   display: flex;
   flex-direction: row;
-  margin-top: 1rem;
   align-items: flex-end;
+  justify-content: flex-end;
+  margin: 1rem;
 }
 
 #sort-h3 {
@@ -123,8 +137,35 @@ button {
 }
 
 #search-form {
-  max-width: 55rem;
+  margin-left: 1rem;
+}
+
+.search-bar {
   min-width: 50vw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#logo-search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 1rem;
+  gap: 1rem;
+  width: 100%;
+}
+
+#autocomplete {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 90%;
+  transform: translate(0, 2.5rem);
+  background-color: rgb(226, 231, 229);
 }
 
 .checked-filter {
@@ -227,13 +268,13 @@ button {
 }
 
 .searchOption {
-  margin: 0 16px 0 16px;
-  background: white;
   border: 0;
   opacity: 100%;
   text-align: left;
   padding: 6px 12px;
   width: 90%;
+  margin: 0;
+  background: none;
 }
 
 #search {
@@ -244,3 +285,13 @@ button {
   STYLING PRIORITIES (TIME-DEPENDENT):
   2. single card -> sizing, colors, text, etc
 */
+
+/*
+BREAKPOINTS
+*/
+
+@media only screen and (max-width: 800px) {
+  #filter-card {
+    display: none;
+  }
+}

@@ -132,15 +132,13 @@ const AllProducts = () => {
     <Container id="all-products-container">
       <Row xs={12}>
         <Col md={3}>
-          <Sort currentSort={sort} setCurrentSort={setSort} />
           <Filters selections={selections} setSelections={setSelections} />
         </Col>
         <Col xs={9}>
-          <Search
-            searchVal={search}
-            setSearchVal={setSearch}
-            search={handleUpdate}
-          />
+          <Row>
+            <Sort currentSort={sort} setCurrentSort={setSort} />
+          </Row>
+
           {products && products.length ? (
             <>
               <section id="plant-list">

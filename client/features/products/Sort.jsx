@@ -20,7 +20,11 @@ const Sort = ({ currentSort, setCurrentSort }) => {
 
         <Dropdown.Menu>
           {orders.map(({ label }, i) => (
-            <Dropdown.Item eventKey={i} key={i}>
+            <Dropdown.Item
+              eventKey={i}
+              key={i}
+              active={currentSort.label === label}
+            >
               {label}
             </Dropdown.Item>
           ))}

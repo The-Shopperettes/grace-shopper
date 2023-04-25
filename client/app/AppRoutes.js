@@ -34,7 +34,7 @@ const AppRoutes = () => {
   }, [user])
 
   return (
-    <div>
+    <div id="routes">
         <Routes>
           <Route path="/*" element={<AllProducts />} />
           <Route path="/cart" element={<Cart />}/>

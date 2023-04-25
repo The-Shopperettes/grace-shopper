@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../auth/authSlice";
 import { Button, Badge } from "react-bootstrap";
 import { selectCart } from "../cart/cartSlice";
+import Search from "../products/Search";
 
 const Navbar = () => {
   const user = useSelector((state) => state.auth.me);
@@ -37,9 +38,35 @@ const Navbar = () => {
   return (
     <div>
       <nav id="navbar">
+        <section id="logo-search">
+          <img
+            id="logo"
+            src="logo.png"
+            style={{ width: "20rem", height: "auto" }}
+          />
+          <Search />
+          <Link to="/cart">
+            <Button variant="cart">
+              <i
+                className="fa-solid fa-cart-shopping fa-2x"
+                style={{ color: "black" }}
+              ></i>
+              <Badge
+                bg="success"
+                style={{
+                  transform: "translate(-0.4rem, -1.3rem)",
+                  borderRadius: "100%",
+                }}
+              >
+                {cartProductCount(cartItems)}
+              </Badge>
+              <span className="visually-hidden">cart items</span>
+            </Button>
+          </Link>
+        </section>
         <div id="navlinks">
           <Link to="/products" style={linkStyle}>
-            Home🌱
+            All Plants🌱
           </Link>
           {isLoggedIn ? (
             <>
@@ -62,14 +89,7 @@ const Navbar = () => {
               </Link>
             </>
           )}
-          <Link to="/cart">
-            <Button variant="cart">
-              🛒<Badge bg="secondary">{cartProductCount(cartItems)}</Badge>
-              <span className="visually-hidden">cart items</span>
-            </Button>
-          </Link>
         </div>
-        <img id="logo" src="logo.png"></img>
       </nav>
     </div>
   );
