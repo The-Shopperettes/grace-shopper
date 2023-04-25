@@ -11,7 +11,7 @@ const Sort = ({ currentSort, setCurrentSort }) => {
   ];
 
   return (
-    <section id="sort-by">
+    <section style={{ display: "flex", alignItems: "center" }}>
       <h3 id="sort-h3">Sort by</h3>
       <Dropdown onSelect={(key) => setCurrentSort(orders[key])}>
         <Dropdown.Toggle variant="primary" id="dropdown-basic">

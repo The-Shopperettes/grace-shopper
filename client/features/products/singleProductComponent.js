@@ -156,9 +156,6 @@ const SingleProduct = () => {
           </Card>
         )}
       </Container>
-      <div>
-        <footer className="foot" />
-      </div>
     </div>
   );
 };

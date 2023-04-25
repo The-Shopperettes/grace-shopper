@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Form, InputGroup, Stack, Button, Container } from "react-bootstrap";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
-const Search = ({ search }) => {
+const Search = () => {
   const [options, setOptions] = useState([]);
   const [searchVal, setSearchVal] = useState("");
+
+  const navigate = useNavigate();
 
   const updateOptions = async ({ target: { value } }) => {
     setSearchVal(value);
@@ -27,8 +30,7 @@ const Search = ({ search }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setOptions([]);
-    search(searchVal);
+    navigate(`/products?search=${searchVal}`);
   };
 
   return (
@@ -41,7 +43,8 @@ const Search = ({ search }) => {
               onChange={updateOptions}
               value={searchVal}
               placeholder="What are you looking for?"
-              style={{ borderRadius: 0 }}
+              style={{ borderRadius: 0, backgroundColor: "#FFFBFC" }}
+              id="search-input"
             />
             <section id="autocomplete">
               {options?.map((option, i) => (
@@ -57,7 +60,12 @@ const Search = ({ search }) => {
             </section>
           </span>
 
-          <Button type="submit">Search</Button>
+          <Button
+            type="submit"
+            style={{ backgroundColor: "#395B50", border: "1px solid #395B50" }}
+          >
+            Search
+          </Button>
         </InputGroup>
       </Stack>
     </Form>

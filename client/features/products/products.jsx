@@ -13,7 +13,6 @@ const AllProducts = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
   const [selections, setSelections] = useState({
     cycle: [],
     sunlight: [],
@@ -27,7 +26,9 @@ const AllProducts = () => {
   // #region PAGINATION & SEARCH----------------------------------
   // get the searchQuery
   const [searchParams] = useSearchParams();
-  let { page, perPage } = Object.fromEntries([...searchParams]);
+  let { page, perPage, search } = Object.fromEntries([...searchParams]);
+
+  if (!search) search = "";
 
   // change page, perPage from strings to numbers
   page = Number(page);
@@ -35,7 +36,7 @@ const AllProducts = () => {
 
   // set page defaults if no valid values given (9 cards/page & page 1)
   if (!perPage || isNaN(perPage) || (perPage > 100) | (perPage < 9))
-    perPage = 12;
+    perPage = 20;
   if (!page || isNaN(page)) page = 1;
 
   // once dispatch is created OR the page, perPage changes, fetch the products using the search query
@@ -50,10 +51,10 @@ const AllProducts = () => {
       })
     );
     setLoading(false);
-  }, [dispatch, page, perPage]);
+  }, [dispatch, page, perPage, search]);
 
   useEffect(() => {
-    navigate(`/products?page=1&perPage=${perPage}`);
+    navigate(`/products?page=1&perPage=${perPage}&search=${search}`);
     dispatch(
       fetchProductsAsync({
         page,
@@ -63,38 +64,35 @@ const AllProducts = () => {
         sort: sort.value,
       })
     );
-  }, [search, selections, sort]);
+  }, [selections, sort]);
 
   // when products/productCount changes, make sure the current page is valid
   useEffect(() => {
     if (!loading && page > Math.ceil(productCount / perPage)) {
       const maxPage = Math.ceil(productCount / perPage);
-      navigate(`/products?page=${maxPage}&perPage=${perPage}`);
+      navigate(`/products?page=${maxPage}&perPage=${perPage}&search=${search}`);
     }
   }, [products, productCount]);
 
   // changes page
   const handlePageChange = (newPage) => {
-    navigate(`/products?page=${newPage}&perPage=${perPage}`);
+    navigate(`/products?page=${newPage}&perPage=${perPage}&search=${search}`);
   };
 
   // change page and perPage
   const handlePerPageChange = (newPage, newPerPage) => {
-    navigate(`/products?${newPage}&perPage=${newPerPage}`);
-  };
-
-  // handle user search
-  const handleUpdate = (searchVal) => {
-    setSearch(searchVal);
+    navigate(
+      `/products?page=${newPage}&perPage=${newPerPage}&search=${search}`
+    );
   };
 
   const reset = () => {
-    setSearch("");
     setSelections({
       cycle: [],
       sunlight: [],
       watering: [],
     });
+    navigate("/products");
   };
 
   //defining user in order to use "isAdmin" property to render Add a Product functionality (for admins only)
@@ -113,7 +111,7 @@ const AllProducts = () => {
           <Card.Title as="h4" className="text-center">
             {product.name}
           </Card.Title>
-          <Card.Img style={{ padding: ".5rem" }} src={product.mediumImg} />
+          <Card.Img style={{ padding: ".5rem" }} src={product.thumbnail} />
           <Card.Body>
             <Card.Text as="h5" className="text-center">
               Price: ${product.price}
@@ -121,7 +119,7 @@ const AllProducts = () => {
           </Card.Body>
           <Nav.Item className="text-center">
             <Link to={`/products/${product.id}`}>
-              <Button variant="outline-dark"> See More </Button>
+              <Button variant="outline-dark"> See Details </Button>
             </Link>
           </Nav.Item>
         </Card>
@@ -135,9 +133,16 @@ const AllProducts = () => {
           <Filters selections={selections} setSelections={setSelections} />
         </Col>
         <Col xs={9}>
-          <Row>
+          <div id="results-header">
+            <h3>
+              {search.length
+                ? `Showing ${productCount} result${
+                    productCount > 1 ? "s" : ""
+                  } for "${search}"`
+                : "All plants"}
+            </h3>
             <Sort currentSort={sort} setCurrentSort={setSort} />
-          </Row>
+          </div>
 
           {products && products.length ? (
             <>
