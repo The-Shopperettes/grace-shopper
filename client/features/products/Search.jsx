@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Form, InputGroup, Stack, Button } from "react-bootstrap";
 import axios from "axios";
 
-const Search = ({ searchVal, setSearchVal, search }) => {
+const Search = ({ search }) => {
   const [options, setOptions] = useState([]);
+  const [searchVal, setSearchVal] = useState("");
 
   const updateOptions = async ({ target: { value } }) => {
     setSearchVal(value);
@@ -26,13 +27,12 @@ const Search = ({ searchVal, setSearchVal, search }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSearchVal("");
     setOptions([]);
-    search();
+    search(searchVal);
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} id="search-form">
       <Stack gap={0}>
         <InputGroup className="mb-0">
           <Form.Control
@@ -42,9 +42,7 @@ const Search = ({ searchVal, setSearchVal, search }) => {
             value={searchVal}
             placeholder="What are you looking for?"
           />
-          <Button disabled={searchVal.length < 1} type="submit">
-            Search
-          </Button>
+          <Button type="submit">Search</Button>
         </InputGroup>
 
         {options?.map((option, i) => (

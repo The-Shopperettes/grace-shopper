@@ -40,7 +40,11 @@ const PageControls = (props) => {
   const offset = 1 + (page - 1) * perPage;
 
   return (
-    <Stack direction="horizontal">
+    <Stack
+      direction="horizontal"
+      className="mt-3"
+      style={{ justifyContent: "flex-end", alignItems: "flex-start" }}
+    >
       <Pagination>
         {page > 1 ? <Pagination.First onClick={() => handleClick(1)} /> : null}
         {page > 2 ? (

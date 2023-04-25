@@ -5,13 +5,13 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchProductsAsync = createAsyncThunk(
   "products/fetchAll",
-  async ({ page, perPage, search }) => {
+  async ({ page, perPage, search, selections, sort }) => {
     try {
       const {
         data: { products, count, cycle, sunlight, watering },
       } = await axios.put(
         `api/products?page=${page}&perPage=${perPage}&search=${search}`,
-        { body: "hello" }
+        { selections, sort }
       );
       return {
         products,

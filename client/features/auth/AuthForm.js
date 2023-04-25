@@ -47,7 +47,12 @@ const AuthForm = ({ name, displayName }) => {
             <div>
               <button type="submit">Login</button>
             </div>
-            {error && <div> {error} </div>}
+            {error ? (
+              <div>
+                {" "}
+                {typeof error === "string" ? error : "An error occurred"}{" "}
+              </div>
+            ) : null}
           </form>
         </div>
         <div id="signup-form">
@@ -68,7 +73,12 @@ const AuthForm = ({ name, displayName }) => {
             <div className="signup-div">
               <button type="submit">Sign Me Up!</button>
             </div>
-            {error && <div> {error} </div>}
+            {error ? (
+              <div>
+                {" "}
+                {typeof error === "string" ? error : "An error occurred"}{" "}
+              </div>
+            ) : null}
           </form>
         </div>
       </div>

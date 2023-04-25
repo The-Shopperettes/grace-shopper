@@ -1,16 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Form, Dropdown, Badge, Accordion } from "react-bootstrap";
-import axios from "axios";
+import React from "react";
+import { Form, Card } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 //cycle, watering and sunlight
-const Filters = () => {
-  const [selections, setSelections] = useState({
-    cycle: [],
-    sunlight: [],
-    watering: [],
-  });
-
+const Filters = ({ selections, setSelections }) => {
   const { filters } = useSelector((state) => state.products);
 
   const capitalize = (str) => {
@@ -36,26 +29,31 @@ const Filters = () => {
   };
 
   return (
-    <Accordion defaultActiveKey={[0, 1, 2]} alwaysOpen>
+    <Card id="filter-card">
       {filters.map(({ type, options }, i) => (
-        <Accordion.Item key={i} eventKey={i}>
-          <Accordion.Header>{capitalize(type)}</Accordion.Header>
-          <Accordion.Body>
-            {options.map(({ count, value }, i) => {
-              if (value.length > 0)
-                return (
-                  <Form.Check
-                    key={i}
-                    checked={selections[type].includes(value)}
-                    label={`${capitalize(value)} (${count})`}
-                    onChange={() => handleToggle(value, type)}
-                  />
-                );
-            })}
-          </Accordion.Body>
-        </Accordion.Item>
+        <section key={i} id="filter-option">
+          <h3 id="filter-title">{capitalize(type)}</h3>
+          <section>
+            {[...options]
+              .sort((a, b) => a.value.localeCompare(b.value))
+              .map(({ count, value }, i) => {
+                if (value.length > 0)
+                  return (
+                    <Form.Check
+                      key={i}
+                      checked={selections[type].includes(value)}
+                      label={`${capitalize(value)} (${count || 0})`}
+                      onChange={() => handleToggle(value, type)}
+                      className={
+                        selections[type].includes(value) ? "checked-filter" : ""
+                      }
+                    />
+                  );
+              })}
+          </section>
+        </section>
       ))}
-    </Accordion>
+    </Card>
   );
 };
 

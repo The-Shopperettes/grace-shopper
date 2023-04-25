@@ -84,6 +84,62 @@ button {
 #plant-card {
   background-color: rgb(226, 231, 229);
   padding: 15px;
+  min-width: 8rem;
+  max-width: 15rem;
+  padding: 5px;
+}
+
+#plant-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2vw;
+  margin-left: 2vw;
+}
+
+#filter-card {
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+#filter-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#filter-option {
+  margin-bottom: 1rem;
+}
+
+#sort-by {
+  display: flex;
+  flex-direction: row;
+  margin-top: 1rem;
+  align-items: flex-end;
+}
+
+#sort-h3 {
+  font-size: 20px;
+  margin-right: 0.6rem;
+}
+
+#search-form {
+  max-width: 55rem;
+  min-width: 50vw;
+}
+
+.checked-filter {
+  color: #0053cc;
+}
+
+#not-found {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 2rem;
+}
+
+#not-found-header {
+  margin: 2rem;
 }
 
 #login-or-signup {
@@ -172,12 +228,12 @@ button {
 
 .searchOption {
   margin: 0 16px 0 16px;
-  width: 100%;
   background: white;
   border: 0;
   opacity: 100%;
   text-align: left;
   padding: 6px 12px;
+  width: 90%;
 }
 
 #search {

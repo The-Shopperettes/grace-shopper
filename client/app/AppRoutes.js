@@ -17,7 +17,7 @@ import AllUsers from '../features/users/AllUsers';
  */
 
 const AppRoutes = () => {
-  const isLoggedIn = useSelector((state) => !!(state.auth.me && state.auth.me.password));
+  const isLoggedIn = useSelector((state) => !!(state.auth.me && state.auth.me.id));
   const user = useSelector((state) => state.auth.me);
  
   const dispatch = useDispatch();

@@ -9,36 +9,38 @@ const TOKEN = "token";
 /*
   THUNKS
 */
-export const me = createAsyncThunk('auth/me', async (_, {getState}) => {
+export const me = createAsyncThunk("auth/me", async (_, { getState }) => {
   const currentCart = getState().cart;
   try {
     const token = window.localStorage.getItem(TOKEN);
     if (token) {
-      const {data} = await axios.get('/auth/me', {
+      const { data } = await axios.get("/auth/me", {
         headers: {
           authorization: token,
         },
       });
 
-      if(currentCart.cartItems.length) {
-        await axios.put('/api/carts/transfer', {},{
-          headers: {
-            authorization: token,
-          },
-        })
+      if (currentCart.cartItems.length) {
+        await axios.put(
+          "/api/carts/transfer",
+          {},
+          {
+            headers: {
+              authorization: token,
+            },
+          }
+        );
       }
       return data;
-    }
-    else {
-      const res = await axios.get('/api/visitors');
+    } else {
+      const res = await axios.get("/api/visitors");
       return res.data;
     }
   } catch (err) {
     console.error(err);
-    const res = await axios.get('/api/visitors');
+    const res = await axios.get("/api/visitors");
     return res.data;
   }
-
 });
 
 export const authenticateLogin = createAsyncThunk(
@@ -54,30 +56,33 @@ export const authenticateLogin = createAsyncThunk(
   }
 );
 
-export const authenticateSignUp = createAsyncThunk("auth/authenticateSignUp", 
-async ({email, username, password, method}, thunkAPI) => {
-  try {
-    const res = await axios.post(`/auth/${method}`, { email, username, password });
+export const authenticateSignUp = createAsyncThunk(
+  "auth/authenticateSignUp",
+  async ({ email, username, password, method }, thunkAPI) => {
+    try {
+      const res = await axios.post(`/auth/${method}`, {
+        email,
+        username,
+        password,
+      });
       window.localStorage.setItem(TOKEN, res.data.token);
       thunkAPI.dispatch(me());
-  } catch (err) {
-    console.error(err);
-  }
-})
-
-export const logout = createAsyncThunk(
-  'auth/logout',
-  async () => {
-    window.localStorage.removeItem(TOKEN);
-    try {
-      const res = await axios.get('/api/visitors');
-
-      return res.data;
     } catch (err) {
       console.error(err);
     }
   }
-)
+);
+
+export const logout = createAsyncThunk("auth/logout", async () => {
+  window.localStorage.removeItem(TOKEN);
+  try {
+    const res = await axios.get("/api/visitors");
+
+    return res.data;
+  } catch (err) {
+    console.error(err);
+  }
+});
 
 /*
   SLICE
@@ -88,8 +93,7 @@ export const authSlice = createSlice({
     me: {},
     error: null,
   },
-  reducers: {
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(me.fulfilled, (state, action) => {
       state.me = action.payload;
@@ -105,7 +109,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.me = action.payload;
-    })
+    });
   },
 });
 

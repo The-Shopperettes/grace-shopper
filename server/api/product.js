@@ -6,7 +6,15 @@ const { Sequelize, Op } = require("sequelize");
 // get all products
 router.put("/", async (req, res, next) => {
   try {
-    
+    //get the filters
+    let query = {};
+    const { selections } = req.body;
+    if (selections.cycle.length) query.cycle = { [Op.or]: selections.cycle };
+    if (selections.sunlight.length)
+      query.sunlight = { [Op.or]: selections.sunlight };
+    if (selections.watering.length)
+      query.watering = { [Op.or]: selections.watering };
+
     // set page to the query, or default to 1
     const page = req.query.page || 1;
     // set the perPage limit to the query, or default to 9
@@ -22,13 +30,32 @@ router.put("/", async (req, res, next) => {
         name: {
           [Op.iLike]: `${search}%`,
         },
+        ...query,
       },
       offset,
       limit: perPage,
+      order: [req.body.sort],
     });
 
     async function getFilter(type) {
+      let otherFilters = {};
+      for (let key of Object.keys(query)) {
+        if (key !== type) otherFilters[key] = query[key];
+      }
+
       const options = await Product.findAll({
+        attributes: [[type, "value"]],
+
+        where: {
+          name: {
+            [Op.iLike]: `${search}%`,
+          },
+        },
+
+        group: [type],
+      });
+
+      const counts = await Product.findAll({
         attributes: [
           [type, "value"],
           [
@@ -44,10 +71,18 @@ router.put("/", async (req, res, next) => {
           name: {
             [Op.iLike]: `${search}%`,
           },
+          ...otherFilters,
         },
 
         group: [type],
       });
+
+      for (let { dataValues } of counts) {
+        const { count, value } = dataValues;
+        const idx = options.findIndex((opt) => opt.dataValues.value === value);
+        if (idx >= 0) options[idx].dataValues.count = count;
+      }
+
       return { type, options };
     }
 
