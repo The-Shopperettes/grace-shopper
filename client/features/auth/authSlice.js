@@ -45,9 +45,9 @@ export const me = createAsyncThunk("auth/me", async (_, { getState }) => {
 
 export const authenticateLogin = createAsyncThunk(
   "auth/authenticateLogin",
-  async ({ username, password, method }, thunkAPI) => {
+  async ({ username, password }, thunkAPI) => {
     try {
-      const res = await axios.post(`/auth/${method}`, { username, password });
+      const res = await axios.post(`/auth/login`, { username, password });
       window.localStorage.setItem(TOKEN, res.data.token);
       thunkAPI.dispatch(me());
     } catch (err) {
@@ -58,9 +58,9 @@ export const authenticateLogin = createAsyncThunk(
 
 export const authenticateSignUp = createAsyncThunk(
   "auth/authenticateSignUp",
-  async ({ email, username, password, method }, thunkAPI) => {
+  async ({ email, username, password }, thunkAPI) => {
     try {
-      const res = await axios.post(`/auth/${method}`, {
+      const res = await axios.post(`/auth/signup`, {
         email,
         username,
         password,

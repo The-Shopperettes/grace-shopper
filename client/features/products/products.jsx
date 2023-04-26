@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Container, Card, Row, Col, Nav, Button } from "react-bootstrap";
+import {
+  Container,
+  Card,
+  Row,
+  Col,
+  Nav,
+  Button,
+  Spinner,
+} from "react-bootstrap";
 import { fetchProductsAsync, selectProducts } from "./productsSlice";
 import PageControls from "./pageControls";
 import AddProduct from "./addProductAdmin";
-import Search from "./Search";
 import Filters from "./Filters";
 import Sort from "./Sort";
 
@@ -128,62 +135,73 @@ const AllProducts = () => {
 
   return (
     <Container id="all-products-container">
-      <Row xs={12}>
-        <Col md={3}>
-          <Filters selections={selections} setSelections={setSelections} />
-        </Col>
-        <Col xs={9}>
-          <div id="results-header">
-            <h3>
-              {search.length
-                ? `Showing ${productCount} result${
-                    productCount > 1 ? "s" : ""
-                  } for "${search}"`
-                : "All plants"}
-            </h3>
-            <Sort currentSort={sort} setCurrentSort={setSort} />
-          </div>
+      {!loading ? (
+        <>
+          <Row xs={12}>
+            <Col md={3}>
+              <Filters selections={selections} setSelections={setSelections} />
+            </Col>
+            <Col xs={9}>
+              <div id="results-header">
+                <h3>
+                  {search.length
+                    ? `Showing ${productCount} result${
+                        productCount > 1 ? "s" : ""
+                      } for "${search}"`
+                    : "All plants"}
+                </h3>
+                <Sort currentSort={sort} setCurrentSort={setSort} />
+              </div>
 
-          {products && products.length ? (
-            <>
-              <section id="plant-list">
-                <ProductList />
-              </section>
-            </>
-          ) : (
-            <section id="not-found">
-              <h3 id="not-found-header">No products found</h3>
-              <Button onClick={reset}>View all products</Button>
-            </section>
-          )}
-        </Col>
-      </Row>
-      <PageControls
-        handlePageChange={handlePageChange}
-        page={page}
-        perPage={perPage}
-        count={productCount}
-        handlePerPageChange={handlePerPageChange}
-      />
-      <div>
-        {/* Admin only section begins here*/}
-        {user && user.isAdmin && (
+              {products && products.length ? (
+                <>
+                  <section id="plant-list">
+                    <ProductList />
+                  </section>
+                </>
+              ) : (
+                <section id="not-found">
+                  <h3 id="not-found-header">No products found</h3>
+                  <Button onClick={reset}>View all products</Button>
+                </section>
+              )}
+            </Col>
+          </Row>
+          <PageControls
+            handlePageChange={handlePageChange}
+            page={page}
+            perPage={perPage}
+            count={productCount}
+            handlePerPageChange={handlePerPageChange}
+          />
           <div>
-            <br />
-            <h5>
-              <b>Admin View</b>
-            </h5>
-            <p>
-              <b>Add Product:</b>
-            </p>
-            <div>
-              <div>{<AddProduct />}</div>
-            </div>
+            {/* Admin only section begins here*/}
+            {user && user.isAdmin && (
+              <div>
+                <br />
+                <h5>
+                  <b>Admin View</b>
+                </h5>
+                <p>
+                  <b>Add Product:</b>
+                </p>
+                <div>
+                  <div>{<AddProduct />}</div>
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <br></br>
-      <br></br>
+          <br></br>
+          <br></br>
+        </>
+      ) : (
+        <section>
+          <h3>Loading our plants...</h3>
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </section>
+      )}
     </Container>
   );
 };

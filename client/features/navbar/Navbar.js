@@ -20,9 +20,8 @@ const Navbar = () => {
   };
 
   const linkStyle = {
-    margin: "8px",
     textDecoration: "none",
-    color: "#2e2823",
+    color: "#1c1c1c ",
   };
 
   const { cartItems } = useSelector(selectCart);

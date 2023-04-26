@@ -30,6 +30,8 @@ const Search = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setOptions([]);
+    setSearchVal("");
     navigate(`/products?search=${searchVal}`);
   };
 
@@ -43,14 +45,14 @@ const Search = () => {
               onChange={updateOptions}
               value={searchVal}
               placeholder="What are you looking for?"
-              style={{ borderRadius: 0, backgroundColor: "#FFFBFC" }}
+              style={{ borderRadius: 0 }}
               id="search-input"
             />
             <section id="autocomplete">
               {options?.map((option, i) => (
                 <button
                   type="button"
-                  className="searchOption"
+                  className="search-option"
                   key={i}
                   onClick={() => selectOption(option)}
                 >
@@ -60,11 +62,11 @@ const Search = () => {
             </section>
           </span>
 
-          <Button
-            type="submit"
-            style={{ backgroundColor: "#395B50", border: "1px solid #395B50" }}
-          >
-            Search
+          <Button type="submit" id="search-btn" style={{}}>
+            <i
+              class="fa-solid fa-magnifying-glass"
+              style={{ color: "white" }}
+            ></i>
           </Button>
         </InputGroup>
       </Stack>
