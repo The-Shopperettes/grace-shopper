@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { authenticateLogin, authenticateSignUp } from "../../app/store";
+import {
+  authenticateLogin,
+  authenticateSignUp,
+  resetAuthError,
+} from "../../app/store";
 import { useNavigate, useParams } from "react-router";
 import { Container, InputGroup, Form, Button } from "react-bootstrap";
 import AuthTemplate from "./AuthTemplate";
@@ -14,13 +18,16 @@ const AuthForm = ({ type }) => {
 
   useEffect(() => {
     setError("");
+    dispatch(resetAuthError());
     document.querySelector(".user-form").reset();
   }, [type]);
 
   useEffect(() => {
+    console.log("auth error: ", authError);
     if (loading && authError) {
       setError("An error occurred.");
       setLoading(false);
+      dispatch(resetAuthError());
     }
   }, [authError]);
 
@@ -77,10 +84,8 @@ const AuthForm = ({ type }) => {
   ];
 
   return (
-    <Container>
+    <Container fluid>
       <Container id="login-or-signup">
-        <h2 id="welcome">Welcome</h2>
-        <h3 id="wel-subtitle">We're glad you're here.</h3>
         {type === "login" ? (
           <AuthTemplate
             inputs={loginInputs}

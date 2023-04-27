@@ -42,6 +42,7 @@ const Navbar = () => {
             id="logo"
             src="logo.png"
             style={{ width: "20rem", height: "auto" }}
+            onClick={() => navigate("/")}
           />
           <Search />
           <Link to="/cart">

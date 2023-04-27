@@ -45,30 +45,32 @@ export const me = createAsyncThunk("auth/me", async (_, { getState }) => {
 
 export const authenticateLogin = createAsyncThunk(
   "auth/authenticateLogin",
-  async ({ username, password }, thunkAPI) => {
+  async ({ username, password }, { dispatch, rejectWithValue }) => {
     try {
       const res = await axios.post(`/auth/login`, { username, password });
       window.localStorage.setItem(TOKEN, res.data.token);
-      thunkAPI.dispatch(me());
+      if (!res.data.token) throw new Error();
+      dispatch(me());
     } catch (err) {
-      console.error(err);
+      return rejectWithValue("Unauthorized");
     }
   }
 );
 
 export const authenticateSignUp = createAsyncThunk(
   "auth/authenticateSignUp",
-  async ({ email, username, password }, thunkAPI) => {
+  async ({ email, username, password }, { dispatch, rejectWithValue }) => {
     try {
       const res = await axios.post(`/auth/signup`, {
         email,
         username,
         password,
       });
+      if (!res.data.token) throw new Error();
       window.localStorage.setItem(TOKEN, res.data.token);
-      thunkAPI.dispatch(me());
+      dispatch(me());
     } catch (err) {
-      console.error(err);
+      return rejectWithValue("Unauthorized");
     }
   }
 );
@@ -93,7 +95,11 @@ export const authSlice = createSlice({
     me: {},
     error: null,
   },
-  reducers: {},
+  reducers: {
+    resetAuthError(state) {
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(me.fulfilled, (state, action) => {
       state.me = action.payload;
@@ -109,6 +115,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.me = action.payload;
+      state.error = null;
     });
   },
 });
@@ -117,3 +124,4 @@ export const authSlice = createSlice({
   REDUCER
 */
 export default authSlice.reducer;
+export const { resetAuthError } = authSlice.actions;

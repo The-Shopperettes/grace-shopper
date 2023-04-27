@@ -10,7 +10,11 @@ import {
   Button,
   Spinner,
 } from "react-bootstrap";
-import { fetchProductsAsync, selectProducts } from "./productsSlice";
+import {
+  fetchProductsAsync,
+  selectProducts,
+  resetProducts,
+} from "./productsSlice";
 import PageControls from "./pageControls";
 import AddProduct from "./addProductAdmin";
 import Filters from "./Filters";
@@ -28,7 +32,7 @@ const AllProducts = () => {
   const [sort, setSort] = useState({ label: "Name (A-Z)", value: ["name"] });
 
   // fetch products and number of products (for pagination)
-  const { products, productCount } = useSelector(selectProducts);
+  const { products, productCount, error } = useSelector(selectProducts);
 
   // #region PAGINATION & SEARCH----------------------------------
   // get the searchQuery
@@ -48,20 +52,25 @@ const AllProducts = () => {
 
   // once dispatch is created OR the page, perPage changes, fetch the products using the search query
   useEffect(() => {
-    dispatch(
-      fetchProductsAsync({
-        page,
-        perPage,
-        search,
-        selections,
-        sort: sort.value,
-      })
-    );
-    setLoading(false);
-  }, [dispatch, page, perPage, search]);
+    setLoading(true);
+    dispatch(resetProducts());
+    fetch();
+  }, [dispatch, search]);
+
+  useEffect(() => {
+    fetch();
+  }, [page, perPage]);
+
+  useEffect(() => {
+    if (error || products.length) setLoading(false);
+  }, [error, products]);
 
   useEffect(() => {
     navigate(`/products?page=1&perPage=${perPage}&search=${search}`);
+    fetch();
+  }, [selections, sort]);
+
+  const fetch = () => {
     dispatch(
       fetchProductsAsync({
         page,
@@ -71,7 +80,7 @@ const AllProducts = () => {
         sort: sort.value,
       })
     );
-  }, [selections, sort]);
+  };
 
   // when products/productCount changes, make sure the current page is valid
   useEffect(() => {
@@ -113,12 +122,18 @@ const AllProducts = () => {
   const ProductList = () =>
     products?.map((product) => {
       return (
-        <Card id="plant-card">
+        <Card className="plant-card">
           {product.qty === 0 && <Card.Header>SOLD OUT</Card.Header>}
-          <Card.Title as="h4" className="text-center">
+          <Card.Title as="h4" className="text-center plant-card-title">
             {product.name}
           </Card.Title>
-          <Card.Img style={{ padding: ".5rem" }} src={product.thumbnail} />
+          <Card.Img
+            className="plant-card-img"
+            src={product.thumbnail}
+            onError={({ target }) => {
+              target.src = "/default_img_med.jpeg";
+            }}
+          />
           <Card.Body>
             <Card.Text as="h5" className="text-center">
               Price: ${product.price}
@@ -145,12 +160,14 @@ const AllProducts = () => {
               <div id="results-header">
                 <h3>
                   {search.length
-                    ? `Showing ${productCount} result${
+                    ? `Showing ${productCount || 0} result${
                         productCount > 1 ? "s" : ""
                       } for "${search}"`
                     : "All plants"}
                 </h3>
-                <Sort currentSort={sort} setCurrentSort={setSort} />
+                {products.length > 1 && (
+                  <Sort currentSort={sort} setCurrentSort={setSort} />
+                )}
               </div>
 
               {products && products.length ? (
@@ -160,20 +177,21 @@ const AllProducts = () => {
                   </section>
                 </>
               ) : (
-                <section id="not-found">
-                  <h3 id="not-found-header">No products found</h3>
+                <Container fluid justifyContent="center">
                   <Button onClick={reset}>View all products</Button>
-                </section>
+                </Container>
               )}
             </Col>
           </Row>
-          <PageControls
-            handlePageChange={handlePageChange}
-            page={page}
-            perPage={perPage}
-            count={productCount}
-            handlePerPageChange={handlePerPageChange}
-          />
+          {products.length > 1 && (
+            <PageControls
+              handlePageChange={handlePageChange}
+              page={page}
+              perPage={perPage}
+              count={productCount}
+              handlePerPageChange={handlePerPageChange}
+            />
+          )}
           <div>
             {/* Admin only section begins here*/}
             {user && user.isAdmin && (
@@ -195,12 +213,20 @@ const AllProducts = () => {
           <br></br>
         </>
       ) : (
-        <section>
+        <Container
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: "3rem",
+          }}
+        >
           <h3>Loading our plants...</h3>
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
-        </section>
+        </Container>
       )}
     </Container>
   );

@@ -5,7 +5,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchProductsAsync = createAsyncThunk(
   "products/fetchAll",
-  async ({ page, perPage, search, selections, sort }) => {
+  async ({ page, perPage, search, selections, sort }, { rejectWithValue }) => {
     try {
       const {
         data: { products, count, cycle, sunlight, watering },
@@ -13,10 +13,13 @@ export const fetchProductsAsync = createAsyncThunk(
         `api/products?page=${page}&perPage=${perPage}&search=${search}`,
         { selections, sort }
       );
+      if (!products.length) return rejectWithValue("No products found");
+
       return {
         products,
         productCount: count,
         filters: [cycle, sunlight, watering],
+        error: null,
       };
     } catch (err) {
       console.error(err);
@@ -24,17 +27,29 @@ export const fetchProductsAsync = createAsyncThunk(
   }
 );
 
+const initialState = {
+  products: [],
+  productCount: null,
+  filters: [],
+  error: null,
+};
+
 export const productsSlice = createSlice({
   name: "products",
-  initialState: {
-    products: [],
-    productCount: null,
-    filters: [],
+  initialState,
+  reducers: {
+    resetProducts() {
+      return initialState;
+    },
   },
-  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchProductsAsync.fulfilled, (state, action) => {
       return action.payload;
+    });
+    builder.addCase(fetchProductsAsync.rejected, (state, action) => {
+      state.error = action.payload;
+      state.products = 0;
+      state.productCount = 0;
     });
   },
 });
@@ -42,3 +57,4 @@ export const productsSlice = createSlice({
 export const selectProducts = (state) => state.products;
 
 export default productsSlice.reducer;
+export const { resetProducts } = productsSlice.actions;

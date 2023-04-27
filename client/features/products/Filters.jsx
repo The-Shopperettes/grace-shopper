@@ -1,10 +1,13 @@
-import React from "react";
-import { Form, Card } from "react-bootstrap";
+import React, { useState } from "react";
+import { Form, Card, Stack } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 //cycle, watering and sunlight
 const Filters = ({ selections, setSelections }) => {
   const { filters } = useSelector((state) => state.products);
+  const [showing, setShowing] = useState([true, true, true]);
+
+  if (!filters.length) return <></>;
 
   const capitalize = (str) => {
     return str
@@ -28,30 +31,57 @@ const Filters = ({ selections, setSelections }) => {
     setSelections(copy);
   };
 
+  const updateShowing = (i) => {
+    let copy = [...showing];
+    copy[i] = !showing[i];
+    setShowing(copy);
+  };
+
+  const FilterSection = ({ type, options, show, update }) => {
+    return (
+      <section id="filter-option">
+        <button className="unstyled-btn filter-head" onClick={update}>
+          <h3 className="filter-title">{capitalize(type)}</h3>
+          <span
+            style={{
+              transform: `rotate(${show ? "180deg" : "0deg"})`,
+            }}
+          >
+            <i className="fa-sharp fa-solid fa-angle-up fa-lg"></i>
+          </span>
+        </button>
+
+        <section style={show ? {} : { display: "none" }}>
+          {[...options]
+            .sort((a, b) => a.value.localeCompare(b.value))
+            .map(({ count, value }, i) => {
+              if (value.length > 0)
+                return (
+                  <Form.Check
+                    key={i}
+                    checked={selections[type].includes(value)}
+                    label={`${capitalize(value)} (${count || 0})`}
+                    onChange={() => handleToggle(value, type)}
+                    className={
+                      selections[type].includes(value) ? "checked-filter" : ""
+                    }
+                  />
+                );
+            })}
+        </section>
+      </section>
+    );
+  };
+
   return (
     <Card id="filter-card">
-      {filters.map(({ type, options }, i) => (
-        <section key={i} id="filter-option">
-          <h3 id="filter-title">{capitalize(type)}</h3>
-          <section>
-            {[...options]
-              .sort((a, b) => a.value.localeCompare(b.value))
-              .map(({ count, value }, i) => {
-                if (value.length > 0)
-                  return (
-                    <Form.Check
-                      key={i}
-                      checked={selections[type].includes(value)}
-                      label={`${capitalize(value)} (${count || 0})`}
-                      onChange={() => handleToggle(value, type)}
-                      className={
-                        selections[type].includes(value) ? "checked-filter" : ""
-                      }
-                    />
-                  );
-              })}
-          </section>
-        </section>
+      {filters.map((filter, i) => (
+        <FilterSection
+          {...filter}
+          key={i}
+          show={showing[i]}
+          update={() => updateShowing(i)}
+        />
       ))}
     </Card>
   );

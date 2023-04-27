@@ -5,10 +5,10 @@ import {
   selectSingleProduct,
   fetchSingleProduct,
   deleteProduct,
+  reset,
 } from "../products/singleProductSlice";
 import { addToCart } from "../cart/cartSlice";
 import EditProduct from "./editSingleProduct";
-import { selectUser } from "../user/userSlice";
 import { Button, Card, Form, Modal, Container, Stack } from "react-bootstrap";
 
 const SingleProduct = () => {
@@ -24,6 +24,7 @@ const SingleProduct = () => {
     singleProduct;
 
   useEffect(() => {
+    dispatch(reset());
     dispatch(fetchSingleProduct(id));
   }, [dispatch]);
 
@@ -77,10 +78,14 @@ const SingleProduct = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Button onClick={viewCart}>View cart</Button>
+          <Button onClick={viewCart} variant="secondary">
+            View cart
+          </Button>
           <br></br>
           <br></br>
-          <Button onClick={closeModal}>Continue shopping</Button>
+          <Button onClick={closeModal} variant="secondary">
+            Continue shopping
+          </Button>
         </Modal.Body>
       </Modal>
     );
@@ -92,12 +97,23 @@ const SingleProduct = () => {
       <Container id="single-container">
         <ConfirmationModal />
         {singleProduct && singleProduct.id && (
-          <Card id="singleProduct" key={id}>
-            <Stack direction="horizontal">
+          <Card id="single-product" key={id}>
+            <Stack direction="horizontal" style={{ alignItems: "flex-start" }}>
               <div className="single-stack">
-                <Card.Title style={{ fontWeight: "bold", margin: "20px auto" }}>
+                <Card.Img
+                  src={mediumImg}
+                  className="single-img"
+                  alt={`Image of ${name} plant`}
+                  onError={({ target }) => {
+                    target.src = "/default_img_med.jpeg";
+                  }}
+                />
+              </div>
+              <Stack direction="vertical" gap={3} className="single-stack">
+                <Card.Title style={{ fontWeight: "bold", fontSize: "30px" }}>
                   {name}
                 </Card.Title>
+                <Card.Title>Price: ${parseFloat(price).toFixed(2)}</Card.Title>
                 {qty > 0 && (
                   <Form>
                     <Form.Control
@@ -109,38 +125,38 @@ const SingleProduct = () => {
                     {qtyMessage && <Form.Text>{qtyMessage}</Form.Text>}
                   </Form>
                 )}
-                <Card.Text>Cycle: {cycle}</Card.Text>
-                <Card.Text>Watering: {watering}</Card.Text>
-                <Card.Text>Sun Needs: {sunlight}</Card.Text>
-              </div>
-              <div className="single-stack">
-                <Card.Img src={mediumImg} style={{ width: "30vw" }} />
-              </div>
+                <Card.Body
+                  style={{
+                    alignItems: "flex-start",
+                    padding: "0",
+                  }}
+                >
+                  <Card.Text>Cycle: {cycle}</Card.Text>
+                  <Card.Text>Watering: {watering}</Card.Text>
+                  <Card.Text>Sun Needs: {sunlight}</Card.Text>
+                  <Card.Text>
+                    {singleProduct.qty < 20 && (
+                      <Card.Text>
+                        {qty <= 0
+                          ? "Sold out!"
+                          : `Low stock! Only ${qty} left!`}
+                      </Card.Text>
+                    )}
+                  </Card.Text>
+                </Card.Body>
+                <br />
+                <Button
+                  variant="secondary"
+                  onClick={handleAddToCart}
+                  style={{ width: "10rem" }}
+                  disabled={qty <= 0}
+                >
+                  Add to Cart
+                </Button>
+              </Stack>
             </Stack>
-            <Card.Text>
-              {singleProduct.qty < 20 && (
-                <Card.Text>
-                  {qty <= 0 ? "Sold out!" : `Low stock! Only ${qty} left!`}
-                </Card.Text>
-              )}
-            </Card.Text>
+
             <br />
-            <Card.Title style={{ margin: "25px" }}>
-              Price: ${parseFloat(price).toFixed(2)}
-            </Card.Title>
-            <br />
-            <Button
-              variant="secondary"
-              onClick={handleAddToCart}
-              style={{ width: "10rem", margin: "20px" }}
-              disabled={qty <= 0}
-            >
-              Add to Cart
-            </Button>
-            <br />
-            {/* <Card.Footer>
-            Price: ${parseFloat(price).toFixed(2)}
-          </Card.Footer> */}
             <br />
             {user && user.isAdmin && (
               <div id="single-admin-view">

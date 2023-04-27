@@ -36,7 +36,7 @@ const AuthTemplate = ({
             />
           </InputGroup>
         ))}
-        <Button type="submit" disabled={disabled}>
+        <Button type="submit" disabled={disabled} variant="secondary">
           {disabled ? "Loading..." : buttonLabel}
         </Button>
         {error ? <div> {error} </div> : null}

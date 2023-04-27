@@ -27,6 +27,12 @@ button {
   opacity: 0.8;
 }
 
+.unstyled-btn {
+  background: none;
+  border: 0;
+  transition: 0.3s;
+}
+
 #navbar {
   text-align: center;
   padding: 1rem;
@@ -92,13 +98,32 @@ button {
   background-color: rgb(226, 231, 229);
 }
 
-#plant-card {
-  background-color: rgb(226, 231, 229);
-  padding: 15px;
+.plant-card {
+  background-color: rgb(222, 222, 222) !important;
+  padding: 0.3rem 0.8rem 0.5rem 0.8rem !important;
   min-width: 7rem;
   max-width: 13rem;
+  min-height: 21rem;
   padding: 5px;
   flex-grow: 1;
+}
+
+.single-img {
+  min-width: 30vw;
+  min-height: 30vw;
+}
+
+.plant-card-title {
+  font-size: 20px;
+  min-height: 2.3rem;
+  padding: 0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plant-card-img {
+  height: 12rem;
 }
 
 #plant-list {
@@ -113,13 +138,28 @@ button {
   margin-top: 1rem;
 }
 
-#filter-title {
+.filter-title {
   font-size: 20px;
   font-weight: bold;
+  padding: 0;
+  margin: 0;
+}
+
+.fa-sharp {
+  transition: 0.3s;
 }
 
 #filter-option {
   margin-bottom: 1rem;
+}
+
+.filter-head {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 0.6rem;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  width: 100%;
 }
 
 #results-header {
@@ -195,11 +235,12 @@ button {
 #login-or-signup {
   background-color: #c1c0c0;
   padding: 40px;
-  width: 60vw;
-  margin: auto 20%;
   display: flex;
+  max-width: 40rem;
+  min-width: 10rem;
   flex-direction: column;
   align-items: center;
+  align-self: center;
 }
 
 .foot {
@@ -219,7 +260,6 @@ button {
 
 .user-header {
   font-size: 25px;
-  margin: auto 12px;
 }
 
 .signup-header {
@@ -231,7 +271,6 @@ button {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  margin-top: 3rem;
 }
 
 .user-flex {
@@ -247,14 +286,19 @@ button {
   margin: 3px;
 }
 
-#singleProduct {
+#single-product {
   width: 70vw;
   margin: 5vh 13vw;
   background-color: #c1c0c0;
 }
 
 .single-stack {
-  margin: 20px;
+  display: "flex";
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: left;
+  padding: 1rem;
+  height: 100%;
 }
 
 .single-container {

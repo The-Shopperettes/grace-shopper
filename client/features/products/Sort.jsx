@@ -14,7 +14,7 @@ const Sort = ({ currentSort, setCurrentSort }) => {
     <section style={{ display: "flex", alignItems: "center" }}>
       <h3 id="sort-h3">Sort by</h3>
       <Dropdown onSelect={(key) => setCurrentSort(orders[key])}>
-        <Dropdown.Toggle variant="primary" id="dropdown-basic">
+        <Dropdown.Toggle id="dropdown-basic" size="sm" variant="secondary">
           {currentSort.label}
         </Dropdown.Toggle>
 
@@ -24,6 +24,7 @@ const Sort = ({ currentSort, setCurrentSort }) => {
               eventKey={i}
               key={i}
               active={currentSort.label === label}
+              variant="secondary"
             >
               {label}
             </Dropdown.Item>
