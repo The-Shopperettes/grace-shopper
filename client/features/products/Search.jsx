@@ -9,10 +9,23 @@ const Search = () => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const { classList } = document.querySelector("#routes");
+    const isDark = classList.contains("dark-mode");
+
+    if (!searchVal.length && isDark) {
+      classList.remove("dark-mode");
+    } else if (searchVal.length && !isDark) {
+      classList.add("dark-mode");
+    }
+  }, [searchVal]);
+
   const updateOptions = async ({ target: { value } }) => {
     setSearchVal(value);
+
     if (!value) {
       setOptions([]);
+
       return;
     }
 
@@ -61,7 +74,15 @@ const Search = () => {
               ))}
             </section>
           </span>
-
+          {searchVal.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setSearchVal("")}
+              id="search-clear"
+            >
+              <i class="fa-solid fa-x fa-lg"></i>
+            </button>
+          )}
           <Button type="submit" id="search-btn" style={{}}>
             <i
               class="fa-solid fa-magnifying-glass"

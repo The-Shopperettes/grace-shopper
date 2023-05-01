@@ -12,7 +12,7 @@ label {
   display: block;
 }
 
-nav a {
+a {
   display: inline-block;
   margin: 1em;
 }
@@ -37,11 +37,11 @@ button {
   text-align: center;
   padding: 1rem;
   background: #9fc075;
-  margin: 0 0 1rem 0;
 }
 
 #search-input {
   padding: 0.8rem;
+  border: 0;
 }
 
 #logo {
@@ -88,6 +88,14 @@ button {
   justify-content: center;
   flex-direction: row;
   align-content: flex-start;
+  height: 100%;
+  padding-top: 1rem;
+  transition: 0.3s;
+}
+
+.dark-mode {
+  filter: brightness(80%);
+  background-color: rgb(219, 219, 219);
 }
 
 .hstack {
@@ -96,6 +104,10 @@ button {
 
 #cart-card {
   background-color: rgb(226, 231, 229);
+}
+
+#cart-container {
+  padding: 1rem 5rem;
 }
 
 .plant-card {
@@ -184,6 +196,16 @@ button {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  border: 1px solid white;
+}
+
+#search-clear {
+  background: white;
+  border: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  opacity: 1;
 }
 
 #logo-search {
@@ -215,10 +237,6 @@ button {
 #search-btn:hover {
   background-color: #2a423a;
   border: 1px solid #2a423a;
-}
-
-.checked-filter {
-  color: #0053cc;
 }
 
 #not-found {
@@ -336,6 +354,19 @@ button {
 
 #search {
   border-radius: 0%;
+}
+
+.form-check-input {
+  width: 1.3rem !important;
+  height: 1.3rem !important;
+  margin-top: 0.14rem !important;
+  margin-right: 0.4rem;
+  border-radius: 3px !important;
+}
+
+.form-check {
+  margin: 0.4rem 0;
+  font-size: 16px;
 }
 
 /*

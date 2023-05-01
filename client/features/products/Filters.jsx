@@ -62,9 +62,7 @@ const Filters = ({ selections, setSelections }) => {
                     checked={selections[type].includes(value)}
                     label={`${capitalize(value)} (${count || 0})`}
                     onChange={() => handleToggle(value, type)}
-                    className={
-                      selections[type].includes(value) ? "checked-filter" : ""
-                    }
+                    isValid={selections[type].includes(value)}
                   />
                 );
             })}

@@ -64,7 +64,7 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     //if it's a user, start active at event key 1, else 0
-    setActive(me && me.id ? 1 : 0);
+    setActive(me && me.username ? 1 : 0);
   }, [me]);
 
   useEffect(() => {
@@ -125,7 +125,7 @@ const CheckoutPage = () => {
                 <Col md={6}>
                   <Accordion activeKey={[active.toString()]}>
                     <h1>Checkout</h1>
-                    {!me || !me.id ? (
+                    {!me || !me.username ? (
                       <Accordion.Item eventKey="0">
                         <Accordion.Header>Account details</Accordion.Header>
                         <Accordion.Body>

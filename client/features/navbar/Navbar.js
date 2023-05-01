@@ -9,7 +9,7 @@ import Search from "../products/Search";
 const Navbar = () => {
   const user = useSelector((state) => state.auth.me);
   const isLoggedIn = useSelector(
-    (state) => !!(state.auth.me && state.auth.me.id)
+    (state) => !!(state.auth.me && state.auth.me.username)
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -44,25 +44,27 @@ const Navbar = () => {
             style={{ width: "20rem", height: "auto" }}
             onClick={() => navigate("/")}
           />
-          <Search />
-          <Link to="/cart">
-            <Button variant="cart">
-              <i
-                className="fa-solid fa-cart-shopping fa-2x"
-                style={{ color: "black" }}
-              ></i>
-              <Badge
-                bg="success"
-                style={{
-                  transform: "translate(-0.4rem, -1.3rem)",
-                  borderRadius: "100%",
-                }}
-              >
-                {cartProductCount(cartItems)}
-              </Badge>
-              <span className="visually-hidden">cart items</span>
-            </Button>
-          </Link>
+          <span style={{ display: "flex", alignItems: "center" }}>
+            <Search />
+            <Link to="/cart">
+              <Button variant="cart">
+                <i
+                  className="fa-solid fa-cart-shopping fa-2x"
+                  style={{ color: "black" }}
+                ></i>
+                <Badge
+                  bg="success"
+                  style={{
+                    transform: "translate(-0.4rem, -1.3rem)",
+                    borderRadius: "100%",
+                  }}
+                >
+                  {cartProductCount(cartItems)}
+                </Badge>
+                <span className="visually-hidden">cart items</span>
+              </Button>
+            </Link>
+          </span>
         </section>
         <div id="navlinks">
           <Link to="/products" style={linkStyle}>
@@ -78,14 +80,22 @@ const Navbar = () => {
                   Manage users
                 </Link>
               )}
-              <button type="button" onClick={logoutAndRedirectHome}>
+              <Button
+                type="button"
+                onClick={logoutAndRedirectHome}
+                variant="success"
+                size="sm"
+              >
                 Logout
-              </button>
+              </Button>
             </>
           ) : (
             <>
               <Link to="/login" style={linkStyle}>
-                Login/Sign Up
+                Log in
+              </Link>
+              <Link to="/signup" style={linkStyle}>
+                Sign Up
               </Link>
             </>
           )}

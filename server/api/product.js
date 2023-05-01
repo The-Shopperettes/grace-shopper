@@ -11,7 +11,11 @@ router.put("/", async (req, res, next) => {
     const { selections } = req.body;
     if (selections.cycle.length) query.cycle = { [Op.or]: selections.cycle };
     if (selections.sunlight.length)
-      query.sunlight = { [Op.or]: selections.sunlight };
+      query.sunlight = {
+        [Op.iLike]: {
+          [Op.any]: selections.sunlight.map((selected) => `%${selected}%`),
+        },
+      };
     if (selections.watering.length)
       query.watering = { [Op.or]: selections.watering };
 
@@ -43,12 +47,14 @@ router.put("/", async (req, res, next) => {
         if (key !== type) otherFilters[key] = query[key];
       }
 
+      const searchQuery = `${search}%`;
+
       const options = await Product.findAll({
         attributes: [[type, "value"]],
 
         where: {
           name: {
-            [Op.iLike]: `${search}%`,
+            [Op.iLike]: searchQuery,
           },
         },
 
@@ -69,7 +75,7 @@ router.put("/", async (req, res, next) => {
 
         where: {
           name: {
-            [Op.iLike]: `${search}%`,
+            [Op.iLike]: searchQuery,
           },
           ...otherFilters,
         },
@@ -86,9 +92,59 @@ router.put("/", async (req, res, next) => {
       return { type, options };
     }
 
-    const [cycle, sunlight, watering] = await Promise.all(
-      ["cycle", "sunlight", "watering"].map(getFilter)
-    );
+    const getSunFilters = async () => {
+      const types = [
+        "Deciduous shade",
+        "Full sun",
+        "Part sun/Part shade",
+        "Deep shade",
+        "Filtered shade",
+        "Partial sun",
+        "Partial shade",
+      ];
+
+      const otherFilters = {};
+      if (query.watering) otherFilters.watering = query.watering;
+      if (query.cycle) otherFilters.cycle = query.cycle;
+
+      //find out how many there are of each option
+      const options = await Promise.all(
+        types.map(async (type) => {
+          //if there's no options based on the search, don't count it
+          const withSearch = await Product.count({
+            where: {
+              sunlight: {
+                [Op.iLike]: `%${type}%`,
+              },
+              name: {
+                [Op.iLike]: `${search}%`,
+              },
+            },
+          });
+
+          if (withSearch === 0) return;
+          const count = await Product.count({
+            where: {
+              sunlight: {
+                [Op.iLike]: `%${type}%`,
+              },
+              name: {
+                [Op.iLike]: `${search}%`,
+              },
+              ...otherFilters,
+            },
+          });
+          return { value: type, count };
+        })
+      );
+
+      return { type: "sunlight", options: options.filter((opt) => !!opt) };
+    };
+
+    const [cycle, watering, sunlight] = await Promise.all([
+      ...["cycle", "watering"].map(getFilter),
+      getSunFilters(),
+    ]);
 
     res.json({ products: rows, count, cycle, sunlight, watering });
   } catch (err) {

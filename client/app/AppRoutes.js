@@ -18,7 +18,7 @@ import AllUsers from "../features/users/AllUsers";
 
 const AppRoutes = () => {
   const isLoggedIn = useSelector(
-    (state) => !!(state.auth.me && state.auth.me.id)
+    (state) => !!(state.auth.me && state.auth.me.username)
   );
   const user = useSelector((state) => state.auth.me);
 
@@ -45,14 +45,8 @@ const AppRoutes = () => {
         <Route path="/checkout" element={<CheckoutPage />} />
         {!isLoggedIn ? (
           <>
-            <Route
-              path="/login"
-              element={<AuthForm type="login"/>}
-            />
-            <Route
-              path="/signup"
-              element={<AuthForm type="signup"/>}
-            />
+            <Route path="/login" element={<AuthForm type="login" />} />
+            <Route path="/signup" element={<AuthForm type="signup" />} />
           </>
         ) : (
           <>
