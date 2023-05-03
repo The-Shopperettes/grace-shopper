@@ -23,6 +23,7 @@ import Sort from "./Sort";
 const AllProducts = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [fetched, setFetched] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selections, setSelections] = useState({
     cycle: [],
@@ -52,9 +53,10 @@ const AllProducts = () => {
 
   // once dispatch is created OR the page, perPage changes, fetch the products using the search query
   useEffect(() => {
-    setLoading(true);
     dispatch(resetProducts());
+    setLoading(true);
     fetch();
+    setFetched(true);
   }, [dispatch, search]);
 
   useEffect(() => {
@@ -62,7 +64,7 @@ const AllProducts = () => {
   }, [page, perPage]);
 
   useEffect(() => {
-    if (error || products.length) setLoading(false);
+    if ((error || products.length) && fetched) setLoading(false);
   }, [error, products]);
 
   useEffect(() => {
@@ -120,9 +122,9 @@ const AllProducts = () => {
 
   // mapping to create products list. This is where the product cards are created. If the product quantity is sold out, a "sold out" header will appear.
   const ProductList = () =>
-    products?.map((product) => {
+    products?.map((product, i) => {
       return (
-        <Card className="plant-card">
+        <Card className="plant-card" key={i}>
           {product.qty === 0 && <Card.Header>SOLD OUT</Card.Header>}
           <Card.Title as="h4" className="text-center plant-card-title">
             {product.name}

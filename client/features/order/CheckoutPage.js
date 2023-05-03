@@ -182,7 +182,7 @@ const CheckoutPage = () => {
                       </Accordion.Item>
                     ) : null}
 
-                    <Accordion.Item eventKey="1">
+                    {/* <Accordion.Item eventKey="1">
                       <Accordion.Header>Shipping Information</Accordion.Header>
                       <Accordion.Body>
                         Shipping info here
@@ -192,9 +192,9 @@ const CheckoutPage = () => {
                         ) : null}{" "}
                         <Button onClick={() => setActive(2)}>Next</Button>
                       </Accordion.Body>
-                    </Accordion.Item>
+                    </Accordion.Item> */}
 
-                    <Accordion.Item eventKey="2">
+                    <Accordion.Item eventKey="1">
                       <Accordion.Header>Payment information</Accordion.Header>
                       <Accordion.Body>
                         {clientSecret && stripePromise && (
@@ -202,7 +202,9 @@ const CheckoutPage = () => {
                             <PaymentForm placeOrder={placeOrder} />
                           </Elements>
                         )}
-                        <Button onClick={() => setActive(1)}>Back</Button>{" "}
+                        {!me || !me.username ? (
+                          <Button onClick={() => setActive(0)}>Back</Button>
+                        ) : null}{" "}
                       </Accordion.Body>
                     </Accordion.Item>
                   </Accordion>

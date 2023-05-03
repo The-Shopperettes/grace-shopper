@@ -77,7 +77,10 @@ const Search = () => {
           {searchVal.length > 0 && (
             <button
               type="button"
-              onClick={() => setSearchVal("")}
+              onClick={() => {
+                setSearchVal("");
+                setOptions([]);
+              }}
               id="search-clear"
             >
               <i class="fa-solid fa-x fa-lg"></i>
