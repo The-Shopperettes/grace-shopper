@@ -1,81 +1,112 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { authenticateLogin, authenticateSignUp } from "../../app/store";
-import { useNavigate } from "react-router";
-import { Container } from "react-bootstrap";
+import {
+  authenticateLogin,
+  authenticateSignUp,
+  resetAuthError,
+} from "../../app/store";
+import { useNavigate, useParams } from "react-router";
+import { Container, InputGroup, Form, Button } from "react-bootstrap";
+import AuthTemplate from "./AuthTemplate";
 
-const AuthForm = ({ name, displayName }) => {
-  const { error } = useSelector((state) => state.auth);
+//Login or signup form (type = login or signup)
+const AuthForm = ({ type }) => {
+  const { error: authError } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    const formName = evt.target.name;
-    const username = evt.target.username.value;
-    const password = evt.target.password.value;
-    dispatch(authenticateLogin({ username, password, method: formName }));
-  };
+  useEffect(() => {
+    setError("");
+    dispatch(resetAuthError());
+    document.querySelector(".user-form").reset();
+  }, [type]);
 
-  const handleNewUser = (evt) => {
-    evt.preventDefault();
-    const formName = evt.target.name;
-    const username = evt.target.username.value;
-    const email = evt.target.email.value;
-    const password = evt.target.password.value;
-    dispatch(
-      authenticateSignUp({ email, username, password, method: formName })
+  useEffect(() => {
+    console.log("auth error: ", authError);
+    if (loading && authError) {
+      setError("An error occurred.");
+      setLoading(false);
+      dispatch(resetAuthError());
+    }
+  }, [authError]);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const [username, password] = [e.target.username, e.target.password].map(
+      ({ value }) => value
     );
+
+    dispatch(authenticateLogin({ username, password }));
   };
+
+  const handleSignup = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const [username, email, password] = [
+      e.target.username,
+      e.target.email,
+      e.target.password,
+    ].map(({ value }) => value);
+
+    dispatch(authenticateSignUp({ email, username, password }));
+  };
+
+  const loginInputs = [
+    { aria: "login username input", placeholder: "Username", name: "username" },
+    {
+      aria: "login password input",
+      placeholder: "password",
+      name: "password",
+      type: "password",
+    },
+  ];
+
+  const signupInputs = [
+    {
+      aria: "new user email input",
+      placeholder: "Email",
+      name: "email",
+      type: "email",
+    },
+    {
+      aria: "new user username input",
+      placeholder: "Username",
+      name: "username",
+    },
+    {
+      aria: "new user password input",
+      placeholder: "password",
+      name: "password",
+      type: "password",
+    },
+  ];
 
   return (
-    <div>
-      <div id="login-or-signup">
-        <h2 id="welcome">Welcome</h2>
-        <h3 id="wel-subtitle">We're glad you're here.</h3>
-        <div id="login-form">
-          <h6 id="login-header">Login</h6>
-          <form id="login-flex" onSubmit={handleSubmit} name="login">
-            <div>
-              <label htmlFor="username"></label>
-              <input name="username" type="text" placeholder="Username" />
-            </div>
-            <div>
-              <label htmlFor="password"></label>
-              <input name="password" type="password" placeholder="Password" />
-            </div>
-            <div>
-              <button type="submit">Login</button>
-            </div>
-            {error && <div> {error} </div>}
-          </form>
-        </div>
-        <div id="signup-form">
-          <h6>New to Plant Shopper? Register below!</h6>
-          <form id="signup-flex" onSubmit={handleNewUser} name="signup">
-            <div className="signup-div">
-              <label htmlFor="email"></label>
-              <input name="email" type="email" placeholder="Email" />
-            </div>
-            <div className="signup-div">
-              <label htmlFor="username"></label>
-              <input name="username" type="text" placeholder="Username" />
-            </div>
-            <div className="signup-div">
-              <label htmlFor="password"></label>
-              <input name="password" type="password" placeholder="Password" />
-            </div>
-            <div className="signup-div">
-              <button type="submit">Sign Me Up!</button>
-            </div>
-            {error && <div> {error} </div>}
-          </form>
-        </div>
-      </div>
-      <div>
-        <footer className="foot" />
-      </div>
-    </div>
+    <Container fluid>
+      <Container id="login-or-signup">
+        {type === "login" ? (
+          <AuthTemplate
+            inputs={loginInputs}
+            error={error}
+            header="Login"
+            buttonLabel="Submit"
+            onSubmit={handleLogin}
+            disabled={loading}
+          />
+        ) : (
+          <AuthTemplate
+            inputs={signupInputs}
+            error={error}
+            header="Sign up"
+            buttonLabel="Create account"
+            onSubmit={handleSignup}
+            disabled={loading}
+          />
+        )}
+      </Container>
+    </Container>
   );
 };
 

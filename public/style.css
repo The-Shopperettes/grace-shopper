@@ -1,11 +1,7 @@
-main {
-  background-color: #9FC075;
-  height: 100vh;
-}
-
 #app {
-  background-color: #9FC075;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: Lato;
+  min-height: 100vh;
+  background-attachment: fixed;
 }
 
 a {
@@ -16,13 +12,12 @@ label {
   display: block;
 }
 
-nav a {
+a {
   display: inline-block;
   margin: 1em;
 }
 
 form div {
-  margin: 1em;
   display: inline-block;
 }
 
@@ -32,8 +27,21 @@ button {
   opacity: 0.8;
 }
 
+.unstyled-btn {
+  background: none;
+  border: 0;
+  transition: 0.3s;
+}
+
 #navbar {
   text-align: center;
+  padding: 1rem;
+  background: #9fc075;
+}
+
+#search-input {
+  padding: 0.8rem;
+  border: 0;
 }
 
 #logo {
@@ -43,14 +51,15 @@ button {
 #navlinks {
   text-align: right;
   text-decoration: none;
+  gap: 1rem;
 }
 
 #user-profile {
   width: 80vw;
   margin: 10px 10vw;
-  background-color: #C1C0C0;
+  background-color: #c1c0c0;
   align-items: center;
-}  
+}
 
 #user-img {
   height: 35vh;
@@ -70,7 +79,23 @@ button {
 }
 
 #all-products-container {
-  background-color: #C1C0C0;
+  margin: 0;
+  max-width: 95%;
+}
+
+#routes {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-content: flex-start;
+  height: 100%;
+  padding-top: 1rem;
+  transition: 0.3s;
+}
+
+.dark-mode {
+  filter: brightness(80%);
+  background-color: rgb(219, 219, 219);
 }
 
 .hstack {
@@ -81,25 +106,165 @@ button {
   background-color: rgb(226, 231, 229);
 }
 
-#plant-card {
-  background-color: rgb(226, 231, 229);
-  padding: 15px;
+#cart-container {
+  padding: 1rem 5rem;
+}
+
+.plant-card {
+  background-color: rgb(222, 222, 222) !important;
+  padding: 0.3rem 0.8rem 0.5rem 0.8rem !important;
+  min-width: 7rem;
+  max-width: 13rem;
+  min-height: 21rem;
+  padding: 5px;
+  flex-grow: 1;
+}
+
+.single-img {
+  min-width: 30vw;
+  min-height: 30vw;
+}
+
+.plant-card-title {
+  font-size: 20px;
+  min-height: 2.3rem;
+  padding: 0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plant-card-img {
+  height: 12rem;
+}
+
+#plant-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2vw;
+  margin-left: 2vw;
+}
+
+#filter-card {
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.filter-title {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+}
+
+.fa-sharp {
+  transition: 0.3s;
+}
+
+#filter-option {
+  margin-bottom: 1rem;
+}
+
+.filter-head {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 0.6rem;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  width: 100%;
+}
+
+#results-header {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin: 1rem;
+}
+
+#sort-h3 {
+  font-size: 20px;
+  margin-right: 0.6rem;
+}
+
+#search-form {
+  margin-left: 1rem;
+}
+
+.search-bar {
+  min-width: 50vw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid white;
+}
+
+#search-clear {
+  background: white;
+  border: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  opacity: 1;
+}
+
+#logo-search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 1rem;
+  gap: 1rem;
+  width: 100%;
+}
+
+#autocomplete {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 95%;
+  transform: translate(0, 3.2rem);
+  background-color: rgb(255, 255, 255);
+}
+
+#search-btn {
+  background-color: #395b50;
+  border: 1px solid #395b50;
+}
+
+#search-btn:hover {
+  background-color: #2a423a;
+  border: 1px solid #2a423a;
+}
+
+#not-found {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 2rem;
+}
+
+#not-found-header {
+  margin: 2rem;
 }
 
 #login-or-signup {
-  background-color: #C1C0C0;
+  background-color: #c1c0c0;
   padding: 40px;
-  width: 60vw;
-  /* height: 60vh; */
-  margin: auto 20%;
   display: flex;
+  max-width: 40rem;
+  min-width: 10rem;
   flex-direction: column;
-  align-content: center;
+  align-items: center;
+  align-self: center;
 }
- 
+
 .foot {
-  background-color: #9FC075;
+  background-color: #9fc075;
   height: 20vh;
+  margin: 1rem 0 0 0;
 }
 
 #welcome {
@@ -111,57 +276,60 @@ button {
   margin: auto 12px 30px 12px;
 }
 
-#login-form {
-margin: 5px auto 20px auto;  
+.user-header {
+  font-size: 25px;
 }
 
-#login-flex {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+.signup-header {
+  font-size: 20px;
 }
 
-#login-header {
-  font-size: 18px;
-  margin: auto 12px;
-} 
-
-#signup-form {
+.user-form {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1rem;
 }
 
-#signup-flex {
+.user-flex {
   display: flex;
   flex-direction: column;
+  gap: 0.8rem;
+  align-items: center;
+  min-width: 20rem;
+  max-width: 30rem;
 }
 
 .signup-div {
   margin: 3px;
 }
 
-#singleProduct {
+#single-product {
   width: 70vw;
   margin: 5vh 13vw;
-  background-color: #C1C0C0
+  background-color: #c1c0c0;
 }
 
 .single-stack {
-  margin: 20px;
+  display: "flex";
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: left;
+  padding: 1rem;
+  height: 100%;
 }
 
 .single-container {
   width: 60vw;
   margin: 20vw;
-  padding: 40px
+  padding: 40px;
 }
 
 #single-admin-view {
-  background-color:  #7BA842;
+  background-color: #7ba842;
   border: 1.5px solid black;
   margin: 25px;
-  padding: 40px
+  padding: 40px;
 }
 
 #admin-title {
@@ -170,14 +338,60 @@ margin: 5px auto 20px auto;
   text-decoration: underline;
 }
 
+.search-option {
+  border: 0;
+  opacity: 100%;
+  text-align: left;
+  padding: 6px 12px;
+  width: 100%;
+  margin: 0;
+  background: none;
+}
 
+.search-option:hover {
+  background-color: #c2e3c2;
+}
 
+#search {
+  border-radius: 0%;
+}
 
+.form-check-input {
+  width: 1.3rem !important;
+  height: 1.3rem !important;
+  margin-top: 0.14rem !important;
+  margin-right: 0.4rem;
+  border-radius: 3px !important;
+}
 
+.form-check {
+  margin: 0.4rem 0;
+  font-size: 16px;
+}
 
+.page-item {
+  padding: 0;
+  margin: 0;
+  height: fit-content;
+  width: fit-content;
+}
 
+.page-link {
+  padding: 0;
+  margin: 0;
+}
 
 /*
   STYLING PRIORITIES (TIME-DEPENDENT):
   2. single card -> sizing, colors, text, etc
 */
+
+/*
+BREAKPOINTS
+*/
+
+@media only screen and (max-width: 800px) {
+  #filter-card {
+    display: none;
+  }
+}

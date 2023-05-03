@@ -15,6 +15,7 @@ const PageControls = (props) => {
     //don't do anything if the new page is invalid
     if (newPage < 1 || newPage === page || newPage > maxPages) return;
     handlePageChange(newPage);
+    window.scrollTo(0, 0);
   };
 
   //changes the number of items per page and page when the user selects a valid value on the dropdown
@@ -40,7 +41,11 @@ const PageControls = (props) => {
   const offset = 1 + (page - 1) * perPage;
 
   return (
-    <Stack direction="horizontal">
+    <Stack
+      direction="horizontal"
+      className="mt-3"
+      style={{ justifyContent: "flex-end", alignItems: "flex-start" }}
+    >
       <Pagination>
         {page > 1 ? <Pagination.First onClick={() => handleClick(1)} /> : null}
         {page > 2 ? (
