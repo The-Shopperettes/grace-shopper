@@ -96,8 +96,8 @@ const Cart = () => {
       <ConfirmationModal />
       {cartItems && cartItems.length ? (
         <Row>
-          <Col xs={7}>
-            <Row>
+          <Col xs={7} sm='auto'>
+            <Row style={{width: 'auto'}}>
               {cartItems.map(({ id, product, qty }) => {
                 return (
                   <Card key={id} id="cart-card" className="m-2">
@@ -105,11 +105,6 @@ const Cart = () => {
                       <Card.Header style={{ textAlign: "center" }}>
                         <Card.Img
                           src={product.thumbnail}
-                          style={{
-                            height: "10rem",
-                            width: "auto",
-                            padding: "15px",
-                          }}
                         ></Card.Img>
                         <Card.Text>
                           <Link
