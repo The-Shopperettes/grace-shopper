@@ -98,7 +98,7 @@ const SingleProduct = () => {
         <ConfirmationModal />
         {singleProduct && singleProduct.id && (
           <Card id="single-product" key={id}>
-            <Stack direction="horizontal" style={{ alignItems: "flex-start" }}>
+            <Stack direction={{md: "horizontal", sm:'vertical'}} style={{ alignItems: "flex-start" }}>
               <div className="single-stack">
                 <Card.Img
                   src={mediumImg}
