@@ -44,7 +44,7 @@ const PageControls = (props) => {
     <Stack
       direction="horizontal"
       className="mt-3"
-      style={{ justifyContent: "flex-end", alignItems: "flex-start" }}
+      style={{justifyContent: "flex-end", alignItems: "flex-start", flexWrap: 'wrap' }}
     >
       <Pagination>
         {page > 1 ? <Pagination.First onClick={() => handleClick(1)} /> : null}
