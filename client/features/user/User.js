@@ -23,7 +23,7 @@ const User = () => {
       <div id="user-profile">
         {user && user.id ? (
           <div>
-            <header id="user-header">
+            <div id="user-header" style={{display: 'flex', flexWrap: 'wrap'}}>
               <img
                 id="user-img"
                 src="https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png"
@@ -32,8 +32,8 @@ const User = () => {
                 <h2>{user.username}</h2>
                 <h5>{user.email}</h5>
               </div>
-            </header>
-              <h4>Order History</h4>
+            </div>
+              <h4 style={{marginLeft: '5px'}}>Order History</h4>
               {orders && orders.length 
                 ? <Orders orders={orders} /> : 'No previous transactions'}
           </div>
