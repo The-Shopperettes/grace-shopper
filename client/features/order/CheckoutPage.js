@@ -122,7 +122,7 @@ const CheckoutPage = () => {
           {cartItems && cartItems.length ? (
             <Container>
               <Row>
-                <Col md={6}>
+                <Col md={6} sm="auto">
                   <Accordion activeKey={[active.toString()]}>
                     <h1>Checkout</h1>
                     {!me || !me.username ? (
