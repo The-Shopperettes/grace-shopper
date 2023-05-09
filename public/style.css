@@ -81,6 +81,10 @@ button {
 #all-products-container {
   margin: 0;
   max-width: 95%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: space-around;
 }
 
 #routes {
@@ -108,6 +112,15 @@ button {
 
 #cart-container {
   padding: 1rem 5rem;
+}
+
+#empty-cart {
+  background-color: rgb(226, 231, 229);
+  padding: 1rem;
+  text-align: center;
+  max-width: 20rem;
+  margin: auto;
+  font-size: 20px;
 }
 
 .plant-card {
@@ -143,6 +156,8 @@ button {
   flex-wrap: wrap;
   gap: 2vw;
   margin-left: 2vw;
+  justify-content: space-between;
+  align-items: space-between;
 }
 
 #filter-card {
@@ -180,6 +195,7 @@ button {
   align-items: flex-end;
   justify-content: space-between;
   margin: 1rem;
+  flex-wrap: wrap;
 }
 
 #sort-h3 {
@@ -188,7 +204,9 @@ button {
 }
 
 #search-form {
-  margin-left: 1rem;
+  margin-left: 1vw;
+  display: flex;
+  flex-wrap: nowrap;
 }
 
 .search-bar {

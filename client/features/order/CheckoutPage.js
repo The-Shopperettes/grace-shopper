@@ -130,30 +130,54 @@ const CheckoutPage = () => {
                         <Accordion.Header>Account details</Accordion.Header>
                         <Accordion.Body>
                           <Form>
-                            <Button>
-                              <Link
-                                to="/login"
+                            <span
+                              style={{
+                                display: "flex",
+                                marginBottom: "0.5rem",
+                              }}
+                            >
+                              <Button
                                 style={{
-                                  textDecoration: "none",
-                                  color: "white",
+                                  height: "2rem",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  width: "fit-content",
+                                  marginRight: "0.5rem",
                                 }}
                               >
-                                Log in
-                              </Link>
-                            </Button>{" "}
-                            <Button>
-                              <Link
-                                to="/signup"
+                                <Link
+                                  to="/login"
+                                  style={{
+                                    textDecoration: "none",
+                                    color: "white",
+                                  }}
+                                >
+                                  Log in
+                                </Link>
+                              </Button>{" "}
+                              <Button
                                 style={{
-                                  textDecoration: "none",
-                                  color: "white",
+                                  height: "2rem",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  width: "fit-content",
                                 }}
                               >
-                                Create an account
-                              </Link>
-                            </Button>
+                                <Link
+                                  to="/signup"
+                                  style={{
+                                    textDecoration: "none",
+                                    color: "white",
+                                  }}
+                                >
+                                  Create an account
+                                </Link>
+                              </Button>
+                            </span>
                             <Form.Group
-                              style={{ width: "25rem" }}
+                              style={{ width: "25rem", marginRight: "0.5rem" }}
                               className="mb-3"
                             >
                               <Form.Label>
@@ -164,6 +188,7 @@ const CheckoutPage = () => {
                                 placeholder="Enter email"
                                 required
                                 onChange={(e) => setGuestEmail(e.target.value)}
+                                style={{ maxWidth: "80vw" }}
                               />
                               <Form.Text className="text-muted">
                                 {!guestEmail.length || testEmail(guestEmail)
@@ -182,18 +207,6 @@ const CheckoutPage = () => {
                       </Accordion.Item>
                     ) : null}
 
-                    {/* <Accordion.Item eventKey="1">
-                      <Accordion.Header>Shipping Information</Accordion.Header>
-                      <Accordion.Body>
-                        Shipping info here
-                        <p></p>
-                        {guestEmail && guestEmail.length ? (
-                          <Button onClick={() => setActive(0)}>Back</Button>
-                        ) : null}{" "}
-                        <Button onClick={() => setActive(2)}>Next</Button>
-                      </Accordion.Body>
-                    </Accordion.Item> */}
-
                     <Accordion.Item eventKey="1">
                       <Accordion.Header>Payment information</Accordion.Header>
                       <Accordion.Body>
@@ -211,7 +224,7 @@ const CheckoutPage = () => {
                   {orderError && <p>{orderError}</p>}
                 </Col>
 
-                <Col md={4}>
+                <Col md={4} className="mt-5">
                   <Table bordered>
                     <thead>
                       <tr>

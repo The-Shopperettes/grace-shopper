@@ -51,7 +51,7 @@ const Search = () => {
   return (
     <Form onSubmit={handleSubmit} id="search-form">
       <Stack gap={0} style={{ margin: 0 }}>
-        <InputGroup style={{ margin: 0 }}>
+        <InputGroup style={{ margin: 0, display: "flex", flexWrap: "nowrap" }}>
           <span className="search-bar">
             <Form.Control
               aria-label="search bar"

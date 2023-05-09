@@ -44,10 +44,19 @@ const Navbar = () => {
             style={{ width: "20rem", height: "auto" }}
             onClick={() => navigate("/")}
           />
-          <span style={{ display: "flex", alignItems: "center" }}>
+          <span
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            }}
+          >
             <Search />
             <Link to="/cart">
-              <Button variant="cart">
+              <Button
+                variant="cart"
+                style={{ display: "flex", alignItems: "center" }}
+              >
                 <i
                   className="fa-solid fa-cart-shopping fa-2x"
                   style={{ color: "black" }}
@@ -55,7 +64,7 @@ const Navbar = () => {
                 <Badge
                   bg="success"
                   style={{
-                    transform: "translate(-0.4rem, -1.3rem)",
+                    transform: "translate(-0.4rem, -1rem)",
                     borderRadius: "100%",
                   }}
                 >
