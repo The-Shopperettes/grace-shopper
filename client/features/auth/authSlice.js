@@ -65,7 +65,7 @@ export const authenticateSignUp = createAsyncThunk(
         username,
         password,
       });
-      if (!res.data.token) throw new Error();
+      if (!res.data.token) return rejectWithValue("Unauthorized");
       window.localStorage.setItem(TOKEN, res.data.token);
       dispatch(me());
     } catch (err) {

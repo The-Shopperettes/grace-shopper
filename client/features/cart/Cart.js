@@ -96,15 +96,40 @@ const Cart = () => {
       <ConfirmationModal />
       {cartItems && cartItems.length ? (
         <Row>
-          <Col xs={7} sm='auto'>
-            <Row style={{width: 'auto'}}>
-              {cartItems.map(({ id, product, qty }) => {
-                return (
-                  <Card key={id} id="cart-card" className="m-2">
-                    <Stack direction="horizontal">
+          <Col
+            xs={7}
+            sm="auto"
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              flexDirection: "column",
+            }}
+          >
+            {cartItems.map(({ id, product, qty }) => {
+              return (
+                <Row
+                  xs={12}
+                  key={id}
+                  style={{ display: "block", minWidth: "50vw" }}
+                >
+                  <Card
+                    id="cart-card"
+                    className="m-2"
+                    style={{ display: "block", width: "100%" }}
+                  >
+                    <Container
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                      }}
+                    >
                       <Card.Header style={{ textAlign: "center" }}>
                         <Card.Img
                           src={product.thumbnail}
+                          style={{ minWidth: "10rem" }}
+                          onError={({ target }) => {
+                            target.src = "/default_img_med.jpeg";
+                          }}
                         ></Card.Img>
                         <Card.Text>
                           <Link
@@ -148,22 +173,30 @@ const Cart = () => {
                           Remove item
                         </Button>
                       </Card.Body>
-                    </Stack>
+                    </Container>
                   </Card>
-                );
-              })}
-              <Button
-                variant="dark"
-                style={{ width: "20vw" }}
-                onClick={seeModal}
-                className="m-2"
-              >
-                Clear cart
-              </Button>
-            </Row>
+                </Row>
+              );
+            })}
+            <Button
+              variant="dark"
+              style={{ minWidth: "10rem", maxWidth: "25rem" }}
+              onClick={seeModal}
+              className="m-2"
+            >
+              Clear cart
+            </Button>
           </Col>
 
-          <Col xs={4} className="m-4">
+          <Col
+            xs={4}
+            className="m-4"
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              flexDirection: "column",
+            }}
+          >
             <h3>
               Total: $
               {cartItems.reduce(
@@ -172,16 +205,21 @@ const Cart = () => {
               )}
               .00
             </h3>
-            <Button variant="success" size="lg" onClick={handleCheckout}>
+            <Button
+              variant="success"
+              size="lg"
+              onClick={handleCheckout}
+              style={{ minWidth: "10rem", maxWidth: "25rem" }}
+            >
               Check out
             </Button>
           </Col>
         </Row>
       ) : (
-        <p>
+        <Card id="empty-cart">
           Your cart is empty.{" "}
           <Link to="/products">Click here to browse our plants</Link>
-        </p>
+        </Card>
       )}
     </Container>
   );
