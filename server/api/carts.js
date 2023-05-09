@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const { Product, User, Cart, CartItem, Order, Visitor } =
   require("../db").models;
-const { getToken } = require('./middleware'); 
+const { getToken } = require("./middleware");
 
-//auth middleware 
+//auth middleware
 const authenticateCartItem = async (req, res, next) => {
   try {
     //get the user/visitor, check that the cart item belongs to that userg, unless an admin
@@ -54,7 +54,8 @@ router.get("/", getToken, async ({ visitor, user }, res, next) => {
 
     await Promise.all(
       cart.cartItems.map((item) => {
-        if (item.qty > item.product.qty) {
+        if (!item.qty) item.destroy();
+        else if (item.qty > item.product.qty) {
           item.update({ qty: item.product.qty });
           upToDate = false;
         }
@@ -121,29 +122,54 @@ router.put("/transfer", getToken, async (req, res, next) => {
     if (!req.user) throw new Error("Issue transfering");
 
     //get the visitorIp
-    const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+    const ip = req.headers["x-forwarded-for"]
+      ? req.headers["x-forwarded-for"].split(",")[0]
+      : "::1";
 
     //get the visitor's cart
     let visitor = await Visitor.findOne({
       where: { token: ip },
       include: {
         model: Cart,
-        include: CartItem
-      }
+        include: CartItem,
+      },
     });
 
-    if(!visitor.cart) throw new Error('Cart not found');
+    if (!visitor.cart) throw new Error("Cart not found");
 
     //transfer the cart items
     //can't just transfer the cart because the user may have an existing cart
-    const userCart = await Cart.findOne({where: {userId: req.user.id}});
+    const userCart = await Cart.findOne({
+      where: { userId: req.user.id },
+      include: CartItem,
+    });
 
-    await userCart.addCartItems(visitor.cart.cartItems);
+    //update existing items, or create new ones
+    if (userCart.cartItems.length) {
+      for (let item of visitor.cart.cartItems) {
+        const { productId, qty } = item;
+
+        const foundItem = userCart.cartItems.find(
+          ({ productId: id }) => productId == id
+        );
+
+        if (!foundItem) {
+          await CartItem.create({
+            cartId: userCart.id,
+            productId,
+            qty,
+          });
+        } else {
+          await foundItem.increment("qty", { by: qty });
+        }
+      }
+    } else {
+      await userCart.addCartItems(visitor.cart.cartItems);
+    }
 
     await Promise.all([visitor.destroy(), visitor.cart.destroy()]);
 
     res.status(201).send();
-
   } catch (err) {
     next(err);
   }
@@ -152,22 +178,24 @@ router.put("/transfer", getToken, async (req, res, next) => {
 // /api/carts/clear
 // clear a given user's cart
 router.put("/clear", getToken, async (req, res, next) => {
-  try{
+  try {
     const owner = req.user || req.visitor;
 
     const cart = await owner.getCart({
-      include: CartItem
+      include: CartItem,
     });
 
-    await Promise.all(cart.cartItems.map(item => {
-      item.destroy();
-    }))
+    await Promise.all(
+      cart.cartItems.map((item) => {
+        item.destroy();
+      })
+    );
 
     res.send();
   } catch (err) {
     next(err);
   }
-})
+});
 
 // /api/carts/item/:itemId
 //update qty of item in user's cart, sends back new cart
@@ -198,29 +226,34 @@ router.put(
 // orders the current items, creates order, resets user's cart, reduces qty of item
 router.put("/order", getToken, async (req, res, next) => {
   try {
-
-    const association = req.user ? {userId: req.user.id} : {visitorId: req.visitor.id};
+    const association = req.user
+      ? { userId: req.user.id }
+      : { visitorId: req.visitor.id };
     //create order and assign cart items to that order, assign user to order
-    const order = await Order.create({email: req.body.email, ...association});
+    const order = await Order.create({ email: req.body.email, ...association });
 
-    const idSearch = req.user ? {userId: req.user.id} : {visitorId: req.visitor.id};
+    const idSearch = req.user
+      ? { userId: req.user.id }
+      : { visitorId: req.visitor.id };
 
     const cart = await Cart.findOne({
       where: idSearch,
       include: {
         model: CartItem,
-        include: Product
-      }
+        include: Product,
+      },
     });
 
     //update quantity first, in order to catch any qty errors
-    await Promise.all(cart.cartItems.map(({qty, product}) => {
-      product.update({qty: product.qty - qty});
-    }))
+    await Promise.all(
+      cart.cartItems.map(({ qty, product }) => {
+        product.update({ qty: product.qty - qty });
+      })
+    );
 
     //transfer cart items to order
     await order.addCartItems(cart.cartItems);
-    
+
     //reset the cart
     await cart.removeCartItems(cart.cartItems);
 

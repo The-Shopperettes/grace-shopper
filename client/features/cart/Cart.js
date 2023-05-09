@@ -123,12 +123,14 @@ const Cart = () => {
                         flexWrap: "wrap",
                       }}
                     >
-                      <Card.Header style={{ textAlign: "center" }}>
+                      <Card.Header
+                        style={{ textAlign: "center", width: "12rem" }}
+                      >
                         <Card.Img
                           src={product.thumbnail}
                           style={{ minWidth: "10rem" }}
                           onError={({ target }) => {
-                            target.src = "/default_img_med.jpeg";
+                            target.src = "/default_img_thumb.jpeg";
                           }}
                         ></Card.Img>
                         <Card.Text>
@@ -140,7 +142,7 @@ const Cart = () => {
                           </Link>
                         </Card.Text>
                       </Card.Header>
-                      <Card.Body>
+                      <Card.Body style={{ width: "12rem" }}>
                         <Card.Title style={{ fontWeight: "bold" }}>
                           {product.name}
                         </Card.Title>
