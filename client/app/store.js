@@ -7,8 +7,6 @@ import productsReducer from "../features/products/productsSlice";
 import singleProductReducer from "../features/products/singleProductSlice";
 import usersReducer from "../features/users/allUsersSlice";
 
-console.log(process.env.NODE_ENV);
-
 const store = configureStore({
   reducer: {
     auth: authReducer,
