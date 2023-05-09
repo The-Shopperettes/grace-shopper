@@ -45,6 +45,8 @@ const Cart = () => {
       return;
     }
 
+    setErrorMessages({});
+
     //send request to backend to change quantity of that item
     dispatch(updateQty({ qty, itemId, cartId }));
   }
@@ -123,12 +125,14 @@ const Cart = () => {
                         flexWrap: "wrap",
                       }}
                     >
-                      <Card.Header style={{ textAlign: "center" }}>
+                      <Card.Header
+                        style={{ textAlign: "center", width: "12rem" }}
+                      >
                         <Card.Img
                           src={product.thumbnail}
                           style={{ minWidth: "10rem" }}
                           onError={({ target }) => {
-                            target.src = "/default_img_med.jpeg";
+                            target.src = "/default_img_thumb.jpeg";
                           }}
                         ></Card.Img>
                         <Card.Text>
@@ -140,7 +144,7 @@ const Cart = () => {
                           </Link>
                         </Card.Text>
                       </Card.Header>
-                      <Card.Body>
+                      <Card.Body style={{ width: "12rem" }}>
                         <Card.Title style={{ fontWeight: "bold" }}>
                           {product.name}
                         </Card.Title>
@@ -154,7 +158,7 @@ const Cart = () => {
                           <Form.Control
                             style={{ width: "6rem" }}
                             type="number"
-                            value={qty}
+                            defaultValue={qty}
                             onChange={(e) => {
                               changeQty(e, id, product.qty);
                             }}

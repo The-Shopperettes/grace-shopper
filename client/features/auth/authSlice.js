@@ -9,10 +9,11 @@ const TOKEN = "token";
 /*
   THUNKS
 */
-export const me = createAsyncThunk("auth/me", async (_, { getState }) => {
+export const me = createAsyncThunk("auth/me", async (tok, { getState }) => {
   const currentCart = getState().cart;
   try {
-    const token = window.localStorage.getItem(TOKEN);
+    const token = tok || window.localStorage.getItem(TOKEN);
+
     if (token) {
       const { data } = await axios.get("/auth/me", {
         headers: {
@@ -49,7 +50,7 @@ export const authenticateLogin = createAsyncThunk(
       const res = await axios.post(`/auth/login`, { username, password });
       if (!res.data.token) return rejectWithValue("Unauthorized");
       window.localStorage.setItem(TOKEN, res.data.token);
-      dispatch(me());
+      dispatch(me(res.data.token));
     } catch (err) {
       return rejectWithValue("Unauthorized");
     }
@@ -67,7 +68,7 @@ export const authenticateSignUp = createAsyncThunk(
       });
       if (!res.data.token) return rejectWithValue("Unauthorized");
       window.localStorage.setItem(TOKEN, res.data.token);
-      dispatch(me());
+      dispatch(me(res.data.token));
     } catch (err) {
       return rejectWithValue("Unauthorized");
     }

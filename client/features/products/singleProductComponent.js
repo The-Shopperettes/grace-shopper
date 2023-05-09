@@ -31,7 +31,10 @@ const SingleProduct = () => {
   //  add product to cart
   const handleAddToCart = (event) => {
     event.preventDefault();
-    dispatch(addToCart({ productId: id, qty: quantity }));
+    let num = Number(quantity);
+    if (isNaN(num) || num <= 0 || num > qty) return;
+
+    dispatch(addToCart({ productId: id, qty: num }));
     setShowModal(true);
   };
 
@@ -50,13 +53,12 @@ const SingleProduct = () => {
   });
 
   const handleQuantityChange = ({ target: { value } }) => {
-    value = Number(value);
-    if (value < 1 || isNaN(value)) return;
+    let num = Number(value);
+    if (isNaN(num) || num <= 0)
+      setQtyMessage("Please enter a number greater than 0");
     //update to also check qty in cart
-    if (value > qty) {
-      setQtyMessage(`Only ${qty} in stock`);
-      return;
-    }
+    else if (num > qty) setQtyMessage(`Only ${qty} in stock`);
+    else setQtyMessage("");
     setQuantity(value);
   };
 
@@ -98,7 +100,10 @@ const SingleProduct = () => {
         <ConfirmationModal />
         {singleProduct && singleProduct.id && (
           <Card id="single-product" key={id}>
-            <Stack direction={{md: "horizontal", sm:'vertical'}} style={{ alignItems: "flex-start" }}>
+            <Stack
+              direction={{ md: "horizontal", sm: "vertical" }}
+              style={{ alignItems: "flex-start" }}
+            >
               <div className="single-stack">
                 <Card.Img
                   src={mediumImg}
@@ -119,8 +124,8 @@ const SingleProduct = () => {
                     <Form.Control
                       style={{ width: "10rem" }}
                       type="number"
-                      value={quantity}
                       onChange={handleQuantityChange}
+                      value={quantity}
                     ></Form.Control>
                     {qtyMessage && <Form.Text>{qtyMessage}</Form.Text>}
                   </Form>
