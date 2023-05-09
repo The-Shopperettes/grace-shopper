@@ -23,7 +23,7 @@ const AuthForm = ({ type }) => {
   }, [type]);
 
   useEffect(() => {
-    console.log("auth error: ", authError);
+
     if (loading && authError) {
       setError("An error occurred.");
       setLoading(false);

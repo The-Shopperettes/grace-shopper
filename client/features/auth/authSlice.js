@@ -37,7 +37,6 @@ export const me = createAsyncThunk("auth/me", async (_, { getState }) => {
       return res.data;
     }
   } catch (err) {
-    console.error(err);
     const res = await axios.get("/api/visitors");
     return res.data;
   }
@@ -48,8 +47,8 @@ export const authenticateLogin = createAsyncThunk(
   async ({ username, password }, { dispatch, rejectWithValue }) => {
     try {
       const res = await axios.post(`/auth/login`, { username, password });
+      if (!res.data.token) return rejectWithValue("Unauthorized");
       window.localStorage.setItem(TOKEN, res.data.token);
-      if (!res.data.token) throw new Error();
       dispatch(me());
     } catch (err) {
       return rejectWithValue("Unauthorized");
