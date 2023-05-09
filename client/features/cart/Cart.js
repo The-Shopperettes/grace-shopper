@@ -45,6 +45,8 @@ const Cart = () => {
       return;
     }
 
+    setErrorMessages({});
+
     //send request to backend to change quantity of that item
     dispatch(updateQty({ qty, itemId, cartId }));
   }
@@ -156,7 +158,7 @@ const Cart = () => {
                           <Form.Control
                             style={{ width: "6rem" }}
                             type="number"
-                            value={qty}
+                            defaultValue={qty}
                             onChange={(e) => {
                               changeQty(e, id, product.qty);
                             }}
