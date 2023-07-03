@@ -1,7 +1,7 @@
 # Wild Roots
 Wild Roots is an ecommerce plant site that was developed for the Grace Shopper Senior Phase project in the Grace Hopper Program at Fullstack Academy.
 
-https://wild-roots.onrender.com/ 
+Deployed at [www.shop-wild-roots.com](https://www.shop-wild-roots.com)
 
 ## Overview
 Wild Roots was designed to offer customers an easy-to-use site to browse a vast collection of plants from the comfort of their home. Customers are able to shop as a guest or as a logged in user. Similar to other ecommerce sites, users have the ability to add various items and quantities of items to their cart, as well as adjust or remove items once they are on the cart page. Furthermore, users can complete their order by checkout out via Stripe.
